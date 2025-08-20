@@ -85,7 +85,7 @@ const schemaData = {
     opens: "09:00",
     closes: "18:00",
   },
-  sameAs: ["https://www.linkedin.com/company/humanismx/?viewAsMember=true"],
+  sameAs: ["https://www.linkedin.com/company/humanismx"],
   aggregateRating: {
     "@type": "AggregateRating",
     ratingValue: "4.9",

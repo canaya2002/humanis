@@ -1355,7 +1355,7 @@ export default function PrivacyPage() {
               </p>
               <div className="footer-social">
                 <a
-                  href="https://linkedin.com/company/humanis-mexico"
+                  href="https://www.linkedin.com/company/humanismx"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link"

@@ -1248,7 +1248,7 @@ export default function TermsPage() {
               </p>
               <div className="footer-social">
                 <a
-                  href="https://linkedin.com/company/humanis-mexico"
+                  href="https://www.linkedin.com/company/humanismx"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link"
@@ -1275,7 +1275,7 @@ export default function TermsPage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/por-que-nosotros" className="footer-link">
+                  <Link href="/nosotros" className="footer-link">
                     ¿Por Qué Nosotros?
                   </Link>
                 </li>

@@ -385,12 +385,12 @@ export default function ConsultaPage() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 1rem 0;
+          padding: 0.75rem 0;
         }
 
         @media (max-width: 768px) {
           .nav-wrapper {
-            padding: 0.75rem 0;
+            padding: 0.5rem 0;
           }
         }
 
@@ -2449,7 +2449,7 @@ export default function ConsultaPage() {
                 </p>
                 <div className="footer-social">
                   <a
-                    href="https://linkedin.com/company/humanis-mexico"
+                    href="https://www.linkedin.com/company/humanismx"
                     target="_blank"
                     rel="noopener noreferrer"
                     className="social-link"

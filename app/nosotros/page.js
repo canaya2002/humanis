@@ -2202,7 +2202,7 @@ export default function PorQueNosotrosPage() {
               </p>
               <div className="footer-social">
                 <a
-                  href="https://linkedin.com/company/humanis-mexico"
+                  href="https://www.linkedin.com/company/humanismx"
                   className="social-link"
                   aria-label="LinkedIn"
                   target="_blank"

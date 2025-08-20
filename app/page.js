@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
+import Head from 'next/head';
 
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -173,8 +174,90 @@ export default function HomePage() {
     }
   ];
 
+  // Structured Data para SEO
+  const structuredData = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "Humanis México",
+    "url": "https://humanis.com.mx",
+    "logo": "https://humanis.com.mx/images/logohumanis.png",
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "telephone": "+52-55-4416-7974",
+      "contactType": "sales",
+      "areaServed": "MX",
+      "availableLanguage": "Spanish"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressCountry": "MX"
+    },
+    "description": "Firma líder en executive search México. Especialistas en headhunting C-Level con 98% retención y 9 días promedio de colocación.",
+    "foundingDate": "2013",
+    "numberOfEmployees": "10-50",
+    "industry": "Executive Search",
+    "serviceArea": {
+      "@type": "Country",
+      "name": "Mexico"
+    },
+    "service": [
+      {
+        "@type": "Service",
+        "name": "Executive Search",
+        "description": "Búsqueda especializada de ejecutivos nivel C-Level"
+      },
+      {
+        "@type": "Service", 
+        "name": "Talent Mapping",
+        "description": "Inteligencia de mercado y mapeo de talento"
+      },
+      {
+        "@type": "Service",
+        "name": "Organizational Development", 
+        "description": "Desarrollo organizacional y consultoría de talento"
+      }
+    ]
+  };
+
   return (
     <>
+      <Head>
+        <title>Humanis México | Executive Search y Headhunting Líder</title>
+        <meta name="description" content="Firma #1 executive search México. Especialistas headhunting C-Level con 98% retención, 9 días promedio. 300+ ejecutivos colocados. Consulta gratuita." />
+        <meta name="keywords" content="executive search méxico, headhunting, reclutamiento ejecutivo, búsqueda de talento, consultores c-level" />
+        <meta name="robots" content="index, follow" />
+        <link rel="canonical" href="https://humanis.com.mx/" />
+        
+        {/* Open Graph */}
+        <meta property="og:title" content="Humanis México | Executive Search y Headhunting Líder" />
+        <meta property="og:description" content="Firma #1 executive search México. Especialistas headhunting C-Level con 98% retención, 9 días promedio. 300+ ejecutivos colocados." />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://humanis.com.mx/" />
+        <meta property="og:image" content="https://humanis.com.mx/images/og-image.jpg" />
+        <meta property="og:locale" content="es_MX" />
+        <meta property="og:site_name" content="Humanis México" />
+        
+        {/* Twitter Card */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Humanis México | Executive Search y Headhunting Líder" />
+        <meta name="twitter:description" content="Firma #1 executive search México. Especialistas headhunting C-Level con 98% retención, 9 días promedio." />
+        <meta name="twitter:image" content="https://humanis.com.mx/images/og-image.jpg" />
+        
+        {/* Technical SEO */}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+        <meta name="language" content="Spanish" />
+        <meta name="geo.region" content="MX" />
+        <meta name="geo.country" content="Mexico" />
+        <meta name="ICBM" content="19.4326, -99.1332" />
+        
+        {/* Structured Data */}
+        <script 
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+        />
+      </Head>
+
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
@@ -216,6 +299,7 @@ export default function HomePage() {
           border-radius: 5px;
         }
 
+        /* Layout Classes */
         .container {
           max-width: 1280px;
           margin: 0 auto;
@@ -228,6 +312,7 @@ export default function HomePage() {
           }
         }
 
+        /* Loading Animation */
         .loader {
           position: fixed;
           inset: 0;
@@ -289,6 +374,7 @@ export default function HomePage() {
           }
         }
 
+        /* Navigation Styles */
         .nav-header {
           position: fixed;
           top: 0;
@@ -310,12 +396,12 @@ export default function HomePage() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 1rem 0;
+          padding: 0.75rem 0;
         }
 
         @media (max-width: 768px) {
           .nav-wrapper {
-            padding: 0.75rem 0;
+            padding: 0.5rem 0;
           }
         }
 
@@ -382,6 +468,7 @@ export default function HomePage() {
           gap: 1rem;
         }
 
+        /* Button Styles */
         .btn {
           padding: 0.75rem 1.75rem;
           border-radius: 12px;
@@ -422,6 +509,29 @@ export default function HomePage() {
           background: #f0f9ff;
         }
 
+        .btn-white {
+          background: white;
+          color: #1e40af;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-white:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-outline-white {
+          border: 2px solid white;
+          color: white;
+          background: transparent;
+        }
+
+        .btn-outline-white:hover {
+          background: white;
+          color: #1e40af;
+        }
+
+        /* Mobile Menu */
         .mobile-menu-btn {
           display: none;
           flex-direction: column;
@@ -490,6 +600,7 @@ export default function HomePage() {
           visibility: visible;
         }
 
+        /* Hero Section */
         .hero {
           min-height: 100vh;
           background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #3b82f6 100%);
@@ -555,6 +666,7 @@ export default function HomePage() {
           background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 60%);
           filter: blur(100px);
           animation: pulseGlow 8s ease-in-out infinite;
+          will-change: transform;
         }
 
         @keyframes pulseGlow {
@@ -746,6 +858,7 @@ export default function HomePage() {
           }
         }
 
+        /* Stats Section */
         .hero-stats-container {
           position: relative;
           z-index: 10;
@@ -899,6 +1012,7 @@ export default function HomePage() {
           }
         }
 
+        /* Clients Section */
         .clients-section {
           padding: 6rem 0;
           background: white;
@@ -1030,6 +1144,7 @@ export default function HomePage() {
           object-fit: contain;
         }
 
+        /* Services Section */
         .services-section {
           padding: 6rem 0;
           background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
@@ -1176,6 +1291,7 @@ export default function HomePage() {
           stroke-width: 3;
         }
 
+        /* Process Section */
         .process-section {
           padding: 6rem 0;
           background: white;
@@ -1324,91 +1440,7 @@ export default function HomePage() {
           font-weight: 600;
         }
 
-        .achievements-section {
-          padding: 6rem 0;
-          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-        }
-
-        @media (max-width: 768px) {
-          .achievements-section {
-            padding: 4rem 0;
-          }
-        }
-
-        .achievements-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-          gap: 3rem;
-          margin-top: 4rem;
-        }
-
-        @media (max-width: 768px) {
-          .achievements-grid {
-            grid-template-columns: 1fr;
-            gap: 2rem;
-            margin-top: 3rem;
-          }
-        }
-
-        .achievement-card {
-          position: relative;
-          overflow: hidden;
-          border-radius: 24px;
-          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
-          transition: transform 0.3s ease;
-          cursor: pointer;
-        }
-
-        .achievement-card:hover {
-          transform: translateY(-10px);
-        }
-
-        .achievement-image {
-          width: 100%;
-          height: 280px;
-          position: relative;
-          background: linear-gradient(135deg, #1e40af, #3b82f6);
-        }
-
-        @media (max-width: 768px) {
-          .achievement-image {
-            height: 240px;
-          }
-        }
-
-        .achievement-overlay {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          padding: 2rem;
-          background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 100%);
-        }
-
-        @media (max-width: 768px) {
-          .achievement-overlay {
-            padding: 1.5rem;
-          }
-        }
-
-        .achievement-title {
-          font-size: 1.5rem;
-          font-weight: 700;
-          color: white;
-          margin-bottom: 0.625rem;
-        }
-
-        @media (max-width: 768px) {
-          .achievement-title {
-            font-size: 1.25rem;
-          }
-        }
-
-        .achievement-description {
-          color: rgba(255, 255, 255, 0.9);
-          line-height: 1.6;
-        }
-
+        /* About Section */
         .about-section {
           background: white;
           padding: 6rem 0;
@@ -1534,6 +1566,93 @@ export default function HomePage() {
           font-size: 0.875rem;
         }
 
+        /* Achievements Section */
+        .achievements-section {
+          padding: 6rem 0;
+          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        @media (max-width: 768px) {
+          .achievements-section {
+            padding: 4rem 0;
+          }
+        }
+
+        .achievements-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+          gap: 3rem;
+          margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+          .achievements-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+          }
+        }
+
+        .achievement-card {
+          position: relative;
+          overflow: hidden;
+          border-radius: 24px;
+          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease;
+          cursor: pointer;
+        }
+
+        .achievement-card:hover {
+          transform: translateY(-10px);
+        }
+
+        .achievement-image {
+          width: 100%;
+          height: 280px;
+          position: relative;
+          background: linear-gradient(135deg, #1e40af, #3b82f6);
+        }
+
+        @media (max-width: 768px) {
+          .achievement-image {
+            height: 240px;
+          }
+        }
+
+        .achievement-overlay {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 2rem;
+          background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 100%);
+        }
+
+        @media (max-width: 768px) {
+          .achievement-overlay {
+            padding: 1.5rem;
+          }
+        }
+
+        .achievement-title {
+          font-size: 1.5rem;
+          font-weight: 700;
+          color: white;
+          margin-bottom: 0.625rem;
+        }
+
+        @media (max-width: 768px) {
+          .achievement-title {
+            font-size: 1.25rem;
+          }
+        }
+
+        .achievement-description {
+          color: rgba(255, 255, 255, 0.9);
+          line-height: 1.6;
+        }
+
+        /* CTA Section */
         .cta-section {
           padding: 6rem 0;
           background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
@@ -1632,28 +1751,7 @@ export default function HomePage() {
           }
         }
 
-        .btn-white {
-          background: white;
-          color: #1e40af;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-        }
-
-        .btn-white:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn-outline-white {
-          border: 2px solid white;
-          color: white;
-          background: transparent;
-        }
-
-        .btn-outline-white:hover {
-          background: white;
-          color: #1e40af;
-        }
-
+        /* Footer */
         .footer {
           background: #ffffff;
           color: #1a1a1a;
@@ -1789,6 +1887,7 @@ export default function HomePage() {
           }
         }
 
+        /* Animation Classes */
         [data-animate] {
           opacity: 0;
           transform: translateY(30px);
@@ -1805,10 +1904,35 @@ export default function HomePage() {
           }
         }
 
+        /* Focus States */
         a:focus-visible,
         button:focus-visible {
           outline: 2px solid #3b82f6;
           outline-offset: 2px;
+        }
+
+        /* Performance Optimizations */
+        .hero-glow,
+        .hero-pattern,
+        .hero::before {
+          will-change: transform;
+        }
+
+        .stat-card,
+        .service-card,
+        .achievement-card {
+          will-change: transform;
+        }
+
+        /* Reduce Motion */
+        @media (prefers-reduced-motion: reduce) {
+          *,
+          *::before,
+          *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+          }
         }
       `}</style>
 
@@ -1816,7 +1940,7 @@ export default function HomePage() {
         <div className="loader-content">
           <Image 
             src="/images/logohumanis.png"
-            alt="Humanis"
+            alt="Humanis México - Executive Search"
             width={240}
             height={96}
             className="loader-logo"
@@ -1836,7 +1960,7 @@ export default function HomePage() {
             <Link href="/" className="logo-container">
               <Image 
                 src="/images/logohumanis.png"
-                alt="Humanis México - Executive Search"
+                alt="Humanis México - Executive Search y Headhunting"
                 width={240}
                 height={80}
                 className="logo-image"
@@ -1854,7 +1978,7 @@ export default function HomePage() {
 
             <div className="nav-cta">
               <Link href="/nosotros" className="btn btn-secondary">
-                ¿Por qué nosotros?
+                ¿Por qué Humanis?
               </Link>
               <Link href="/consulta" className="btn btn-primary">
                 Contactar
@@ -1864,7 +1988,8 @@ export default function HomePage() {
             <button 
               className={`mobile-menu-btn ${mobileMenuOpen ? 'active' : ''}`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              aria-label="Menu"
+              aria-label="Abrir menú de navegación"
+              type="button"
             >
               <span></span>
               <span></span>
@@ -1873,29 +1998,29 @@ export default function HomePage() {
           </div>
         </div>
 
-        <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
-          <nav style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <nav className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`} role="navigation" aria-label="Menú móvil">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
             <a href="#inicio" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Inicio</a>
             <a href="#servicios" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Servicios</a>
             <a href="#proceso" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Proceso</a>
             <a href="#nosotros" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Nosotros</a>
             <a href="#clientes" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Clientes</a>
             <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <Link href="/nosotros" className="btn btn-secondary">¿Por qué nosotros?</Link>
+              <Link href="/nosotros" className="btn btn-secondary">¿Por qué Humanis?</Link>
               <Link href="/consulta" className="btn btn-primary">Contactar</Link>
             </div>
-          </nav>
-        </div>
+          </div>
+        </nav>
       </header>
 
       <main>
-        <section id="inicio" className="hero">
+        <section id="inicio" className="hero" role="banner">
           <div className="hero-pattern" data-parallax="0.1"></div>
           <div className="hero-glow" style={{
             transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`
           }}></div>
           
-          <div className="hero-lines">
+          <div className="hero-lines" aria-hidden="true">
             {[...Array(5)].map((_, i) => (
               <div
                 key={`line-${i}`}
@@ -1914,7 +2039,7 @@ export default function HomePage() {
             width: '100%',
             height: '100%',
             overflow: 'hidden'
-          }}>
+          }} aria-hidden="true">
             {[...Array(20)].map((_, i) => (
               <div
                 key={i}
@@ -1958,7 +2083,7 @@ export default function HomePage() {
                     boxShadow: '0 10px 40px rgba(255, 255, 255, 0.2)'
                   }}>
                     Iniciar Consulta
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                   </Link>
@@ -2011,13 +2136,13 @@ export default function HomePage() {
             </div>
           </div>
           
-          <div className="clients-carousel">
+          <div className="clients-carousel" aria-label="Carrusel de logos de clientes">
             <div className="clients-track">
               {[...clients, ...clients].map((client, index) => (
                 <div key={index} className="client-logo">
                   <Image 
                     src={client} 
-                    alt={`Cliente ${(index % 8) + 1}`}
+                    alt={`Logo cliente ${(index % 8) + 1} - Humanis México`}
                     width={280}
                     height={100}
                     style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
@@ -2041,7 +2166,7 @@ export default function HomePage() {
 
             <div className="services-grid">
               {services.map((service, index) => (
-                <div 
+                <article 
                   key={index} 
                   className="service-card" 
                   data-animate 
@@ -2055,7 +2180,7 @@ export default function HomePage() {
                   <div className="service-image">
                     <Image 
                       src={service.image}
-                      alt={service.title}
+                      alt={`${service.title} - Humanis México`}
                       fill
                       style={{ objectFit: 'cover' }}
                     />
@@ -2068,7 +2193,7 @@ export default function HomePage() {
                       {service.features.map((feature, idx) => (
                         <li key={idx} className="service-feature">
                           <span className="feature-icon">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" aria-hidden="true">
                               <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round"/>
                             </svg>
                           </span>
@@ -2077,7 +2202,7 @@ export default function HomePage() {
                       ))}
                     </ul>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           </div>
@@ -2095,23 +2220,23 @@ export default function HomePage() {
             </div>
 
             <div className="process-timeline">
-              <div className="process-line"></div>
+              <div className="process-line" aria-hidden="true"></div>
               <div className="process-steps">
                 {process.map((step, index) => (
-                  <div key={index} className="process-step" data-animate id={`process-${index}`}>
+                  <article key={index} className="process-step" data-animate id={`process-${index}`}>
                     <div className="process-image">
                       <Image 
                         src={step.image}
-                        alt={step.title}
+                        alt={`${step.title} - Proceso Humanis México`}
                         fill
                         style={{ objectFit: 'cover' }}
                       />
-                      <div className="step-number">{step.step}</div>
+                      <div className="step-number" aria-label={`Paso ${step.step}`}>{step.step}</div>
                     </div>
                     <h3 className="step-title">{step.title}</h3>
                     <p className="step-description">{step.description}</p>
                     <span className="step-duration">{step.duration}</span>
-                  </div>
+                  </article>
                 ))}
               </div>
             </div>
@@ -2141,7 +2266,7 @@ export default function HomePage() {
                 <div className="about-features">
                   <div className="about-feature">
                     <div className="about-icon">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true">
                         <path d="M12 2L2 7l10 5 10-5-10-5z"/>
                         <path d="M2 17l10 5 10-5"/>
                         <path d="M2 12l10 5 10-5"/>
@@ -2155,7 +2280,7 @@ export default function HomePage() {
                   
                   <div className="about-feature">
                     <div className="about-icon">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true">
                         <path d="M9 11l3 3L22 4"/>
                         <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
                       </svg>
@@ -2168,7 +2293,7 @@ export default function HomePage() {
                   
                   <div className="about-feature">
                     <div className="about-icon">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true">
                         <circle cx="12" cy="12" r="10"/>
                         <polyline points="12 6 12 12 16 14"/>
                       </svg>
@@ -2181,7 +2306,7 @@ export default function HomePage() {
                   
                   <div className="about-feature">
                     <div className="about-icon">
-                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" aria-hidden="true">
                         <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
                         <circle cx="8.5" cy="7" r="4"/>
                         <line x1="20" y1="8" x2="20" y2="14"/>
@@ -2199,7 +2324,7 @@ export default function HomePage() {
               <div className="about-image" data-animate id="about-image">
                 <Image 
                   src="/images/about-team.jpg"
-                  alt="Equipo Humanis"
+                  alt="Equipo Humanis México - Executive Search"
                   fill
                   style={{ objectFit: 'cover' }}
                 />
@@ -2221,11 +2346,11 @@ export default function HomePage() {
 
             <div className="achievements-grid">
               {achievements.map((achievement, index) => (
-                <div key={index} className="achievement-card" data-animate id={`achievement-${index}`}>
+                <article key={index} className="achievement-card" data-animate id={`achievement-${index}`}>
                   <div className="achievement-image">
                     <Image 
                       src={achievement.image}
-                      alt={achievement.title}
+                      alt={`${achievement.title} - Humanis México`}
                       fill
                       style={{ objectFit: 'cover' }}
                     />
@@ -2234,14 +2359,14 @@ export default function HomePage() {
                       <p className="achievement-description">{achievement.description}</p>
                     </div>
                   </div>
-                </div>
+                </article>
               ))}
             </div>
           </div>
         </section>
 
         <section className="cta-section">
-          <div className="cta-pattern"></div>
+          <div className="cta-pattern" aria-hidden="true"></div>
           <div className="container">
             <div className="cta-wrapper">
               <div className="cta-content">
@@ -2255,13 +2380,13 @@ export default function HomePage() {
                 <div className="cta-buttons">
                   <Link href="/consulta" className="btn btn-white">
                     Agendar Consulta Gratuita
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                       <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"/>
                     </svg>
                   </Link>
                   <Link href="/nosotros" className="btn btn-outline-white">
                     Conocer Más
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
                       <path d="M5 12h14M12 5l7 7-7 7"/>
                     </svg>
                   </Link>
@@ -2271,7 +2396,7 @@ export default function HomePage() {
               <div className="cta-image">
                 <Image 
                   src="/images/cta-success.jpg"
-                  alt="Humanis Success"
+                  alt="Éxito ejecutivo Humanis México"
                   fill
                   style={{ objectFit: 'cover' }}
                 />
@@ -2288,11 +2413,11 @@ export default function HomePage() {
               <div className="footer-logo">
                 <Image 
                   src="/images/logohumanis.png"
-                  alt="Humanis México"
+                  alt="Humanis México - Executive Search"
                   width={240}
                   height={80}
                   className="footer-logo-image"
-                  priority={true}
+                  priority={false}
                 />
               </div>
               <p className="footer-description">
@@ -2300,8 +2425,8 @@ export default function HomePage() {
                 Transformamos organizaciones conectando líderes excepcionales con empresas extraordinarias.
               </p>
               <div className="footer-social">
-                <a href="https://linkedin.com/company/humanis-mexico" className="social-link" aria-label="LinkedIn">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                <a href="https://www.linkedin.com/company/humanismx" className="social-link" aria-label="Síguenos en LinkedIn" rel="noopener noreferrer" target="_blank">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
                   </svg>
                 </a>
@@ -2335,9 +2460,9 @@ export default function HomePage() {
                   </a>
                 </li>
                 <li>
-                  <a href="mailto:contacto@humanis.com.mx" className="footer-link">
-                    contacto@humanis.com.mx
-                  </a>
+                  <span className="footer-link">
+                    contacto at humanis.com.mx
+                  </span>
                 </li>
                 <li className="footer-link">
                   Lun - Vie: 9:00 - 18:00
