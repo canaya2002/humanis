@@ -1,9 +1,15 @@
-# *
 User-agent: *
 Allow: /
 
+# Páginas importantes
+Allow: /consulta
+Allow: /nosotros
+
 # Host
-Host: https://www.humanis.com.mx/
+Host: https://humanis.com.mx
 
 # Sitemaps
-Sitemap: https://www.humanis.com.mx/sitemap.xml
+Sitemap: https://humanis.com.mx/sitemap.xml
+
+# Optimización crawl
+Crawl-delay: 1
