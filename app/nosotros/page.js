@@ -339,7 +339,7 @@ export default function PorQueNosotrosPage() {
 
         @media (max-width: 768px) {
           .container {
-            padding: 0 1.25rem;
+            padding: 0 1rem;
           }
         }
 
@@ -365,7 +365,13 @@ export default function PorQueNosotrosPage() {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 1rem 0;
+          padding: 0.75rem 0;
+        }
+
+        @media (max-width: 768px) {
+          .nav-wrapper {
+            padding: 0.5rem 0;
+          }
         }
 
         .logo-container {
@@ -382,6 +388,12 @@ export default function PorQueNosotrosPage() {
         .logo-image {
           height: 80px;
           width: auto;
+        }
+
+        @media (max-width: 768px) {
+          .logo-image {
+            height: 50px;
+          }
         }
 
         .nav-menu {
@@ -513,7 +525,7 @@ export default function PorQueNosotrosPage() {
 
         .mobile-menu {
           position: fixed;
-          top: 96px;
+          top: 76px;
           left: 0;
           right: 0;
           background: white;
@@ -540,6 +552,12 @@ export default function PorQueNosotrosPage() {
           display: flex;
           align-items: center;
           padding: 7rem 0 4rem;
+        }
+
+        @media (max-width: 768px) {
+          .hero {
+            padding: 5rem 0 3rem;
+          }
         }
 
         .hero::before {
@@ -709,8 +727,8 @@ export default function PorQueNosotrosPage() {
         }
 
         .badge-dot {
-          width: 8px;
-          height: 8px;
+          width: 0.75rem;
+          height: 0.75rem;
           background: #10b981;
           border-radius: 50%;
           animation: pulse 2s infinite;
@@ -776,6 +794,12 @@ export default function PorQueNosotrosPage() {
           text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
+        @media (max-width: 768px) {
+          .hero-description {
+            font-size: 1.1rem;
+          }
+        }
+
         .hero-buttons {
           display: flex;
           gap: 1.25rem;
@@ -819,7 +843,8 @@ export default function PorQueNosotrosPage() {
         @media (max-width: 768px) {
           .hero-stats {
             grid-template-columns: 1fr;
-            padding: 2rem;
+            padding: 1.5rem;
+            gap: 1.5rem;
           }
         }
 
@@ -834,6 +859,12 @@ export default function PorQueNosotrosPage() {
           cursor: default;
           position: relative;
           overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+          .stat-card {
+            padding: 1rem;
+          }
         }
 
         .stat-card::before {
@@ -878,6 +909,12 @@ export default function PorQueNosotrosPage() {
           text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
+        @media (max-width: 768px) {
+          .stat-value {
+            font-size: 2rem;
+          }
+        }
+
         .stat-label {
           color: rgba(255, 255, 255, 0.8);
           font-size: 0.95rem;
@@ -886,10 +923,22 @@ export default function PorQueNosotrosPage() {
           letter-spacing: 0.5px;
         }
 
+        @media (max-width: 768px) {
+          .stat-label {
+            font-size: 0.8rem;
+          }
+        }
+
         /* Sections */
         .section {
           padding: 6rem 0;
           position: relative;
+        }
+
+        @media (max-width: 768px) {
+          .section {
+            padding: 4rem 0;
+          }
         }
 
         .section-alt {
@@ -899,6 +948,12 @@ export default function PorQueNosotrosPage() {
         .section-header {
           text-align: center;
           margin-bottom: 4rem;
+        }
+
+        @media (max-width: 768px) {
+          .section-header {
+            margin-bottom: 3rem;
+          }
         }
 
         .section-badge {
@@ -932,6 +987,12 @@ export default function PorQueNosotrosPage() {
           line-height: 1.7;
         }
 
+        @media (max-width: 768px) {
+          .section-subtitle {
+            font-size: 1.1rem;
+          }
+        }
+
         /* Differentiators */
         .diff-grid {
           display: grid;
@@ -939,6 +1000,13 @@ export default function PorQueNosotrosPage() {
           gap: 2rem;
           min-height: 400px;
           align-items: stretch;
+        }
+
+        @media (max-width: 768px) {
+          .diff-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
         }
 
         .diff-card {
@@ -983,6 +1051,12 @@ export default function PorQueNosotrosPage() {
           justify-content: space-between;
         }
 
+        @media (max-width: 768px) {
+          .diff-content {
+            padding: 1.5rem;
+          }
+        }
+
         .diff-icon {
           width: 64px;
           height: 64px;
@@ -1008,6 +1082,12 @@ export default function PorQueNosotrosPage() {
           margin-bottom: 1rem;
         }
 
+        @media (max-width: 768px) {
+          .diff-title {
+            font-size: 1.25rem;
+          }
+        }
+
         .diff-description {
           color: #4b5563;
           line-height: 1.7;
@@ -1025,6 +1105,12 @@ export default function PorQueNosotrosPage() {
           transition: transform 0.3s ease;
         }
 
+        @media (max-width: 768px) {
+          .diff-stats {
+            font-size: 2.25rem;
+          }
+        }
+
         .diff-stats:hover {
           transform: scale(1.05);
         }
@@ -1033,6 +1119,12 @@ export default function PorQueNosotrosPage() {
           font-size: 1rem;
           font-weight: 600;
           color: var(--gradient-start);
+        }
+
+        @media (max-width: 768px) {
+          .diff-unit {
+            font-size: 0.875rem;
+          }
         }
 
         /* Methodology */
@@ -1071,6 +1163,7 @@ export default function PorQueNosotrosPage() {
         @media (max-width: 768px) {
           .method-steps {
             grid-template-columns: 1fr;
+            gap: 2rem;
           }
           
           .method-line {
@@ -1088,6 +1181,12 @@ export default function PorQueNosotrosPage() {
           justify-content: space-between;
         }
 
+        @media (max-width: 768px) {
+          .method-step {
+            min-height: auto;
+          }
+        }
+
         .method-image {
           width: 160px;
           height: 160px;
@@ -1099,6 +1198,13 @@ export default function PorQueNosotrosPage() {
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
           transition: all 0.3s ease;
           background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        }
+
+        @media (max-width: 768px) {
+          .method-image {
+            width: 120px;
+            height: 120px;
+          }
         }
 
         .method-step:hover .method-image {
@@ -1125,11 +1231,27 @@ export default function PorQueNosotrosPage() {
           box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
         }
 
+        @media (max-width: 768px) {
+          .method-number {
+            width: 32px;
+            height: 32px;
+            font-size: 0.875rem;
+            top: -8px;
+            right: 8px;
+          }
+        }
+
         .method-title {
           font-size: 1.375rem;
           font-weight: 700;
           color: #1a1a1a;
           margin-bottom: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+          .method-title {
+            font-size: 1.25rem;
+          }
         }
 
         .method-description {
@@ -1138,6 +1260,13 @@ export default function PorQueNosotrosPage() {
           margin-bottom: 1rem;
           padding: 0 1rem;
           font-size: 0.95rem;
+        }
+
+        @media (max-width: 768px) {
+          .method-description {
+            padding: 0;
+            font-size: 0.9rem;
+          }
         }
 
         .method-duration {
@@ -1153,11 +1282,32 @@ export default function PorQueNosotrosPage() {
         /* Achievements */
         .achievements-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 2rem;
-          min-height: 300px;
+          grid-template-columns: repeat(5, 1fr);
+          gap: 1.5rem;
           padding: 2rem;
           align-items: stretch;
+        }
+
+        @media (max-width: 1024px) {
+          .achievements-grid {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .achievements-grid {
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            padding: 1rem;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .achievements-grid {
+            grid-template-columns: 1fr;
+            max-width: 280px;
+            margin: 0 auto;
+          }
         }
 
         .achievement-card {
@@ -1175,6 +1325,13 @@ export default function PorQueNosotrosPage() {
           justify-content: center;
         }
 
+        @media (max-width: 768px) {
+          .achievement-card {
+            padding: 1.5rem 1rem;
+            min-height: 120px;
+          }
+        }
+
         .achievement-card:hover {
           transform: translateY(-5px);
           box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
@@ -1188,6 +1345,12 @@ export default function PorQueNosotrosPage() {
           transition: transform 0.3s ease;
         }
 
+        @media (max-width: 768px) {
+          .achievement-metric {
+            font-size: 2rem;
+          }
+        }
+
         .achievement-card:hover .achievement-metric {
           transform: scale(1.05);
         }
@@ -1197,6 +1360,13 @@ export default function PorQueNosotrosPage() {
           font-size: 0.875rem;
           font-weight: 600;
           text-transform: uppercase;
+          line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+          .achievement-label {
+            font-size: 0.75rem;
+          }
         }
 
         /* Industries */
@@ -1209,6 +1379,12 @@ export default function PorQueNosotrosPage() {
           margin-bottom: 2rem;
         }
 
+        @media (max-width: 768px) {
+          .industry-bar {
+            margin-bottom: 1.5rem;
+          }
+        }
+
         .industry-header {
           display: flex;
           justify-content: space-between;
@@ -1218,6 +1394,12 @@ export default function PorQueNosotrosPage() {
         .industry-name {
           font-weight: 600;
           color: #1a1a1a;
+        }
+
+        @media (max-width: 768px) {
+          .industry-name {
+            font-size: 0.9rem;
+          }
         }
 
         .industry-percentage {
@@ -1246,6 +1428,13 @@ export default function PorQueNosotrosPage() {
           gap: 2rem;
         }
 
+        @media (max-width: 768px) {
+          .values-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
+        }
+
         .value-card {
           text-align: center;
           padding: 2rem;
@@ -1253,6 +1442,12 @@ export default function PorQueNosotrosPage() {
           border-radius: 20px;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
           transition: all 0.3s ease;
+        }
+
+        @media (max-width: 768px) {
+          .value-card {
+            padding: 1.5rem;
+          }
         }
 
         .value-card:hover {
@@ -1272,6 +1467,13 @@ export default function PorQueNosotrosPage() {
           transition: all 0.3s ease;
         }
 
+        @media (max-width: 768px) {
+          .value-icon {
+            width: 60px;
+            height: 60px;
+          }
+        }
+
         .value-card:hover .value-icon {
           transform: scale(1.1);
           box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
@@ -1289,12 +1491,24 @@ export default function PorQueNosotrosPage() {
           line-height: 1.6;
         }
 
+        @media (max-width: 768px) {
+          .value-description {
+            font-size: 0.95rem;
+          }
+        }
+
         /* CTA Section */
         .cta-section {
           padding: 6rem 0;
           background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
           position: relative;
           overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+          .cta-section {
+            padding: 4rem 0;
+          }
         }
 
         .cta-pattern {
@@ -1317,6 +1531,7 @@ export default function PorQueNosotrosPage() {
           .cta-wrapper {
             grid-template-columns: 1fr;
             text-align: center;
+            gap: 3rem;
           }
         }
 
@@ -1337,10 +1552,24 @@ export default function PorQueNosotrosPage() {
           line-height: 1.8;
         }
 
+        @media (max-width: 768px) {
+          .cta-description {
+            font-size: 1.1rem;
+            margin-bottom: 2rem;
+          }
+        }
+
         .cta-buttons {
           display: flex;
           gap: 1.25rem;
           flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+          .cta-buttons {
+            justify-content: center;
+            gap: 1rem;
+          }
         }
 
         .cta-image {
@@ -1349,6 +1578,12 @@ export default function PorQueNosotrosPage() {
           border-radius: 20px;
           overflow: hidden;
           box-shadow: 0 40px 100px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 768px) {
+          .cta-image {
+            height: 300px;
+          }
         }
 
         .btn-white {
@@ -1381,6 +1616,12 @@ export default function PorQueNosotrosPage() {
           border-top: 1px solid #e5e7eb;
         }
 
+        @media (max-width: 768px) {
+          .footer {
+            padding: 3rem 0 2rem;
+          }
+        }
+
         .footer-grid {
           display: grid;
           grid-template-columns: 2fr 1fr 1fr 1fr;
@@ -1391,6 +1632,8 @@ export default function PorQueNosotrosPage() {
         @media (max-width: 768px) {
           .footer-grid {
             grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
           }
         }
 
@@ -1407,6 +1650,12 @@ export default function PorQueNosotrosPage() {
         .footer-logo-image {
           height: 80px;
           width: auto;
+        }
+
+        @media (max-width: 768px) {
+          .footer-logo-image {
+            height: 60px;
+          }
         }
 
         .footer-description {
@@ -1470,6 +1719,14 @@ export default function PorQueNosotrosPage() {
           gap: 1rem;
         }
 
+        @media (max-width: 768px) {
+          .footer-bottom {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+          }
+        }
+
         .footer-copyright {
           color: #6b7280;
         }
@@ -1477,6 +1734,12 @@ export default function PorQueNosotrosPage() {
         .footer-legal {
           display: flex;
           gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+          .footer-legal {
+            gap: 1rem;
+          }
         }
 
         /* Animations */
@@ -1508,33 +1771,6 @@ export default function PorQueNosotrosPage() {
           to {
             opacity: 1;
             transform: scale(1);
-          }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-          .hero-title {
-            font-size: 2.25rem;
-          }
-
-          .section-title {
-            font-size: 2rem;
-          }
-
-          .diff-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .achievements-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-
-          .values-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .stat-value {
-            font-size: 2.25rem;
           }
         }
 

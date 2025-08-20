@@ -224,7 +224,7 @@ export default function HomePage() {
 
         @media (max-width: 768px) {
           .container {
-            padding: 0 1.25rem;
+            padding: 0 1rem;
           }
         }
 
@@ -313,6 +313,12 @@ export default function HomePage() {
           padding: 1rem 0;
         }
 
+        @media (max-width: 768px) {
+          .nav-wrapper {
+            padding: 0.75rem 0;
+          }
+        }
+
         .logo-container {
           display: flex;
           align-items: center;
@@ -327,6 +333,12 @@ export default function HomePage() {
         .logo-image {
           height: 80px;
           width: auto;
+        }
+
+        @media (max-width: 768px) {
+          .logo-image {
+            height: 60px;
+          }
         }
 
         .nav-menu {
@@ -372,33 +384,34 @@ export default function HomePage() {
 
         .btn {
           padding: 0.75rem 1.75rem;
-          border-radius: 10px;
+          border-radius: 12px;
           font-size: 0.95rem;
           font-weight: 600;
           text-decoration: none;
-          transition: all 0.2s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           display: inline-flex;
           align-items: center;
           gap: 0.625rem;
           position: relative;
           overflow: hidden;
           cursor: pointer;
+          border: none;
         }
 
         .btn-primary {
-          background: #3b82f6;
+          background: linear-gradient(135deg, #3b82f6, #2563eb);
           color: white;
-          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
+          box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
         }
 
         .btn-primary:hover {
-          background: #2563eb;
+          background: linear-gradient(135deg, #2563eb, #1d4ed8);
           transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.45);
         }
 
         .btn-secondary {
-          border: 1.5px solid #e5e7eb;
+          border: 2px solid #e5e7eb;
           color: #6b7280;
           background: white;
         }
@@ -452,7 +465,7 @@ export default function HomePage() {
 
         .mobile-menu {
           position: fixed;
-          top: 96px;
+          top: 92px;
           left: 0;
           right: 0;
           background: white;
@@ -462,6 +475,13 @@ export default function HomePage() {
           opacity: 0;
           visibility: hidden;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (max-width: 768px) {
+          .mobile-menu {
+            top: 76px;
+            padding: 1.5rem;
+          }
         }
 
         .mobile-menu.active {
@@ -478,6 +498,13 @@ export default function HomePage() {
           display: flex;
           align-items: center;
           padding: 7rem 0 4rem;
+        }
+
+        @media (max-width: 768px) {
+          .hero {
+            padding: 5rem 0 3rem;
+            min-height: 90vh;
+          }
         }
 
         .hero::before {
@@ -619,6 +646,13 @@ export default function HomePage() {
           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
+        @media (max-width: 768px) {
+          .hero-badge {
+            padding: 0.5rem 1rem;
+            margin-bottom: 1.5rem;
+          }
+        }
+
         .badge-dot {
           width: 8px;
           height: 8px;
@@ -649,8 +683,14 @@ export default function HomePage() {
           text-transform: uppercase;
         }
 
+        @media (max-width: 768px) {
+          .badge-text {
+            font-size: 0.75rem;
+          }
+        }
+
         .hero-title {
-          font-size: clamp(2.5rem, 5vw, 4.5rem);
+          font-size: clamp(2rem, 5vw, 4.5rem);
           font-weight: 900;
           color: white;
           line-height: 1.1;
@@ -681,10 +721,29 @@ export default function HomePage() {
           text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
+        @media (max-width: 768px) {
+          .hero-description {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+          }
+        }
+
         .hero-buttons {
           display: flex;
           gap: 1.25rem;
           flex-wrap: wrap;
+        }
+
+        @media (max-width: 768px) {
+          .hero-buttons {
+            flex-direction: column;
+            gap: 1rem;
+          }
+
+          .hero-buttons .btn {
+            justify-content: center;
+            padding: 1rem 2rem;
+          }
         }
 
         .hero-stats-container {
@@ -704,6 +763,14 @@ export default function HomePage() {
           box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3),
                       inset 0 1px 0 rgba(255, 255, 255, 0.2);
           position: relative;
+        }
+
+        @media (max-width: 768px) {
+          .hero-stats {
+            grid-template-columns: 1fr;
+            padding: 2rem;
+            gap: 1.5rem;
+          }
         }
 
         .hero-stats::before {
@@ -733,6 +800,12 @@ export default function HomePage() {
           cursor: default;
           position: relative;
           overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+          .stat-card {
+            padding: 1.25rem;
+          }
         }
 
         .stat-card::before {
@@ -772,12 +845,24 @@ export default function HomePage() {
           text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
+        @media (max-width: 768px) {
+          .stat-value {
+            font-size: 2.25rem;
+          }
+        }
+
         .stat-suffix {
           font-size: 2.25rem;
           background: linear-gradient(135deg, #60a5fa, #a78bfa);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
+        }
+
+        @media (max-width: 768px) {
+          .stat-suffix {
+            font-size: 1.75rem;
+          }
         }
 
         .stat-label {
@@ -787,6 +872,12 @@ export default function HomePage() {
           text-transform: uppercase;
           letter-spacing: 0.5px;
           margin-bottom: 0.75rem;
+        }
+
+        @media (max-width: 768px) {
+          .stat-label {
+            font-size: 0.85rem;
+          }
         }
 
         .stat-trend {
@@ -801,6 +892,13 @@ export default function HomePage() {
           backdrop-filter: blur(10px);
         }
 
+        @media (max-width: 768px) {
+          .stat-trend {
+            font-size: 0.75rem;
+            padding: 0.25rem 0.75rem;
+          }
+        }
+
         .clients-section {
           padding: 6rem 0;
           background: white;
@@ -808,23 +906,36 @@ export default function HomePage() {
           overflow: hidden;
         }
 
+        @media (max-width: 768px) {
+          .clients-section {
+            padding: 4rem 0;
+          }
+        }
+
         .clients-header {
           text-align: center;
           margin-bottom: 4rem;
         }
 
+        @media (max-width: 768px) {
+          .clients-header {
+            margin-bottom: 3rem;
+          }
+        }
+
         .section-badge {
           display: inline-block;
-          padding: 0.5rem 1.25rem;
-          background: linear-gradient(135deg, #f0f9ff, #dbeafe);
-          color: #3b82f6;
-          border-radius: 30px;
-          font-weight: 600;
+          padding: 0.625rem 1.5rem;
+          background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+          color: #1e40af;
+          border-radius: 50px;
+          font-weight: 700;
           font-size: 0.875rem;
           letter-spacing: 0.5px;
-          margin-bottom: 1rem;
+          margin-bottom: 1.5rem;
           text-transform: uppercase;
-          border: 1px solid #bfdbfe;
+          border: 1px solid #93c5fd;
+          box-shadow: 0 4px 15px rgba(59, 130, 246, 0.1);
         }
 
         .section-title {
@@ -844,6 +955,12 @@ export default function HomePage() {
           line-height: 1.7;
         }
 
+        @media (max-width: 768px) {
+          .section-subtitle {
+            font-size: 1rem;
+          }
+        }
+
         .clients-carousel {
           position: relative;
           margin: 0 -2rem;
@@ -854,9 +971,16 @@ export default function HomePage() {
 
         .clients-track {
           display: flex;
-          gap: 4rem;
-          animation: scroll 30s linear infinite;
+          gap: 3rem;
+          animation: scroll 20s linear infinite;
           align-items: center;
+        }
+
+        @media (max-width: 768px) {
+          .clients-track {
+            gap: 2rem;
+            animation: scroll 15s linear infinite;
+          }
         }
 
         .clients-carousel:hover .clients-track {
@@ -869,8 +993,8 @@ export default function HomePage() {
         }
 
         .client-logo {
-          width: 300px;
-          height: 120px;
+          width: 280px;
+          height: 100px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -878,16 +1002,26 @@ export default function HomePage() {
           background: white;
           border-radius: 12px;
           padding: 1.5rem;
-          filter: grayscale(100%);
-          opacity: 0.7;
+          filter: grayscale(30%);
+          opacity: 0.8;
           transition: all 0.3s ease;
           flex-shrink: 0;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        @media (max-width: 768px) {
+          .client-logo {
+            width: 220px;
+            height: 80px;
+            padding: 1rem;
+          }
         }
 
         .client-logo:hover {
           filter: grayscale(0%);
           opacity: 1;
-          transform: scale(1.1);
+          transform: scale(1.05);
+          box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
         }
 
         .client-logo img {
@@ -898,12 +1032,24 @@ export default function HomePage() {
 
         .services-section {
           padding: 6rem 0;
-          background: #f8fafc;
+          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        @media (max-width: 768px) {
+          .services-section {
+            padding: 4rem 0;
+          }
         }
 
         .section-header {
           text-align: center;
           margin-bottom: 4rem;
+        }
+
+        @media (max-width: 768px) {
+          .section-header {
+            margin-bottom: 3rem;
+          }
         }
 
         .services-grid {
@@ -913,14 +1059,23 @@ export default function HomePage() {
           margin-top: 4rem;
         }
 
+        @media (max-width: 768px) {
+          .services-grid {
+            grid-template-columns: 1fr;
+            margin-top: 3rem;
+            gap: 2rem;
+          }
+        }
+
         .service-card {
           background: white;
-          border-radius: 20px;
+          border-radius: 24px;
           overflow: hidden;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.06);
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
           cursor: pointer;
+          border: 1px solid #f1f5f9;
         }
 
         .service-card::before {
@@ -930,14 +1085,14 @@ export default function HomePage() {
           left: 0;
           right: 0;
           height: 4px;
-          background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+          background: var(--card-gradient);
           transform: scaleX(0);
           transition: transform 0.3s ease;
         }
 
         .service-card:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+          transform: translateY(-12px);
+          box-shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
         }
 
         .service-card:hover::before {
@@ -960,7 +1115,13 @@ export default function HomePage() {
         }
 
         .service-content {
-          padding: 2rem;
+          padding: 2.5rem;
+        }
+
+        @media (max-width: 768px) {
+          .service-content {
+            padding: 2rem;
+          }
         }
 
         .service-title {
@@ -1020,9 +1181,21 @@ export default function HomePage() {
           background: white;
         }
 
+        @media (max-width: 768px) {
+          .process-section {
+            padding: 4rem 0;
+          }
+        }
+
         .process-timeline {
           position: relative;
           margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+          .process-timeline {
+            margin-top: 3rem;
+          }
         }
 
         .process-line {
@@ -1036,11 +1209,24 @@ export default function HomePage() {
           z-index: 0;
         }
 
+        @media (max-width: 768px) {
+          .process-line {
+            display: none;
+          }
+        }
+
         .process-steps {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
           gap: 2rem;
           position: relative;
+        }
+
+        @media (max-width: 768px) {
+          .process-steps {
+            grid-template-columns: 1fr;
+            gap: 3rem;
+          }
         }
 
         .process-step {
@@ -1057,15 +1243,22 @@ export default function HomePage() {
           overflow: hidden;
           position: relative;
           border: 4px solid #e5e7eb;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.08);
           transition: all 0.3s ease;
           background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        }
+
+        @media (max-width: 768px) {
+          .process-image {
+            width: 150px;
+            height: 150px;
+          }
         }
 
         .process-step:hover .process-image {
           transform: scale(1.05);
           border-color: #3b82f6;
-          box-shadow: 0 15px 50px rgba(59, 130, 246, 0.2);
+          box-shadow: 0 20px 60px rgba(59, 130, 246, 0.2);
         }
 
         .step-number {
@@ -1083,7 +1276,16 @@ export default function HomePage() {
           font-size: 1.125rem;
           color: white;
           z-index: 1;
-          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+        }
+
+        @media (max-width: 768px) {
+          .step-number {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+            right: 15px;
+          }
         }
 
         .step-title {
@@ -1093,11 +1295,23 @@ export default function HomePage() {
           margin-bottom: 0.875rem;
         }
 
+        @media (max-width: 768px) {
+          .step-title {
+            font-size: 1.25rem;
+          }
+        }
+
         .step-description {
           color: #6b7280;
           line-height: 1.6;
           margin-bottom: 1rem;
           padding: 0 1rem;
+        }
+
+        @media (max-width: 768px) {
+          .step-description {
+            padding: 0;
+          }
         }
 
         .step-duration {
@@ -1112,7 +1326,13 @@ export default function HomePage() {
 
         .achievements-section {
           padding: 6rem 0;
-          background: #f8fafc;
+          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        }
+
+        @media (max-width: 768px) {
+          .achievements-section {
+            padding: 4rem 0;
+          }
         }
 
         .achievements-grid {
@@ -1122,10 +1342,18 @@ export default function HomePage() {
           margin-top: 4rem;
         }
 
+        @media (max-width: 768px) {
+          .achievements-grid {
+            grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-top: 3rem;
+          }
+        }
+
         .achievement-card {
           position: relative;
           overflow: hidden;
-          border-radius: 20px;
+          border-radius: 24px;
           box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
           transition: transform 0.3s ease;
           cursor: pointer;
@@ -1142,6 +1370,12 @@ export default function HomePage() {
           background: linear-gradient(135deg, #1e40af, #3b82f6);
         }
 
+        @media (max-width: 768px) {
+          .achievement-image {
+            height: 240px;
+          }
+        }
+
         .achievement-overlay {
           position: absolute;
           bottom: 0;
@@ -1151,11 +1385,23 @@ export default function HomePage() {
           background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 100%);
         }
 
+        @media (max-width: 768px) {
+          .achievement-overlay {
+            padding: 1.5rem;
+          }
+        }
+
         .achievement-title {
           font-size: 1.5rem;
           font-weight: 700;
           color: white;
           margin-bottom: 0.625rem;
+        }
+
+        @media (max-width: 768px) {
+          .achievement-title {
+            font-size: 1.25rem;
+          }
         }
 
         .achievement-description {
@@ -1166,6 +1412,12 @@ export default function HomePage() {
         .about-section {
           background: white;
           padding: 6rem 0;
+        }
+
+        @media (max-width: 768px) {
+          .about-section {
+            padding: 4rem 0;
+          }
         }
 
         .about-grid {
@@ -1179,11 +1431,18 @@ export default function HomePage() {
         @media (max-width: 1024px) {
           .about-grid {
             grid-template-columns: 1fr;
+            gap: 3rem;
           }
         }
 
         .about-content {
           padding: 2rem;
+        }
+
+        @media (max-width: 768px) {
+          .about-content {
+            padding: 0;
+          }
         }
 
         .about-content h3 {
@@ -1193,6 +1452,12 @@ export default function HomePage() {
           margin-bottom: 1.5rem;
         }
 
+        @media (max-width: 768px) {
+          .about-content h3 {
+            font-size: 1.875rem;
+          }
+        }
+
         .about-content > p {
           color: #6b7280;
           font-size: 1.125rem;
@@ -1200,12 +1465,24 @@ export default function HomePage() {
           margin-bottom: 2rem;
         }
 
+        @media (max-width: 768px) {
+          .about-content > p {
+            font-size: 1rem;
+          }
+        }
+
         .about-image {
           position: relative;
           height: 500px;
-          border-radius: 20px;
+          border-radius: 24px;
           overflow: hidden;
           box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
+        }
+
+        @media (max-width: 768px) {
+          .about-image {
+            height: 300px;
+          }
         }
 
         .about-features {
@@ -1213,6 +1490,13 @@ export default function HomePage() {
           grid-template-columns: 1fr 1fr;
           gap: 2rem;
           margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+          .about-features {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+          }
         }
 
         .about-feature {
@@ -1232,6 +1516,13 @@ export default function HomePage() {
           flex-shrink: 0;
         }
 
+        @media (max-width: 768px) {
+          .about-icon {
+            width: 44px;
+            height: 44px;
+          }
+        }
+
         .about-feature-text h4 {
           font-weight: 700;
           color: #1a1a1a;
@@ -1248,6 +1539,12 @@ export default function HomePage() {
           background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
           position: relative;
           overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+          .cta-section {
+            padding: 4rem 0;
+          }
         }
 
         .cta-pattern {
@@ -1270,6 +1567,7 @@ export default function HomePage() {
           .cta-wrapper {
             grid-template-columns: 1fr;
             text-align: center;
+            gap: 3rem;
           }
         }
 
@@ -1290,18 +1588,48 @@ export default function HomePage() {
           line-height: 1.8;
         }
 
+        @media (max-width: 768px) {
+          .cta-description {
+            font-size: 1rem;
+            margin-bottom: 2rem;
+          }
+        }
+
         .cta-buttons {
           display: flex;
           gap: 1.25rem;
           flex-wrap: wrap;
         }
 
+        @media (max-width: 768px) {
+          .cta-buttons {
+            flex-direction: column;
+            gap: 1rem;
+          }
+
+          .cta-buttons .btn {
+            justify-content: center;
+          }
+        }
+
         .cta-image {
           position: relative;
           height: 400px;
-          border-radius: 20px;
+          border-radius: 24px;
           overflow: hidden;
           box-shadow: 0 40px 100px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 1024px) {
+          .cta-image {
+            height: 300px;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .cta-image {
+            height: 250px;
+          }
         }
 
         .btn-white {
@@ -1333,6 +1661,12 @@ export default function HomePage() {
           border-top: 1px solid #e5e7eb;
         }
 
+        @media (max-width: 768px) {
+          .footer {
+            padding: 3rem 0 2rem;
+          }
+        }
+
         .footer-grid {
           display: grid;
           grid-template-columns: 2fr 1fr 1fr 1fr;
@@ -1343,6 +1677,7 @@ export default function HomePage() {
         @media (max-width: 768px) {
           .footer-grid {
             grid-template-columns: 1fr;
+            gap: 2rem;
           }
         }
 
@@ -1361,6 +1696,12 @@ export default function HomePage() {
           width: auto;
         }
 
+        @media (max-width: 768px) {
+          .footer-logo-image {
+            height: 60px;
+          }
+        }
+
         .footer-description {
           color: #6b7280;
           line-height: 1.8;
@@ -1373,21 +1714,24 @@ export default function HomePage() {
         }
 
         .social-link {
-          width: 40px;
-          height: 40px;
-          background: #f1f5f9;
-          border-radius: 10px;
+          width: 44px;
+          height: 44px;
+          background: #f8fafc;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.3s ease;
-          color: #6b7280;
+          color: #64748b;
+          border: 1px solid #e2e8f0;
         }
 
         .social-link:hover {
           background: #3b82f6;
           color: white;
           transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+          border-color: #3b82f6;
         }
 
         .footer-column h4 {
@@ -1422,6 +1766,14 @@ export default function HomePage() {
           gap: 1rem;
         }
 
+        @media (max-width: 768px) {
+          .footer-bottom {
+            flex-direction: column;
+            text-align: center;
+            gap: 1rem;
+          }
+        }
+
         .footer-copyright {
           color: #6b7280;
         }
@@ -1429,6 +1781,12 @@ export default function HomePage() {
         .footer-legal {
           display: flex;
           gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+          .footer-legal {
+            gap: 1rem;
+          }
         }
 
         [data-animate] {
@@ -1444,50 +1802,6 @@ export default function HomePage() {
           to {
             opacity: 1;
             transform: translateY(0);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .hero-title {
-            font-size: 2.25rem;
-          }
-
-          .section-title {
-            font-size: 2rem;
-          }
-
-          .services-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .process-steps {
-            grid-template-columns: 1fr;
-          }
-
-          .process-line {
-            display: none;
-          }
-
-          .hero-stats {
-            grid-template-columns: 1fr;
-            padding: 2rem;
-          }
-
-          .stat-value {
-            font-size: 2.25rem;
-          }
-
-          .achievements-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .clients-track {
-            gap: 2rem;
-          }
-
-          .client-logo {
-            width: 200px;
-            height: 80px;
           }
         }
 
@@ -1732,7 +2046,11 @@ export default function HomePage() {
                   className="service-card" 
                   data-animate 
                   id={`service-${index}`}
-                  style={{ '--gradient-start': service.gradient.split(' ')[1], '--gradient-end': service.gradient.split(' ')[3] }}
+                  style={{ '--card-gradient': service.gradient.split(' ')[1] === 'from-blue-500' 
+                    ? 'linear-gradient(90deg, #3b82f6, #2563eb)' 
+                    : service.gradient.split(' ')[1] === 'from-indigo-500'
+                    ? 'linear-gradient(90deg, #6366f1, #8b5cf6)' 
+                    : 'linear-gradient(90deg, #a855f7, #ec4899)' }}
                 >
                   <div className="service-image">
                     <Image 
@@ -2033,8 +2351,8 @@ export default function HomePage() {
               © 2025 Humanis México. Todos los derechos reservados.
             </p>
             <div className="footer-legal">
-              <Link href="/privacidad" className="footer-link">Aviso de Privacidad</Link>
-              <Link href="/terminos" className="footer-link">Términos y Condiciones</Link>
+              <Link href="/aviso-de-privacidad" className="footer-link">Aviso de Privacidad</Link>
+              <Link href="/terminos-y-condiciones" className="footer-link">Términos y Condiciones</Link>
             </div>
           </div>
         </div>

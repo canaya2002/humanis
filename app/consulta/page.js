@@ -359,7 +359,7 @@ export default function ConsultaPage() {
 
         @media (max-width: 768px) {
           .container {
-            padding: 0 1.25rem;
+            padding: 0 1rem;
           }
         }
 
@@ -388,6 +388,12 @@ export default function ConsultaPage() {
           padding: 1rem 0;
         }
 
+        @media (max-width: 768px) {
+          .nav-wrapper {
+            padding: 0.75rem 0;
+          }
+        }
+
         .logo-container {
           display: flex;
           align-items: center;
@@ -402,6 +408,12 @@ export default function ConsultaPage() {
         .logo-image {
           height: 80px;
           width: auto;
+        }
+
+        @media (max-width: 768px) {
+          .logo-image {
+            height: 60px;
+          }
         }
 
         .nav-menu {
@@ -540,7 +552,7 @@ export default function ConsultaPage() {
 
         .mobile-menu {
           position: fixed;
-          top: 96px;
+          top: 76px;
           left: 0;
           right: 0;
           background: white;
@@ -550,6 +562,12 @@ export default function ConsultaPage() {
           opacity: 0;
           visibility: hidden;
           transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @media (max-width: 768px) {
+          .mobile-menu {
+            top: 68px;
+          }
         }
 
         .mobile-menu.active {
@@ -567,6 +585,12 @@ export default function ConsultaPage() {
           display: flex;
           align-items: center;
           padding: 7rem 0 4rem;
+        }
+
+        @media (max-width: 768px) {
+          .hero {
+            padding: 5rem 0 4rem;
+          }
         }
 
         .hero::before {
@@ -725,10 +749,10 @@ export default function ConsultaPage() {
         .hero-badge {
           display: inline-flex;
           align-items: center;
-          gap: 0.625rem;
+          gap: 0.75rem;
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
-          padding: 0.625rem 1.5rem;
+          padding: 0.75rem 1.5rem;
           border-radius: 50px;
           border: 1px solid rgba(255, 255, 255, 0.2);
           margin-bottom: 2rem;
@@ -846,7 +870,10 @@ export default function ConsultaPage() {
         @media (max-width: 768px) {
           .hero-stats {
             grid-template-columns: 1fr;
-            padding: 2rem;
+            gap: 1.5rem;
+            padding: 2rem 1.5rem;
+            margin: 0 0.5rem;
+            border-radius: 20px;
           }
         }
 
@@ -861,6 +888,13 @@ export default function ConsultaPage() {
           cursor: default;
           position: relative;
           overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+          .stat-card {
+            padding: 1.25rem;
+            border-radius: 12px;
+          }
         }
 
         .stat-card::before {
@@ -905,6 +939,12 @@ export default function ConsultaPage() {
           text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
+        @media (max-width: 768px) {
+          .stat-value {
+            font-size: 2.5rem;
+          }
+        }
+
         .stat-label {
           color: rgba(255, 255, 255, 0.8);
           font-size: 0.95rem;
@@ -913,10 +953,22 @@ export default function ConsultaPage() {
           letter-spacing: 0.5px;
         }
 
+        @media (max-width: 768px) {
+          .stat-label {
+            font-size: 0.85rem;
+          }
+        }
+
         /* Sections */
         .section {
           padding: 6rem 0;
           position: relative;
+        }
+
+        @media (max-width: 768px) {
+          .section {
+            padding: 4rem 0;
+          }
         }
 
         .section-alt {
@@ -928,9 +980,15 @@ export default function ConsultaPage() {
           margin-bottom: 4rem;
         }
 
+        @media (max-width: 768px) {
+          .section-header {
+            margin-bottom: 3rem;
+          }
+        }
+
         .section-badge {
           display: inline-block;
-          padding: 0.625rem 1.5rem;
+          padding: 0.75rem 1.5rem;
           background: linear-gradient(135deg, #dbeafe, #bfdbfe);
           color: #1e40af;
           border-radius: 50px;
@@ -958,6 +1016,12 @@ export default function ConsultaPage() {
           max-width: 700px;
           margin: 0 auto;
           line-height: 1.7;
+        }
+
+        @media (max-width: 768px) {
+          .section-subtitle {
+            font-size: 1.1rem;
+          }
         }
 
         /* Enhanced Form Section */
@@ -1008,8 +1072,9 @@ export default function ConsultaPage() {
 
         @media (max-width: 768px) {
           .form-card {
-            padding: 2.5rem 2rem;
+            padding: 2.5rem 1.5rem;
             border-radius: 24px;
+            margin-top: 2rem;
           }
         }
 
@@ -1053,6 +1118,15 @@ export default function ConsultaPage() {
           font-family: 'Inter', sans-serif;
           position: relative;
           z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+          .form-input,
+          .form-select,
+          .form-textarea {
+            padding: 0.875rem 1.25rem;
+            font-size: 0.95rem;
+          }
         }
 
         .form-input::placeholder,
@@ -1117,6 +1191,13 @@ export default function ConsultaPage() {
           flex-direction: column;
           min-height: 280px;
           overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+          .contact-card {
+            padding: 2rem 1.5rem;
+            min-height: 250px;
+          }
         }
 
         .contact-card::before {
@@ -1193,6 +1274,12 @@ export default function ConsultaPage() {
           line-height: 1.2;
         }
 
+        @media (max-width: 768px) {
+          .contact-title {
+            font-size: 1.5rem;
+          }
+        }
+
         .contact-subtitle {
           font-size: 1rem;
           color: #64748b;
@@ -1211,6 +1298,12 @@ export default function ConsultaPage() {
           transition: all 0.3s ease;
           color: var(--card-color);
           line-height: 1.3;
+        }
+
+        @media (max-width: 768px) {
+          .contact-value {
+            font-size: 1.2rem;
+          }
         }
 
         .contact-value:hover {
@@ -1244,6 +1337,13 @@ export default function ConsultaPage() {
           letter-spacing: 0.5px;
         }
 
+        @media (max-width: 768px) {
+          .contact-action {
+            padding: 0.875rem 1.5rem;
+            font-size: 0.9rem;
+          }
+        }
+
         .contact-action:hover {
           background: var(--card-color);
           color: white;
@@ -1256,6 +1356,13 @@ export default function ConsultaPage() {
           position: relative;
           margin-top: 5rem;
           padding: 3rem 0;
+        }
+
+        @media (max-width: 768px) {
+          .process-timeline {
+            margin-top: 3rem;
+            padding: 2rem 0;
+          }
         }
 
         .process-line {
@@ -1320,6 +1427,13 @@ export default function ConsultaPage() {
           align-items: center;
           min-height: 300px;
           overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+          .process-step {
+            padding: 2rem 1.25rem;
+            min-height: 250px;
+          }
         }
 
         .process-step::before {
@@ -1406,6 +1520,12 @@ export default function ConsultaPage() {
           line-height: 1.3;
         }
 
+        @media (max-width: 768px) {
+          .step-title {
+            font-size: 1.3rem;
+          }
+        }
+
         .step-description {
           color: #64748b;
           line-height: 1.7;
@@ -1415,12 +1535,24 @@ export default function ConsultaPage() {
           align-items: center;
         }
 
+        @media (max-width: 768px) {
+          .step-description {
+            font-size: 0.95rem;
+          }
+        }
+
         /* CTA Section */
         .cta-section {
           padding: 6rem 0;
           background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
           position: relative;
           overflow: hidden;
+        }
+
+        @media (max-width: 768px) {
+          .cta-section {
+            padding: 4rem 0;
+          }
         }
 
         .cta-pattern {
@@ -1453,11 +1585,25 @@ export default function ConsultaPage() {
           margin-right: auto;
         }
 
+        @media (max-width: 768px) {
+          .cta-description {
+            font-size: 1.1rem;
+            margin-bottom: 2.5rem;
+          }
+        }
+
         .cta-buttons {
           display: flex;
           gap: 1.25rem;
           flex-wrap: wrap;
           justify-content: center;
+        }
+
+        @media (max-width: 768px) {
+          .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+          }
         }
 
         .btn-white {
@@ -1535,6 +1681,12 @@ export default function ConsultaPage() {
           border-top: 1px solid #e5e7eb;
         }
 
+        @media (max-width: 768px) {
+          .footer {
+            padding: 3rem 0 2rem;
+          }
+        }
+
         .footer-grid {
           display: grid;
           grid-template-columns: 2fr 1fr 1fr;
@@ -1545,6 +1697,8 @@ export default function ConsultaPage() {
         @media (max-width: 768px) {
           .footer-grid {
             grid-template-columns: 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
           }
         }
 
@@ -1561,6 +1715,12 @@ export default function ConsultaPage() {
         .footer-logo-image {
           height: 80px;
           width: auto;
+        }
+
+        @media (max-width: 768px) {
+          .footer-logo-image {
+            height: 60px;
+          }
         }
 
         .footer-description {
@@ -1627,6 +1787,13 @@ export default function ConsultaPage() {
           gap: 1rem;
         }
 
+        @media (max-width: 768px) {
+          .footer-bottom {
+            flex-direction: column;
+            text-align: center;
+          }
+        }
+
         .footer-copyright {
           color: #6b7280;
         }
@@ -1634,6 +1801,12 @@ export default function ConsultaPage() {
         .footer-legal {
           display: flex;
           gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+          .footer-legal {
+            gap: 1rem;
+          }
         }
 
         /* Animations */
@@ -1650,37 +1823,6 @@ export default function ConsultaPage() {
           to {
             opacity: 1;
             transform: translateY(0);
-          }
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-          .hero-title {
-            font-size: 2.25rem;
-          }
-
-          .section-title {
-            font-size: 2rem;
-          }
-
-          .contact-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .process-steps {
-            grid-template-columns: 1fr;
-          }
-
-          .stat-value {
-            font-size: 2.25rem;
-          }
-
-          .contact-card {
-            padding: 2rem;
-          }
-
-          .process-step {
-            padding: 2rem 1.5rem;
           }
         }
 
@@ -1719,7 +1861,7 @@ export default function ConsultaPage() {
               <Link href="/#proceso" className="nav-link">
                 Proceso
               </Link>
-              <Link href="/por-que-nosotros" className="nav-link">
+              <Link href="/nosotros" className="nav-link">
                 ¿Por qué nosotros?
               </Link>
               <Link href="/consulta" className="nav-link active">
@@ -1759,7 +1901,7 @@ export default function ConsultaPage() {
             <Link href="/#proceso" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
               Proceso
             </Link>
-            <Link href="/por-que-nosotros" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
+            <Link href="/nosotros" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
               ¿Por qué nosotros?
             </Link>
             <Link href="/consulta" className="nav-link active" onClick={() => setMobileMenuOpen(false)}>
@@ -2334,7 +2476,7 @@ export default function ConsultaPage() {
                     </Link>
                   </li>
                   <li>
-                    <Link href="/por-que-nosotros" className="footer-link">
+                    <Link href="/nosotros" className="footer-link">
                       ¿Por Qué Nosotros?
                     </Link>
                   </li>
