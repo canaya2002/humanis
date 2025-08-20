@@ -15,24 +15,25 @@ export default function HomePage() {
   const [currentStat, setCurrentStat] = useState(0);
 
   useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800);
+    const timer = setTimeout(() => setIsLoading(false), 600);
 
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 10);
       
-      // Parallax effects
       const parallaxElements = document.querySelectorAll('[data-parallax]');
       parallaxElements.forEach(el => {
         const speed = el.dataset.parallax;
         const yPos = -(window.scrollY * speed);
-        el.style.transform = `translateY(${yPos}px)`;
+        el.style.transform = `translate3d(0, ${yPos}px, 0)`;
       });
     };
 
     const handleMouseMove = (e) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100
+      requestAnimationFrame(() => {
+        setMousePosition({
+          x: (e.clientX / window.innerWidth) * 100,
+          y: (e.clientY / window.innerHeight) * 100
+        });
       });
     };
 
@@ -41,18 +42,18 @@ export default function HomePage() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             setVisibleSections(prev => new Set([...prev, entry.target.id]));
-            entry.target.classList.add('section-visible');
+            entry.target.classList.add('in-view');
           }
         });
       },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      { threshold: 0.05, rootMargin: '-50px' }
     );
 
     document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
 
     const statTimer = setInterval(() => {
       setCurrentStat(prev => (prev + 1) % 4);
-    }, 3000);
+    }, 4000);
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('mousemove', handleMouseMove);
@@ -78,7 +79,7 @@ export default function HomePage() {
         'Due diligence profesional'
       ],
       image: '/images/executive-search.jpg',
-      gradient: 'from-blue-600 to-indigo-700'
+      gradient: 'from-blue-500 to-blue-600'
     },
     {
       title: 'Talent Mapping',
@@ -91,7 +92,7 @@ export default function HomePage() {
         'Reportes de mercado detallados'
       ],
       image: '/images/talent-mapping.jpg',
-      gradient: 'from-purple-600 to-pink-600'
+      gradient: 'from-indigo-500 to-purple-600'
     },
     {
       title: 'Organizational Development',
@@ -104,15 +105,15 @@ export default function HomePage() {
         'Change management'
       ],
       image: '/images/organizational-dev.jpg',
-      gradient: 'from-green-600 to-teal-600'
+      gradient: 'from-purple-500 to-pink-600'
     }
   ];
 
   const stats = [
-    { value: '300+', label: 'Ejecutivos Colocados', trend: '+23%', icon: 'users' },
-    { value: '98%', label: 'Tasa de Retención', trend: 'Industry Leading', icon: 'chart' },
-    { value: '9', label: 'Días Promedio', trend: '72% más rápido', icon: 'clock' },
-    { value: '50+', label: 'Empresas Clientes', icon: 'building' }
+    { value: '300', suffix: '+', label: 'Ejecutivos Colocados', trend: '+23%' },
+    { value: '98', suffix: '%', label: 'Tasa de Retención', trend: 'Industry Leading' },
+    { value: '9', suffix: '', label: 'Días Promedio', trend: '72% más rápido' },
+    { value: '50', suffix: '+', label: 'Empresas Clientes' }
   ];
 
   const clients = [
@@ -179,11 +180,11 @@ export default function HomePage() {
     "@context": "https://schema.org",
     "@type": "ProfessionalService",
     "name": "Humanis México",
-    "alternateName": "Humanis Consultoría de Talento",
+    "alternateName": "Humanis Consultoría Executive Search",
     "url": "https://humanis.com.mx",
-    "logo": "https://humanis.com.mx/logo.svg",
+    "logo": "https://humanis.com.mx/images/logohumanis.png",
     "image": "https://humanis.com.mx/og-image.jpg",
-    "description": "Humanis es la firma líder en executive search y consultoría de talento en México. Especialistas en reclutamiento C-Level y transformación organizacional.",
+    "description": "Humanis México es la firma líder en executive search, headhunting y consultoría de talento ejecutivo. Especialistas en reclutamiento C-Level con 98% de retención.",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "Av. Paseo de la Reforma 250, Piso 15",
@@ -197,7 +198,7 @@ export default function HomePage() {
       "latitude": "19.4326",
       "longitude": "-99.1332"
     },
-    "telephone": "+52-55-5555-0100",
+    "telephone": "+52-55-4416-7974",
     "email": "contacto@humanis.com.mx",
     "priceRange": "$$$",
     "openingHoursSpecification": {
@@ -207,32 +208,39 @@ export default function HomePage() {
       "closes": "18:00"
     },
     "sameAs": [
-      "https://linkedin.com/company/humanis-mexico"
+      "https://linkedin.com/company/humanis-mexico",
+      "https://twitter.com/humanismx"
     ],
     "aggregateRating": {
       "@type": "AggregateRating",
       "ratingValue": "4.9",
-      "reviewCount": "523"
+      "reviewCount": "523",
+      "bestRating": "5"
     }
   };
 
   return (
     <>
       <Head>
-        <title>Humanis | Executive Search & Consultoría de Talento Líder en México</title>
-        <meta name="description" content="Humanis: Firma premium de executive search en México. Especialistas en reclutamiento C-Level, transformación organizacional y talent mapping. 95% retención, 14 días promedio." />
-        <meta name="keywords" content="humanis mexico, executive search mexico, headhunting cdmx, reclutamiento ejecutivo, consultoria talento, c-level recruitment, talent acquisition mexico, humanis consultoria" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="robots" content="index, follow" />
+        <html lang="es-MX" />
+        <title>Humanis México | Executive Search, Headhunting y Consultoría de Talento Líder | Reclutamiento C-Level Premium</title>
+        <meta name="description" content="Humanis México: Firma #1 de executive search y headhunting. Especialistas en reclutamiento C-Level con 98% retención. Transformamos organizaciones conectando líderes excepcionales con empresas Fortune 500. ✓300+ ejecutivos colocados ✓9 días promedio ✓Garantía 60 días. Consulta gratuita disponible." />
+        <meta name="keywords" content="humanis mexico, executive search mexico, headhunting mexico, headhunting cdmx, reclutamiento ejecutivo, consultoria talento mexico, c-level recruitment mexico, talent acquisition, humanis consultoria, busqueda ejecutivos, firma headhunting, reclutamiento directivo" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="author" content="Humanis México" />
+        <meta name="generator" content="Next.js" />
         <link rel="canonical" href="https://humanis.com.mx" />
+        <link rel="alternate" hrefLang="es-MX" href="https://humanis.com.mx" />
         
         {/* Open Graph */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="Humanis | Executive Search Premium en México" />
-        <meta property="og:description" content="Humanis: Conectamos líderes excepcionales con empresas extraordinarias. Executive search y consultoría de talento." />
+        <meta property="og:title" content="Humanis México | Executive Search & Headhunting Premium #1" />
+        <meta property="og:description" content="Firma líder de executive search en México. 300+ ejecutivos colocados, 98% retención. Transformamos empresas con talento C-Level excepcional." />
         <meta property="og:image" content="https://humanis.com.mx/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Humanis México - Executive Search Premium" />
         <meta property="og:url" content="https://humanis.com.mx" />
         <meta property="og:site_name" content="Humanis México" />
         <meta property="og:locale" content="es_MX" />
@@ -240,15 +248,22 @@ export default function HomePage() {
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:site" content="@humanismx" />
-        <meta name="twitter:title" content="Humanis | Executive Search Premium" />
-        <meta name="twitter:description" content="Líderes en executive search y consultoría de talento en México" />
+        <meta name="twitter:creator" content="@humanismx" />
+        <meta name="twitter:title" content="Humanis | Executive Search Premium México" />
+        <meta name="twitter:description" content="Líderes en headhunting y consultoría de talento ejecutivo. 98% retención, 9 días promedio." />
         <meta name="twitter:image" content="https://humanis.com.mx/twitter-card.jpg" />
         
-        <link rel="icon" href="/favicon.ico" />
+        {/* Icons */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#1e40af" />
+        
+        {/* Preconnect */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </Head>
 
       <Script
@@ -260,7 +275,7 @@ export default function HomePage() {
       <Script
         id="gtag"
         strategy="afterInteractive"
-        src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+        src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
       />
 
       <style jsx global>{`
@@ -274,19 +289,35 @@ export default function HomePage() {
 
         html {
           scroll-behavior: smooth;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           line-height: 1.6;
-          color: #0f172a;
+          color: #1a1a1a;
           background: #ffffff;
           overflow-x: hidden;
         }
 
         ::selection {
-          background: #3b82f6;
-          color: white;
+          background: rgba(59, 130, 246, 0.15);
+          color: #1e40af;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: #f8f9fa;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #3b82f6, #1e40af);
+          border-radius: 5px;
         }
 
         .container {
@@ -301,34 +332,66 @@ export default function HomePage() {
           }
         }
 
-        /* Loading Animation */
+        /* Loading */
         .loader {
           position: fixed;
           inset: 0;
-          background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+          background: white;
           display: flex;
           align-items: center;
           justify-content: center;
           z-index: 9999;
-          transition: opacity 0.5s ease-out, visibility 0.5s ease-out;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .loader.hidden {
           opacity: 0;
           visibility: hidden;
+          transform: scale(0.95);
         }
 
-        .loader-spinner {
-          width: 60px;
-          height: 60px;
-          border: 4px solid rgba(255, 255, 255, 0.2);
-          border-top-color: white;
+        .loader-content {
+          text-align: center;
+        }
+
+        .loader-logo {
+          width: 240px;
+          height: 96px;
+          margin-bottom: 2rem;
+          opacity: 0;
+          animation: logoFadeIn 0.6s ease forwards;
+        }
+
+        .loader-dots {
+          display: flex;
+          gap: 0.5rem;
+          justify-content: center;
+        }
+
+        .loader-dot {
+          width: 10px;
+          height: 10px;
+          background: #3b82f6;
           border-radius: 50%;
-          animation: spin 1s linear infinite;
+          animation: dotPulse 1.4s ease-in-out infinite;
         }
 
-        @keyframes spin {
-          to { transform: rotate(360deg); }
+        .loader-dot:nth-child(2) { animation-delay: 0.2s; }
+        .loader-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes logoFadeIn {
+          to { opacity: 1; }
+        }
+
+        @keyframes dotPulse {
+          0%, 80%, 100% {
+            transform: scale(1);
+            opacity: 1;
+          }
+          40% {
+            transform: scale(1.3);
+            opacity: 0.7;
+          }
         }
 
         /* Navigation */
@@ -338,27 +401,33 @@ export default function HomePage() {
           left: 0;
           right: 0;
           z-index: 1000;
-          background: rgba(255, 255, 255, 0.98);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          transition: all 0.3s ease;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-header.scrolled {
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+          background: rgba(255, 255, 255, 0.98);
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
         }
 
         .nav-wrapper {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 1.25rem 0;
+          padding: 1rem 0;
         }
 
         .logo-container {
           display: flex;
           align-items: center;
           text-decoration: none;
+          transition: transform 0.3s ease;
+        }
+
+        .logo-container:hover {
+          transform: scale(1.05);
         }
 
         .logo-image {
@@ -373,27 +442,29 @@ export default function HomePage() {
         }
 
         .nav-link {
+          font-size: 0.95rem;
           font-weight: 500;
-          color: #475569;
+          color: #6b7280;
           text-decoration: none;
           position: relative;
           padding: 0.5rem 0;
-          transition: color 0.3s ease;
+          transition: color 0.2s ease;
         }
 
         .nav-link::after {
           content: '';
           position: absolute;
-          bottom: 0;
-          left: 0;
+          bottom: -2px;
+          left: 50%;
           width: 0;
           height: 2px;
-          background: linear-gradient(90deg, #3b82f6, #1d4ed8);
-          transition: width 0.3s ease;
+          background: #3b82f6;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transform: translateX(-50%);
         }
 
         .nav-link:hover {
-          color: #1e293b;
+          color: #1a1a1a;
         }
 
         .nav-link:hover::after {
@@ -406,32 +477,35 @@ export default function HomePage() {
         }
 
         .btn {
-          padding: 0.875rem 2rem;
-          border-radius: 50px;
+          padding: 0.75rem 1.75rem;
+          border-radius: 10px;
+          font-size: 0.95rem;
           font-weight: 600;
           text-decoration: none;
-          transition: all 0.3s ease;
+          transition: all 0.2s ease;
           display: inline-flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.625rem;
           position: relative;
           overflow: hidden;
+          cursor: pointer;
         }
 
         .btn-primary {
-          background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+          background: #3b82f6;
           color: white;
-          box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
         }
 
         .btn-primary:hover {
+          background: #2563eb;
           transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
+          box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
         }
 
         .btn-secondary {
-          border: 2px solid #e2e8f0;
-          color: #475569;
+          border: 1.5px solid #e5e7eb;
+          color: #6b7280;
           background: white;
         }
 
@@ -445,15 +519,17 @@ export default function HomePage() {
         .mobile-menu-btn {
           display: none;
           flex-direction: column;
-          gap: 6px;
+          gap: 5px;
           padding: 8px;
           cursor: pointer;
+          background: none;
+          border: none;
         }
 
         .mobile-menu-btn span {
-          width: 28px;
+          width: 26px;
           height: 2px;
-          background: #475569;
+          background: #6b7280;
           transition: all 0.3s ease;
           border-radius: 2px;
         }
@@ -464,6 +540,7 @@ export default function HomePage() {
 
         .mobile-menu-btn.active span:nth-child(2) {
           opacity: 0;
+          transform: translateX(-10px);
         }
 
         .mobile-menu-btn.active span:nth-child(3) {
@@ -482,16 +559,16 @@ export default function HomePage() {
 
         .mobile-menu {
           position: fixed;
-          top: 80px;
+          top: 96px;
           left: 0;
           right: 0;
           background: white;
           padding: 2rem;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-          transform: translateY(-100%);
+          transform: translateY(-120%);
           opacity: 0;
           visibility: hidden;
-          transition: all 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .mobile-menu.active {
@@ -503,27 +580,119 @@ export default function HomePage() {
         /* Hero Section */
         .hero {
           min-height: 100vh;
-          background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+          background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #3b82f6 100%);
           position: relative;
           overflow: hidden;
           display: flex;
           align-items: center;
-          padding: 8rem 0 4rem;
+          padding: 7rem 0 4rem;
         }
 
-        .hero-bg {
+        .hero::before {
+          content: '';
           position: absolute;
-          inset: 0;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+                      radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.2) 0%, transparent 50%),
+                      radial-gradient(circle at 40% 20%, rgba(34, 211, 238, 0.2) 0%, transparent 50%);
+          animation: floatAnimation 20s ease-in-out infinite;
+        }
+
+        @keyframes floatAnimation {
+          0%, 100% { transform: translate(0, 0) rotate(0deg); }
+          33% { transform: translate(30px, -30px) rotate(1deg); }
+          66% { transform: translate(-20px, 20px) rotate(-1deg); }
+        }
+
+        .hero-pattern {
+          position: absolute;
+          top: 0;
+          right: -10%;
+          width: 60%;
+          height: 100%;
+          opacity: 0.1;
+          background-image: 
+            linear-gradient(60deg, #3b82f6 12%, transparent 12.5%, transparent 87%, #3b82f6 87.5%, #3b82f6),
+            linear-gradient(120deg, #3b82f6 12%, transparent 12.5%, transparent 87%, #3b82f6 87.5%, #3b82f6);
+          background-size: 60px 100px;
+          background-position: 0 0, 30px 50px;
+          animation: waveAnimation 15s linear infinite;
+        }
+
+        @keyframes waveAnimation {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(60px); }
+        }
+
+        .hero-glow {
+          position: absolute;
+          top: 10%;
+          left: -20%;
+          width: 800px;
+          height: 800px;
+          background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 60%);
+          filter: blur(100px);
+          animation: pulseGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+          0%, 100% { transform: scale(1) translateY(0); }
+          50% { transform: scale(1.2) translateY(-50px); }
+        }
+
+        .hero::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 200px;
+          background: linear-gradient(to top, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+          pointer-events: none;
+        }
+
+        .hero-lines {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          overflow: hidden;
           opacity: 0.1;
         }
 
-        .hero-grid {
+        .hero-line {
           position: absolute;
-          inset: 0;
-          background-image: 
-            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-          background-size: 50px 50px;
+          width: 2px;
+          height: 100%;
+          background: linear-gradient(to bottom, transparent 0%, rgba(147, 197, 253, 0.8) 50%, transparent 100%);
+          animation: lineMove 15s linear infinite;
+          box-shadow: 0 0 20px rgba(147, 197, 253, 0.5);
+        }
+
+        @keyframes lineMove {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(100vw); }
+        }
+
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 0.5;
+          }
+          90% {
+            opacity: 0.5;
+          }
+          50% {
+            transform: translateY(-100vh) translateX(100px);
+            opacity: 0.8;
+          }
         }
 
         .hero-wrapper {
@@ -545,21 +714,17 @@ export default function HomePage() {
           z-index: 10;
         }
 
-        .hero-stats-container {
-          position: relative;
-          z-index: 10;
-        }
-
         .hero-badge {
           display: inline-flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.625rem;
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
           padding: 0.625rem 1.5rem;
           border-radius: 50px;
           border: 1px solid rgba(255, 255, 255, 0.2);
           margin-bottom: 2rem;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         .badge-dot {
@@ -568,11 +733,20 @@ export default function HomePage() {
           background: #10b981;
           border-radius: 50%;
           animation: pulse 2s infinite;
+          box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
         }
 
         @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
+          0%, 100% { 
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+          }
+          50% { 
+            opacity: 0.8;
+            transform: scale(1.5);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.8);
+          }
         }
 
         .badge-text {
@@ -580,103 +754,211 @@ export default function HomePage() {
           font-weight: 600;
           font-size: 0.875rem;
           letter-spacing: 0.5px;
+          text-transform: uppercase;
         }
 
         .hero-title {
-          font-size: clamp(2rem, 6vw, 3.5rem);
+          font-size: clamp(2.5rem, 5vw, 4.5rem);
           font-weight: 900;
           color: white;
           line-height: 1.1;
           margin-bottom: 1.5rem;
+          letter-spacing: -0.03em;
+          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .hero-gradient-text {
-          background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+          background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #fbbf24 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
+          animation: gradientShift 8s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+          0%, 100% { filter: hue-rotate(0deg); }
+          50% { filter: hue-rotate(30deg); }
         }
 
         .hero-description {
-          font-size: 1.1rem;
-          color: #cbd5e1;
+          font-size: 1.25rem;
+          color: rgba(255, 255, 255, 0.9);
           line-height: 1.7;
-          margin-bottom: 3rem;
+          margin-bottom: 2.5rem;
           max-width: 600px;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .hero-buttons {
           display: flex;
           gap: 1.25rem;
-          margin-bottom: 0;
           flex-wrap: wrap;
+        }
+
+        .hero-stats-container {
+          position: relative;
+          z-index: 10;
         }
 
         .hero-stats {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
-          gap: 2.5rem;
-          padding: 3rem;
-          background: rgba(255, 255, 255, 0.08);
+          gap: 2rem;
+          padding: 2.5rem;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
           backdrop-filter: blur(20px);
-          border-radius: 30px;
-          border: 1px solid rgba(255, 255, 255, 0.15);
-          box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+          border-radius: 24px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3),
+                      inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          position: relative;
+        }
+
+        .hero-stats::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          border-radius: 24px;
+          padding: 1px;
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.5), rgba(147, 51, 234, 0.5));
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
         }
 
         .stat-card {
           text-align: center;
           padding: 1.5rem;
           background: rgba(255, 255, 255, 0.05);
-          border-radius: 20px;
+          backdrop-filter: blur(10px);
+          border-radius: 16px;
           border: 1px solid rgba(255, 255, 255, 0.1);
-          transition: all 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: default;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .stat-card::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+          transform: rotate(45deg);
+          animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+          0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+          50%, 100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
         }
 
         .stat-card:hover {
-          transform: translateY(-5px);
+          transform: translateY(-6px) scale(1.02);
+          box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+          border-color: rgba(59, 130, 246, 0.5);
           background: rgba(255, 255, 255, 0.1);
         }
 
         .stat-value {
-          font-size: 3.5rem;
+          font-size: 3rem;
           font-weight: 900;
           color: white;
-          margin-bottom: 0.75rem;
+          margin-bottom: 0.5rem;
           font-variant-numeric: tabular-nums;
+          display: flex;
+          align-items: baseline;
+          justify-content: center;
+          gap: 0.25rem;
           text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
+        .stat-suffix {
+          font-size: 2.25rem;
+          background: linear-gradient(135deg, #60a5fa, #a78bfa);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
         .stat-label {
-          color: #cbd5e1;
-          font-size: 1rem;
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 0.95rem;
           font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 1px;
+          letter-spacing: 0.5px;
           margin-bottom: 0.75rem;
         }
 
         .stat-trend {
           display: inline-block;
-          padding: 0.5rem 1.25rem;
-          background: rgba(16, 185, 129, 0.15);
+          padding: 0.375rem 0.875rem;
+          background: rgba(16, 185, 129, 0.2);
           color: #10b981;
-          border-radius: 25px;
-          font-size: 0.875rem;
+          border-radius: 20px;
+          font-size: 0.8rem;
           font-weight: 700;
           border: 1px solid rgba(16, 185, 129, 0.3);
+          backdrop-filter: blur(10px);
         }
 
         /* Clients Section */
         .clients-section {
-          padding: 8rem 0;
-          background: #f8fafc;
+          padding: 6rem 0;
+          background: white;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .clients-header {
+          text-align: center;
+          margin-bottom: 4rem;
+        }
+
+        .section-badge {
+          display: inline-block;
+          padding: 0.5rem 1.25rem;
+          background: linear-gradient(135deg, #f0f9ff, #dbeafe);
+          color: #3b82f6;
+          border-radius: 30px;
+          font-weight: 600;
+          font-size: 0.875rem;
+          letter-spacing: 0.5px;
+          margin-bottom: 1rem;
+          text-transform: uppercase;
+          border: 1px solid #bfdbfe;
+        }
+
+        .section-title {
+          font-size: clamp(2rem, 4vw, 3rem);
+          font-weight: 900;
+          color: #1a1a1a;
+          margin-bottom: 1.25rem;
+          line-height: 1.2;
+          letter-spacing: -0.02em;
+        }
+
+        .section-subtitle {
+          font-size: 1.25rem;
+          color: #6b7280;
+          max-width: 700px;
+          margin: 0 auto;
+          line-height: 1.7;
         }
 
         .clients-carousel {
-          margin-top: 4rem;
-          overflow: hidden;
           position: relative;
+          margin: 0 -2rem;
+          padding: 2rem 0;
+          mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
+          -webkit-mask-image: linear-gradient(90deg, transparent, black 10%, black 90%, transparent);
         }
 
         .clients-track {
@@ -686,6 +968,10 @@ export default function HomePage() {
           align-items: center;
         }
 
+        .clients-carousel:hover .clients-track {
+          animation-play-state: paused;
+        }
+
         @keyframes scroll {
           0% { transform: translateX(0); }
           100% { transform: translateX(-50%); }
@@ -693,22 +979,26 @@ export default function HomePage() {
 
         .client-logo {
           width: 220px;
-          height: 120px;
+          height: 100px;
           display: flex;
           align-items: center;
           justify-content: center;
           position: relative;
           background: white;
-          border-radius: 15px;
+          border-radius: 12px;
           padding: 1.5rem;
-          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+          filter: grayscale(100%);
+          opacity: 0.7;
           transition: all 0.3s ease;
           flex-shrink: 0;
         }
 
         .client-logo:hover {
+          filter: grayscale(0%);
+          opacity: 1;
           transform: scale(1.1);
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
 
         .client-logo img {
@@ -717,13 +1007,9 @@ export default function HomePage() {
           object-fit: contain;
         }
 
-        /* Sections */
-        .section {
+        /* Services Section */
+        .services-section {
           padding: 6rem 0;
-          position: relative;
-        }
-
-        .section-alt {
           background: #f8fafc;
         }
 
@@ -732,39 +1018,9 @@ export default function HomePage() {
           margin-bottom: 4rem;
         }
 
-        .section-badge {
-          display: inline-block;
-          padding: 0.5rem 1.25rem;
-          background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
-          color: #3b82f6;
-          border-radius: 50px;
-          font-weight: 600;
-          font-size: 0.875rem;
-          letter-spacing: 0.5px;
-          margin-bottom: 1rem;
-          text-transform: uppercase;
-        }
-
-        .section-title {
-          font-size: clamp(2rem, 5vw, 3.5rem);
-          font-weight: 900;
-          color: #0f172a;
-          margin-bottom: 1.5rem;
-          line-height: 1.2;
-        }
-
-        .section-subtitle {
-          font-size: 1.25rem;
-          color: #64748b;
-          max-width: 800px;
-          margin: 0 auto;
-          line-height: 1.8;
-        }
-
-        /* Service Cards with Images */
         .services-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
           gap: 2rem;
           margin-top: 4rem;
         }
@@ -776,11 +1032,28 @@ export default function HomePage() {
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
+          cursor: pointer;
+        }
+
+        .service-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+          transform: scaleX(0);
+          transition: transform 0.3s ease;
         }
 
         .service-card:hover {
           transform: translateY(-8px);
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .service-card:hover::before {
+          transform: scaleX(1);
         }
 
         .service-image {
@@ -788,13 +1061,14 @@ export default function HomePage() {
           height: 200px;
           position: relative;
           overflow: hidden;
+          background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
         }
 
         .service-image::after {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.5) 100%);
+          background: linear-gradient(to bottom, transparent 0%, rgba(0,0,0,0.3) 100%);
         }
 
         .service-content {
@@ -804,12 +1078,12 @@ export default function HomePage() {
         .service-title {
           font-size: 1.5rem;
           font-weight: 800;
-          color: #0f172a;
+          color: #1a1a1a;
           margin-bottom: 0.5rem;
         }
 
         .service-subtitle {
-          color: #64748b;
+          color: #6b7280;
           font-size: 0.875rem;
           font-weight: 600;
           margin-bottom: 1.5rem;
@@ -818,8 +1092,8 @@ export default function HomePage() {
         }
 
         .service-description {
-          color: #475569;
-          line-height: 1.8;
+          color: #4b5563;
+          line-height: 1.7;
           margin-bottom: 2rem;
         }
 
@@ -830,7 +1104,7 @@ export default function HomePage() {
         .service-feature {
           display: flex;
           align-items: flex-start;
-          gap: 0.75rem;
+          gap: 0.875rem;
           margin-bottom: 1rem;
         }
 
@@ -853,7 +1127,12 @@ export default function HomePage() {
           stroke-width: 3;
         }
 
-        /* Process Section with Images */
+        /* Process Section */
+        .process-section {
+          padding: 6rem 0;
+          background: white;
+        }
+
         .process-timeline {
           position: relative;
           margin-top: 4rem;
@@ -861,17 +1140,18 @@ export default function HomePage() {
 
         .process-line {
           position: absolute;
-          top: 100px;
-          left: 0;
-          right: 0;
+          top: 120px;
+          left: 10%;
+          right: 10%;
           height: 2px;
-          background: linear-gradient(90deg, #3b82f6, #a78bfa);
-          opacity: 0.2;
+          background: linear-gradient(90deg, transparent, #3b82f6, #3b82f6, transparent);
+          opacity: 0.3;
+          z-index: 0;
         }
 
         .process-steps {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
           gap: 2rem;
           position: relative;
         }
@@ -879,64 +1159,79 @@ export default function HomePage() {
         .process-step {
           text-align: center;
           position: relative;
+          z-index: 1;
         }
 
         .process-image {
-          width: 150px;
-          height: 150px;
+          width: 180px;
+          height: 180px;
           margin: 0 auto 1.5rem;
           border-radius: 50%;
           overflow: hidden;
           position: relative;
-          border: 4px solid #e2e8f0;
-          box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+          border: 4px solid #e5e7eb;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+          transition: all 0.3s ease;
+          background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        }
+
+        .process-step:hover .process-image {
+          transform: scale(1.05);
+          border-color: #3b82f6;
+          box-shadow: 0 15px 50px rgba(59, 130, 246, 0.2);
         }
 
         .step-number {
           position: absolute;
           top: -10px;
-          right: -10px;
-          width: 40px;
-          height: 40px;
-          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+          right: 20px;
+          width: 48px;
+          height: 48px;
+          background: linear-gradient(135deg, #3b82f6, #1e40af);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           font-weight: 900;
-          font-size: 1rem;
+          font-size: 1.125rem;
           color: white;
           z-index: 1;
-          box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
         }
 
         .step-title {
-          font-size: 1.25rem;
+          font-size: 1.375rem;
           font-weight: 700;
-          color: #0f172a;
-          margin-bottom: 0.75rem;
+          color: #1a1a1a;
+          margin-bottom: 0.875rem;
         }
 
         .step-description {
-          color: #64748b;
+          color: #6b7280;
           line-height: 1.6;
-          margin-bottom: 0.75rem;
+          margin-bottom: 1rem;
+          padding: 0 1rem;
         }
 
         .step-duration {
           display: inline-block;
-          padding: 0.25rem 0.75rem;
-          background: #f0f9ff;
+          padding: 0.375rem 1rem;
+          background: linear-gradient(135deg, #f0f9ff, #dbeafe);
           color: #3b82f6;
           border-radius: 20px;
-          font-size: 0.75rem;
+          font-size: 0.875rem;
           font-weight: 600;
         }
 
         /* Achievements Section */
+        .achievements-section {
+          padding: 6rem 0;
+          background: #f8fafc;
+        }
+
         .achievements-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+          grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
           gap: 3rem;
           margin-top: 4rem;
         }
@@ -945,8 +1240,9 @@ export default function HomePage() {
           position: relative;
           overflow: hidden;
           border-radius: 20px;
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
           transition: transform 0.3s ease;
+          cursor: pointer;
         }
 
         .achievement-card:hover {
@@ -955,8 +1251,9 @@ export default function HomePage() {
 
         .achievement-image {
           width: 100%;
-          height: 250px;
+          height: 280px;
           position: relative;
+          background: linear-gradient(135deg, #1e40af, #3b82f6);
         }
 
         .achievement-overlay {
@@ -965,14 +1262,14 @@ export default function HomePage() {
           left: 0;
           right: 0;
           padding: 2rem;
-          background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+          background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 100%);
         }
 
         .achievement-title {
           font-size: 1.5rem;
           font-weight: 700;
           color: white;
-          margin-bottom: 0.5rem;
+          margin-bottom: 0.625rem;
         }
 
         .achievement-description {
@@ -982,7 +1279,7 @@ export default function HomePage() {
 
         /* About Section */
         .about-section {
-          background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+          background: white;
           padding: 6rem 0;
         }
 
@@ -1004,12 +1301,26 @@ export default function HomePage() {
           padding: 2rem;
         }
 
+        .about-content h3 {
+          font-size: 2.25rem;
+          font-weight: 800;
+          color: #1a1a1a;
+          margin-bottom: 1.5rem;
+        }
+
+        .about-content > p {
+          color: #6b7280;
+          font-size: 1.125rem;
+          line-height: 1.8;
+          margin-bottom: 2rem;
+        }
+
         .about-image {
           position: relative;
           height: 500px;
           border-radius: 20px;
           overflow: hidden;
-          box-shadow: 0 30px 60px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 30px 80px rgba(0, 0, 0, 0.12);
         }
 
         .about-features {
@@ -1026,9 +1337,9 @@ export default function HomePage() {
         }
 
         .about-icon {
-          width: 50px;
-          height: 50px;
-          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+          width: 52px;
+          height: 52px;
+          background: linear-gradient(135deg, #3b82f6, #1e40af);
           border-radius: 12px;
           display: flex;
           align-items: center;
@@ -1038,19 +1349,19 @@ export default function HomePage() {
 
         .about-feature-text h4 {
           font-weight: 700;
-          color: #0f172a;
+          color: #1a1a1a;
           margin-bottom: 0.25rem;
         }
 
         .about-feature-text p {
-          color: #64748b;
+          color: #6b7280;
           font-size: 0.875rem;
         }
 
         /* CTA Section */
         .cta-section {
-          background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
           padding: 6rem 0;
+          background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
           position: relative;
           overflow: hidden;
         }
@@ -1058,7 +1369,7 @@ export default function HomePage() {
         .cta-pattern {
           position: absolute;
           inset: 0;
-          background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 1px);
+          background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.08) 1px, transparent 1px);
           background-size: 40px 40px;
         }
 
@@ -1106,7 +1417,7 @@ export default function HomePage() {
           height: 400px;
           border-radius: 20px;
           overflow: hidden;
-          box-shadow: 0 40px 80px rgba(0, 0, 0, 0.3);
+          box-shadow: 0 40px 100px rgba(0, 0, 0, 0.3);
         }
 
         .btn-white {
@@ -1123,6 +1434,7 @@ export default function HomePage() {
         .btn-outline-white {
           border: 2px solid white;
           color: white;
+          background: transparent;
         }
 
         .btn-outline-white:hover {
@@ -1133,16 +1445,22 @@ export default function HomePage() {
         /* Footer */
         .footer {
           background: #ffffff;
-          color: #0f172a;
+          color: #1a1a1a;
           padding: 4rem 0 2rem;
-          border-top: 1px solid #e2e8f0;
+          border-top: 1px solid #e5e7eb;
         }
 
         .footer-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          grid-template-columns: 2fr 1fr 1fr 1fr;
           gap: 3rem;
           margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+          .footer-grid {
+            grid-template-columns: 1fr;
+          }
         }
 
         .footer-brand {
@@ -1161,7 +1479,7 @@ export default function HomePage() {
         }
 
         .footer-description {
-          color: #64748b;
+          color: #6b7280;
           line-height: 1.8;
           margin-bottom: 1.5rem;
         }
@@ -1175,24 +1493,24 @@ export default function HomePage() {
           width: 40px;
           height: 40px;
           background: #f1f5f9;
-          border-radius: 50%;
+          border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.3s ease;
-          color: #64748b;
+          color: #6b7280;
         }
 
         .social-link:hover {
           background: #3b82f6;
           color: white;
-          transform: translateY(-2px);
+          transform: translateY(-3px);
         }
 
         .footer-column h4 {
           font-weight: 700;
           margin-bottom: 1.5rem;
-          color: #0f172a;
+          color: #1a1a1a;
         }
 
         .footer-links {
@@ -1200,7 +1518,7 @@ export default function HomePage() {
         }
 
         .footer-link {
-          color: #64748b;
+          color: #6b7280;
           text-decoration: none;
           display: block;
           padding: 0.5rem 0;
@@ -1208,12 +1526,12 @@ export default function HomePage() {
         }
 
         .footer-link:hover {
-          color: #0f172a;
+          color: #3b82f6;
         }
 
         .footer-bottom {
           padding-top: 2rem;
-          border-top: 1px solid #e2e8f0;
+          border-top: 1px solid #e5e7eb;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -1222,7 +1540,7 @@ export default function HomePage() {
         }
 
         .footer-copyright {
-          color: #64748b;
+          color: #6b7280;
         }
 
         .footer-legal {
@@ -1236,8 +1554,8 @@ export default function HomePage() {
           transform: translateY(30px);
         }
 
-        .section-visible {
-          animation: fadeInUp 0.8s ease forwards;
+        .in-view {
+          animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         @keyframes fadeInUp {
@@ -1249,31 +1567,33 @@ export default function HomePage() {
 
         /* Responsive */
         @media (max-width: 768px) {
-          .section {
-            padding: 4rem 0;
+          .hero-title {
+            font-size: 2.25rem;
+          }
+
+          .section-title {
+            font-size: 2rem;
           }
 
           .services-grid {
             grid-template-columns: 1fr;
-            gap: 1.5rem;
           }
 
           .process-steps {
             grid-template-columns: 1fr;
           }
 
+          .process-line {
+            display: none;
+          }
+
           .hero-stats {
             grid-template-columns: 1fr;
             padding: 2rem;
-            gap: 2rem;
           }
 
           .stat-value {
-            font-size: 2.5rem;
-          }
-
-          .footer-grid {
-            grid-template-columns: 1fr;
+            font-size: 2.25rem;
           }
 
           .achievements-grid {
@@ -1286,17 +1606,34 @@ export default function HomePage() {
 
           .client-logo {
             width: 180px;
-            height: 100px;
+            height: 80px;
           }
+        }
 
-          .clients-section {
-            padding: 6rem 0;
-          }
+        /* Focus states */
+        a:focus-visible,
+        button:focus-visible {
+          outline: 2px solid #3b82f6;
+          outline-offset: 2px;
         }
       `}</style>
 
       <div className={`loader ${!isLoading ? 'hidden' : ''}`}>
-        <div className="loader-spinner"></div>
+        <div className="loader-content">
+          <Image 
+            src="/images/logohumanis.png"
+            alt="Humanis"
+            width={240}
+            height={96}
+            className="loader-logo"
+            priority
+          />
+          <div className="loader-dots">
+            <div className="loader-dot"></div>
+            <div className="loader-dot"></div>
+            <div className="loader-dot"></div>
+          </div>
+        </div>
       </div>
 
       <header className={`nav-header ${isScrolled ? 'scrolled' : ''}`}>
@@ -1305,8 +1642,8 @@ export default function HomePage() {
             <Link href="/" className="logo-container">
               <Image 
                 src="/images/logohumanis.png"
-                alt="Humanis Logo"
-                width={200}
+                alt="Humanis México - Executive Search"
+                width={240}
                 height={80}
                 className="logo-image"
                 priority
@@ -1333,6 +1670,7 @@ export default function HomePage() {
             <button 
               className={`mobile-menu-btn ${mobileMenuOpen ? 'active' : ''}`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Menu"
             >
               <span></span>
               <span></span>
@@ -1349,80 +1687,138 @@ export default function HomePage() {
             <a href="#nosotros" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Nosotros</a>
             <a href="#clientes" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Clientes</a>
             <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <Link href="/por-que-nosotros" className="btn btn-secondary">¿Por qué nosotros?</Link>
+              <Link href="/nosotros" className="btn btn-secondary">¿Por qué nosotros?</Link>
               <Link href="/consulta" className="btn btn-primary">Contactar</Link>
             </div>
           </nav>
         </div>
       </header>
 
-      <section id="inicio" className="hero">
-        <div className="hero-bg" style={{
-          backgroundImage: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(59, 130, 246, 0.15), transparent 50%)`
-        }}></div>
-        <div className="hero-grid" data-parallax="0.1"></div>
-        
-        <div className="container">
-          <div className="hero-wrapper">
-            <div className="hero-content" data-animate id="hero-content">
-              <div className="hero-badge">
-                <span className="badge-dot"></span>
-                <span className="badge-text">Executive Search Premium</span>
-              </div>
+      <main>
+        <section id="inicio" className="hero">
+          <div className="hero-pattern" data-parallax="0.1"></div>
+          <div className="hero-glow" style={{
+            transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`
+          }}></div>
+          
+          {/* Líneas de luz */}
+          <div className="hero-lines">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={`line-${i}`}
+                className="hero-line"
+                style={{
+                  left: `${i * 25}%`,
+                  animationDelay: `${i * 2}s`,
+                  animationDuration: `${10 + i * 2}s`
+                }}
+              />
+            ))}
+          </div>
+          
+          {/* Partículas flotantes */}
+          <div style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            overflow: 'hidden'
+          }}>
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  position: 'absolute',
+                  width: `${Math.random() * 4 + 2}px`,
+                  height: `${Math.random() * 4 + 2}px`,
+                  background: 'rgba(255, 255, 255, 0.5)',
+                  borderRadius: '50%',
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animation: `float ${Math.random() * 10 + 10}s ${Math.random() * 5}s infinite ease-in-out`,
+                  boxShadow: '0 0 10px rgba(255, 255, 255, 0.3)'
+                }}
+              />
+            ))}
+          </div>
+          
+          <div className="container">
+            <div className="hero-wrapper">
+              <div className="hero-content" data-animate id="hero-content">
+                <div className="hero-badge">
+                  <span className="badge-dot"></span>
+                  <span className="badge-text">Executive Search Premium</span>
+                </div>
 
-              <h1 className="hero-title">
-                Conectamos <span className="hero-gradient-text">Líderes Excepcionales</span><br />
-                con Empresas Extraordinarias
-              </h1>
+                <h1 className="hero-title">
+                  Conectamos <span className="hero-gradient-text">Líderes Excepcionales</span><br />
+                  con Empresas Extraordinarias
+                </h1>
 
-              <p className="hero-description">
-                Somos Humanis, la firma líder de executive search en México, especializados en identificar 
-                y atraer el talento ejecutivo que transformará su organización.
-              </p>
+                <p className="hero-description">
+                  Somos Humanis, la firma líder de executive search en México, especializados en identificar 
+                  y atraer el talento ejecutivo que transformará su organización.
+                </p>
 
-              <div className="hero-buttons">
-                <Link href="/consulta" className="btn btn-primary">
-                  Iniciar Consulta
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </Link>
-                <Link href="/por-que-nosotros" className="btn btn-secondary">
-                  ¿Por qué Humanis?
-                </Link>
-              </div>
-            </div>
-
-            <div className="hero-stats-container" data-animate id="hero-stats">
-              <div className="hero-stats">
-                {stats.map((stat, index) => (
-                  <div key={index} className="stat-card" style={{
-                    opacity: currentStat === index ? 1 : 0.8,
-                    transform: currentStat === index ? 'scale(1.02)' : 'scale(1)',
-                    transition: 'all 0.5s ease'
+                <div className="hero-buttons">
+                  <Link href="/consulta" className="btn btn-primary" style={{
+                    background: 'white',
+                    color: '#1e40af',
+                    boxShadow: '0 10px 40px rgba(255, 255, 255, 0.2)'
                   }}>
-                    <div className="stat-value">{stat.value}</div>
-                    <div className="stat-label">{stat.label}</div>
-                    {stat.trend && <span className="stat-trend">{stat.trend}</span>}
-                  </div>
-                ))}
+                    Iniciar Consulta
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </Link>
+                  <Link href="/nosotros" className="btn btn-secondary" style={{
+                    border: '2px solid rgba(255, 255, 255, 0.3)',
+                    color: 'white',
+                    background: 'rgba(255, 255, 255, 0.1)',
+                    backdropFilter: 'blur(10px)'
+                  }}>
+                    ¿Por qué Humanis?
+                  </Link>
+                </div>
+              </div>
+
+              <div className="hero-stats-container" data-animate id="hero-stats">
+                <div className="hero-stats">
+                  {stats.map((stat, index) => (
+                    <div 
+                      key={index} 
+                      className="stat-card"
+                      style={{
+                        animationDelay: `${index * 0.1}s`,
+                        opacity: currentStat === index ? 1 : 0.85,
+                        transform: currentStat === index ? 'scale(1.02)' : 'scale(1)',
+                      }}
+                    >
+                      <div className="stat-value">
+                        {stat.value}
+                        <span className="stat-suffix">{stat.suffix}</span>
+                      </div>
+                      <div className="stat-label">{stat.label}</div>
+                      {stat.trend && <span className="stat-trend">{stat.trend}</span>}
+                    </div>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="clientes" className="clients-section">
-        <div className="container">
-          <div className="section-header" data-animate id="clients-header">
-            <span className="section-badge">Clientes</span>
-            <h2 className="section-title">Confianza de Líderes del Mercado</h2>
-            <p className="section-subtitle">
-              Muchas empresas líderes confían en Humanis para construir equipos ejecutivos de alto rendimiento 
-              y transformar sus organizaciones con talento excepcional.
-            </p>
+        <section id="clientes" className="clients-section">
+          <div className="container">
+            <div className="clients-header" data-animate id="clients-header">
+              <span className="section-badge">Clientes</span>
+              <h2 className="section-title">Confianza de Líderes del Mercado</h2>
+              <p className="section-subtitle">
+                Muchas empresas líderes confían en Humanis para construir equipos ejecutivos de alto rendimiento 
+                y transformar sus organizaciones con talento excepcional.
+              </p>
+            </div>
           </div>
-
+          
           <div className="clients-carousel">
             <div className="clients-track">
               {[...clients, ...clients].map((client, index) => (
@@ -1438,257 +1834,256 @@ export default function HomePage() {
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="servicios" className="section section-alt">
-        <div className="container">
-          <div className="section-header" data-animate id="services-header">
-            <span className="section-badge">Nuestros Servicios</span>
-            <h2 className="section-title">Soluciones Premium de Talento Ejecutivo</h2>
-            <p className="section-subtitle">
-              Metodología propietaria respaldada por tecnología de vanguardia y una red exclusiva 
-              de más de 1,000 ejecutivos verificados en toda la República Mexicana.
-            </p>
-          </div>
+        <section id="servicios" className="services-section">
+          <div className="container">
+            <div className="section-header" data-animate id="services-header">
+              <span className="section-badge">Nuestros Servicios</span>
+              <h2 className="section-title">Soluciones Premium de Talento Ejecutivo</h2>
+              <p className="section-subtitle">
+                Metodología propietaria respaldada por tecnología de vanguardia y una red exclusiva 
+                de más de 1,000 ejecutivos verificados en toda la República Mexicana.
+              </p>
+            </div>
 
-          <div className="services-grid">
-            {services.map((service, index) => (
-              <div 
-                key={index} 
-                className="service-card" 
-                data-animate 
-                id={`service-${index}`}
-              >
-                <div className="service-image">
-                  <Image 
-                    src={service.image}
-                    alt={service.title}
-                    fill
-                    style={{ objectFit: 'cover' }}
-                  />
-                </div>
-                <div className="service-content">
-                  <h3 className="service-title">{service.title}</h3>
-                  <p className="service-subtitle">{service.subtitle}</p>
-                  <p className="service-description">{service.description}</p>
-                  <ul className="service-features">
-                    {service.features.map((feature, idx) => (
-                      <li key={idx} className="service-feature">
-                        <span className="feature-icon">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                            <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round"/>
-                          </svg>
-                        </span>
-                        <span>{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section id="proceso" className="section">
-        <div className="container">
-          <div className="section-header" data-animate id="process-header">
-            <span className="section-badge">Nuestro Proceso</span>
-            <h2 className="section-title">Metodología Comprobada de 4 Fases</h2>
-            <p className="section-subtitle">
-              Un proceso riguroso y eficiente que garantiza la identificación del talento ideal 
-              en tiempo récord, con seguimiento post-contratación incluido.
-            </p>
-          </div>
-
-          <div className="process-timeline">
-            <div className="process-line"></div>
-            <div className="process-steps">
-              {process.map((step, index) => (
-                <div key={index} className="process-step" data-animate id={`process-${index}`}>
-                  <div className="process-image">
+            <div className="services-grid">
+              {services.map((service, index) => (
+                <div 
+                  key={index} 
+                  className="service-card" 
+                  data-animate 
+                  id={`service-${index}`}
+                  style={{ '--gradient-start': service.gradient.split(' ')[1], '--gradient-end': service.gradient.split(' ')[3] }}
+                >
+                  <div className="service-image">
                     <Image 
-                      src={step.image}
-                      alt={step.title}
+                      src={service.image}
+                      alt={service.title}
                       fill
                       style={{ objectFit: 'cover' }}
                     />
-                    <div className="step-number">{step.step}</div>
                   </div>
-                  <h3 className="step-title">{step.title}</h3>
-                  <p className="step-description">{step.description}</p>
-                  <span className="step-duration">{step.duration}</span>
+                  <div className="service-content">
+                    <h3 className="service-title">{service.title}</h3>
+                    <p className="service-subtitle">{service.subtitle}</p>
+                    <p className="service-description">{service.description}</p>
+                    <ul className="service-features">
+                      {service.features.map((feature, idx) => (
+                        <li key={idx} className="service-feature">
+                          <span className="feature-icon">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                              <path d="M20 6L9 17l-5-5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </span>
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
-      <section id="nosotros" className="about-section">
-        <div className="container">
-          <div className="section-header" data-animate id="about-header">
-            <span className="section-badge">Sobre Nosotros</span>
-            <h2 className="section-title">Líderes en Transformación de Talento</h2>
-            <p className="section-subtitle">
-              Con más de una década de experiencia, hemos construido la red más sólida 
-              de talento ejecutivo en México, transformando organizaciones a través de personas excepcionales.
-            </p>
-          </div>
-
-          <div className="about-grid">
-            <div className="about-content" data-animate id="about-content">
-              <h3 style={{ fontSize: '2rem', fontWeight: '800', color: '#0f172a', marginBottom: '1.5rem' }}>
-                Nuestra Propuesta de Valor
-              </h3>
-              <p style={{ color: '#64748b', fontSize: '1.125rem', lineHeight: '1.8', marginBottom: '2rem' }}>
-                En Humanis, no solo identificamos talento; creamos conexiones estratégicas que impulsan 
-                el crecimiento sostenible de las organizaciones. Nuestro enfoque personalizado y metodología 
-                probada garantizan resultados excepcionales en cada búsqueda.
+        <section id="proceso" className="process-section">
+          <div className="container">
+            <div className="section-header" data-animate id="process-header">
+              <span className="section-badge">Nuestro Proceso</span>
+              <h2 className="section-title">Metodología Comprobada de 4 Fases</h2>
+              <p className="section-subtitle">
+                Un proceso riguroso y eficiente que garantiza la identificación del talento ideal 
+                en tiempo récord, con seguimiento post-contratación incluido.
               </p>
+            </div>
+
+            <div className="process-timeline">
+              <div className="process-line"></div>
+              <div className="process-steps">
+                {process.map((step, index) => (
+                  <div key={index} className="process-step" data-animate id={`process-${index}`}>
+                    <div className="process-image">
+                      <Image 
+                        src={step.image}
+                        alt={step.title}
+                        fill
+                        style={{ objectFit: 'cover' }}
+                      />
+                      <div className="step-number">{step.step}</div>
+                    </div>
+                    <h3 className="step-title">{step.title}</h3>
+                    <p className="step-description">{step.description}</p>
+                    <span className="step-duration">{step.duration}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section id="nosotros" className="about-section">
+          <div className="container">
+            <div className="section-header" data-animate id="about-header">
+              <span className="section-badge">Sobre Nosotros</span>
+              <h2 className="section-title">Líderes en Transformación de Talento</h2>
+              <p className="section-subtitle">
+                Con más de una década de experiencia, hemos construido la red más sólida 
+                de talento ejecutivo en México, transformando organizaciones a través de personas excepcionales.
+              </p>
+            </div>
+
+            <div className="about-grid">
+              <div className="about-content" data-animate id="about-content">
+                <h3>Nuestra Propuesta de Valor</h3>
+                <p>
+                  En Humanis, no solo identificamos talento; creamos conexiones estratégicas que impulsan 
+                  el crecimiento sostenible de las organizaciones. Nuestro enfoque personalizado y metodología 
+                  probada garantizan resultados excepcionales en cada búsqueda.
+                </p>
+                
+                <div className="about-features">
+                  <div className="about-feature">
+                    <div className="about-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                        <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                        <path d="M2 17l10 5 10-5"/>
+                        <path d="M2 12l10 5 10-5"/>
+                      </svg>
+                    </div>
+                    <div className="about-feature-text">
+                      <h4>Red Exclusiva</h4>
+                      <p>+1,000 ejecutivos verificados</p>
+                    </div>
+                  </div>
+                  
+                  <div className="about-feature">
+                    <div className="about-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                        <path d="M9 11l3 3L22 4"/>
+                        <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
+                      </svg>
+                    </div>
+                    <div className="about-feature-text">
+                      <h4>Garantía Total</h4>
+                      <p>60 días de reemplazo sin costo</p>
+                    </div>
+                  </div>
+                  
+                  <div className="about-feature">
+                    <div className="about-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                      </svg>
+                    </div>
+                    <div className="about-feature-text">
+                      <h4>Tiempo Récord</h4>
+                      <p>9 días promedio de colocación</p>
+                    </div>
+                  </div>
+                  
+                  <div className="about-feature">
+                    <div className="about-icon">
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                        <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                        <circle cx="8.5" cy="7" r="4"/>
+                        <line x1="20" y1="8" x2="20" y2="14"/>
+                        <line x1="23" y1="11" x2="17" y2="11"/>
+                      </svg>
+                    </div>
+                    <div className="about-feature-text">
+                      <h4>Seguimiento</h4>
+                      <p>3 meses de acompañamiento</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="about-image" data-animate id="about-image">
+                <Image 
+                  src="/images/about-team.jpg"
+                  alt="Equipo Humanis"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="achievements-section">
+          <div className="container">
+            <div className="section-header" data-animate id="achievements-header">
+              <span className="section-badge">Diferenciadores</span>
+              <h2 className="section-title">Lo que nos Hace Únicos</h2>
+              <p className="section-subtitle">
+                Factores clave que posicionan a Humanis como la firma de executive search 
+                más confiable y efectiva en México.
+              </p>
+            </div>
+
+            <div className="achievements-grid">
+              {achievements.map((achievement, index) => (
+                <div key={index} className="achievement-card" data-animate id={`achievement-${index}`}>
+                  <div className="achievement-image">
+                    <Image 
+                      src={achievement.image}
+                      alt={achievement.title}
+                      fill
+                      style={{ objectFit: 'cover' }}
+                    />
+                    <div className="achievement-overlay">
+                      <h3 className="achievement-title">{achievement.title}</h3>
+                      <p className="achievement-description">{achievement.description}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="cta-section">
+          <div className="cta-pattern"></div>
+          <div className="container">
+            <div className="cta-wrapper">
+              <div className="cta-content">
+                <h2 className="cta-title">
+                  Transforme Su Organización con el Talento Correcto
+                </h2>
+                <p className="cta-description">
+                  Inicie hoy mismo con una consultoría gratuita y descubra cómo Humanis puede 
+                  acelerar el crecimiento de su empresa con ejecutivos excepcionales.
+                </p>
+                <div className="cta-buttons">
+                  <Link href="/consulta" className="btn btn-white">
+                    Agendar Consulta Gratuita
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"/>
+                    </svg>
+                  </Link>
+                  <Link href="/nosotros" className="btn btn-outline-white">
+                    Conocer Más
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7"/>
+                    </svg>
+                  </Link>
+                </div>
+              </div>
               
-              <div className="about-features">
-                <div className="about-feature">
-                  <div className="about-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                      <path d="M12 2L2 7l10 5 10-5-10-5z"/>
-                      <path d="M2 17l10 5 10-5"/>
-                      <path d="M2 12l10 5 10-5"/>
-                    </svg>
-                  </div>
-                  <div className="about-feature-text">
-                    <h4>Red Exclusiva</h4>
-                    <p>+1,000 ejecutivos verificados</p>
-                  </div>
-                </div>
-                
-                <div className="about-feature">
-                  <div className="about-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                      <path d="M9 11l3 3L22 4"/>
-                      <path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/>
-                    </svg>
-                  </div>
-                  <div className="about-feature-text">
-                    <h4>Garantía Total</h4>
-                    <p>60 días de reemplazo sin costo</p>
-                  </div>
-                </div>
-                
-                <div className="about-feature">
-                  <div className="about-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                      <circle cx="12" cy="12" r="10"/>
-                      <polyline points="12 6 12 12 16 14"/>
-                    </svg>
-                  </div>
-                  <div className="about-feature-text">
-                    <h4>Tiempo Récord</h4>
-                    <p>9 días promedio de colocación</p>
-                  </div>
-                </div>
-                
-                <div className="about-feature">
-                  <div className="about-icon">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                      <path d="M16 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
-                      <circle cx="8.5" cy="7" r="4"/>
-                      <line x1="20" y1="8" x2="20" y2="14"/>
-                      <line x1="23" y1="11" x2="17" y2="11"/>
-                    </svg>
-                  </div>
-                  <div className="about-feature-text">
-                    <h4>Seguimiento</h4>
-                    <p>3  meses de acompañamiento</p>
-                  </div>
-                </div>
+              <div className="cta-image">
+                <Image 
+                  src="/images/cta-success.jpg"
+                  alt="Humanis Success"
+                  fill
+                  style={{ objectFit: 'cover' }}
+                />
               </div>
             </div>
-
-            <div className="about-image" data-animate id="about-image">
-              <Image 
-                src="/images/about-team.jpg"
-                alt="Equipo Humanis"
-                fill
-                style={{ objectFit: 'cover' }}
-              />
-            </div>
           </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-header" data-animate id="achievements-header">
-            <span className="section-badge">Diferenciadores</span>
-            <h2 className="section-title">Lo que nos Hace Únicos</h2>
-            <p className="section-subtitle">
-              Factores clave que posicionan a Humanis como la firma de executive search 
-              más confiable y efectiva en México.
-            </p>
-          </div>
-
-          <div className="achievements-grid">
-            {achievements.map((achievement, index) => (
-              <div key={index} className="achievement-card" data-animate id={`achievement-${index}`}>
-                <div className="achievement-image">
-                  <Image 
-                    src={achievement.image}
-                    alt={achievement.title}
-                    fill
-                    style={{ objectFit: 'cover' }}
-                  />
-                  <div className="achievement-overlay">
-                    <h3 className="achievement-title">{achievement.title}</h3>
-                    <p className="achievement-description">{achievement.description}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="cta-section">
-        <div className="cta-pattern"></div>
-        <div className="container">
-          <div className="cta-wrapper">
-            <div className="cta-content">
-              <h2 className="cta-title">
-                Transforme Su Organización con el Talento Correcto
-              </h2>
-              <p className="cta-description">
-                Inicie hoy mismo con una consultoría gratuita y descubra cómo Humanis puede 
-                acelerar el crecimiento de su empresa con ejecutivos excepcionales.
-              </p>
-              <div className="cta-buttons">
-                <Link href="/consulta" className="btn btn-white">
-                  Agendar Consulta Gratuita
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M8 2v4M16 2v4M3 10h18M5 4h14a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V6a2 2 0 012-2z"/>
-                  </svg>
-                </Link>
-                <Link href="/por-que-nosotros" className="btn btn-outline-white">
-                  Conocer Más
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </Link>
-              </div>
-            </div>
-            
-            <div className="cta-image">
-              <Image 
-                src="/images/cta-success.jpg"
-                alt="Humanis Success"
-                fill
-                style={{ objectFit: 'cover' }}
-              />
-            </div>
-          </div>
-        </div>
-      </section>
+        </section>
+      </main>
 
       <footer className="footer">
         <div className="container">
@@ -1697,9 +2092,9 @@ export default function HomePage() {
               <div className="footer-logo">
                 <Image 
                   src="/images/logohumanis.png"
-                  alt="Humanis Logo"
+                  alt="Humanis México"
                   width={240}
-                  height={96}
+                  height={80}
                   className="footer-logo-image"
                   priority={true}
                 />
@@ -1712,6 +2107,11 @@ export default function HomePage() {
                 <a href="https://linkedin.com/company/humanis-mexico" className="social-link" aria-label="LinkedIn">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  </svg>
+                </a>
+                <a href="https://twitter.com/humanismx" className="social-link" aria-label="Twitter">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
                   </svg>
                 </a>
               </div>
@@ -1731,7 +2131,7 @@ export default function HomePage() {
               <h4>Páginas</h4>
               <ul className="footer-links">
                 <li><Link href="/consulta" className="footer-link">Consulta Gratuita</Link></li>
-                <li><Link href="/por-que-nosotros" className="footer-link">¿Por qué Humanis?</Link></li>
+                <li><Link href="/nosotros" className="footer-link">¿Por qué Humanis?</Link></li>
               </ul>
             </div>
 
@@ -1739,7 +2139,7 @@ export default function HomePage() {
               <h4>Contacto</h4>
               <ul className="footer-links">
                 <li>
-                  <a href="tel:+525555550100" className="footer-link">
+                  <a href="tel:+525544167974" className="footer-link">
                     +52 (55) 4416-7974
                   </a>
                 </li>

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,27 +10,27 @@ export default function PorQueNosotrosPage() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [visibleSections, setVisibleSections] = useState(new Set());
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
-  const [activeTab, setActiveTab] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [countingStarted, setCountingStarted] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-      
-      // Parallax effects
+      setIsScrolled(window.scrollY > 10);
+
       const parallaxElements = document.querySelectorAll('[data-parallax]');
       parallaxElements.forEach(el => {
         const speed = el.dataset.parallax;
         const yPos = -(window.scrollY * speed);
-        el.style.transform = `translateY(${yPos}px)`;
+        el.style.transform = `translate3d(0, ${yPos}px, 0)`;
       });
     };
 
     const handleMouseMove = (e) => {
-      setMousePosition({
-        x: (e.clientX / window.innerWidth) * 100,
-        y: (e.clientY / window.innerHeight) * 100
+      requestAnimationFrame(() => {
+        setMousePosition({
+          x: (e.clientX / window.innerWidth) * 100,
+          y: (e.clientY / window.innerHeight) * 100,
+        });
       });
     };
 
@@ -38,24 +38,22 @@ export default function PorQueNosotrosPage() {
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            setVisibleSections(prev => new Set([...prev, entry.target.id]));
-            entry.target.classList.add('section-visible');
-            
-            // Start counting animation for metrics
+            setVisibleSections((prev) => new Set([...prev, entry.target.id]));
+            entry.target.classList.add('in-view');
             if (entry.target.id === 'achievements-header') {
               setCountingStarted(true);
             }
           }
         });
       },
-      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+      { threshold: 0.1, rootMargin: '0px' }
     );
 
-    document.querySelectorAll('[data-animate]').forEach(el => observer.observe(el));
+    document.querySelectorAll('[data-animate]').forEach((el) => observer.observe(el));
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('mousemove', handleMouseMove);
-    
+
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
@@ -70,8 +68,7 @@ export default function PorQueNosotrosPage() {
       icon: 'network',
       stats: '+1,000',
       unit: 'Ejecutivos Verificados',
-      gradientStart: '#3b82f6',
-      gradientEnd: '#1d4ed8'
+      gradient: 'from-blue-500 to-blue-600',
     },
     {
       title: 'Proceso de 7 Filtros de Calidad',
@@ -79,8 +76,7 @@ export default function PorQueNosotrosPage() {
       icon: 'filter',
       stats: '7',
       unit: 'Etapas de Verificación',
-      gradientStart: '#6366f1',
-      gradientEnd: '#4f46e5'
+      gradient: 'from-indigo-500 to-purple-600',
     },
     {
       title: 'Garantía de Reemplazo 60 Días',
@@ -88,8 +84,7 @@ export default function PorQueNosotrosPage() {
       icon: 'shield',
       stats: '60',
       unit: 'Días de Garantía',
-      gradientStart: '#0ea5e9',
-      gradientEnd: '#0284c7'
+      gradient: 'from-cyan-500 to-blue-600',
     },
     {
       title: 'Tiempo de Colocación Récord',
@@ -97,9 +92,8 @@ export default function PorQueNosotrosPage() {
       icon: 'clock',
       stats: '9',
       unit: 'Días Promedio',
-      gradientStart: '#1e40af',
-      gradientEnd: '#1e3a8a'
-    }
+      gradient: 'from-blue-600 to-blue-800',
+    },
   ];
 
   const methodology = [
@@ -108,36 +102,36 @@ export default function PorQueNosotrosPage() {
       title: 'Discovery & Análisis',
       description: 'Inmersión profunda en tu cultura empresarial, necesidades técnicas y objetivos estratégicos para definir el perfil ideal.',
       image: '/images/executive-search.jpg',
-      duration: '2-3 días'
+      duration: '2-3 días',
     },
     {
       step: '02',
       title: 'Búsqueda Estratégica',
       description: 'Activación de nuestra red exclusiva y aplicación de headhunting especializado para identificar candidatos de alto calibre.',
       image: '/images/talent-mapping.jpg',
-      duration: '2-4 días'
+      duration: '2-4 días',
     },
     {
       step: '03',
       title: 'Evaluación Integral',
       description: 'Aplicación de nuestro proceso de 7 filtros: técnico, cultural, psicométrico, referencias, competencias, valores y potencial.',
       image: '/images/organizational-dev.jpg',
-      duration: '3-5 días'
+      duration: '3-5 días',
     },
     {
       step: '04',
       title: 'Presentación Executive',
       description: 'Presentación de candidatos finalistas con reportes detallados, análisis comparativo y recomendaciones estratégicas.',
       image: '/images/process-discovery.jpg',
-      duration: '1-2 días'
+      duration: '1-2 días',
     },
     {
       step: '05',
       title: 'Integración & Seguimiento',
       description: 'Acompañamiento durante 6 meses post-contratación para asegurar una integración exitosa y desarrollo óptimo.',
       image: '/images/process-integration.jpg',
-      duration: '6 meses'
-    }
+      duration: '6 meses',
+    },
   ];
 
   const achievements = [
@@ -146,7 +140,7 @@ export default function PorQueNosotrosPage() {
     { metric: '98%', label: 'Tasa de Retención', icon: 'chart' },
     { metric: '24h', label: 'Respuesta Inicial', icon: 'clock' },
     { metric: '90%', label: 'Clientes Recurrentes', icon: 'repeat' },
-    { metric: '4.9/5', label: 'Calificación Promedio', icon: 'star' }
+    { metric: '4.9/5', label: 'Calificación Promedio', icon: 'star' },
   ];
 
   const industries = [
@@ -154,30 +148,30 @@ export default function PorQueNosotrosPage() {
     { name: 'Finanzas & Banca', percentage: 25 },
     { name: 'Manufactura & Industria', percentage: 20 },
     { name: 'Retail & Consumo', percentage: 15 },
-    { name: 'Salud & Farmacéutica', percentage: 5 }
+    { name: 'Salud & Farmacéutica', percentage: 5 },
   ];
 
   const values = [
     {
       title: 'Excelencia',
       description: 'Comprometidos con entregar resultados excepcionales en cada búsqueda.',
-      icon: 'star'
+      icon: 'star',
     },
     {
       title: 'Integridad',
       description: 'Transparencia y honestidad en cada interacción con clientes y candidatos.',
-      icon: 'shield'
+      icon: 'shield',
     },
     {
       title: 'Innovación',
       description: 'Metodologías vanguardistas y tecnología de punta en recruitment.',
-      icon: 'lightbulb'
+      icon: 'lightbulb',
     },
     {
       title: 'Confidencialidad',
       description: 'Máxima discreción en el manejo de información sensible.',
-      icon: 'lock'
-    }
+      icon: 'lock',
+    },
   ];
 
   const schemaData = {
@@ -190,59 +184,76 @@ export default function PorQueNosotrosPage() {
       "@type": "Organization",
       "name": "Humanis México",
       "url": "https://humanis.com.mx",
-      "logo": "https://humanis.com.mx/logo.svg",
+      "logo": "https://humanis.com.mx/images/logohumanis.png",
       "foundingDate": "2019",
       "numberOfEmployees": {
         "@type": "QuantitativeValue",
-        "value": 50
+        "value": 50,
       },
       "award": [
         "Great Place to Work 2024",
         "ISO 9001:2015 Certified",
-        "LinkedIn Talent Solutions Partner"
+        "LinkedIn Talent Solutions Partner",
       ],
       "member": [
         {
           "@type": "Person",
           "name": "Ana Patricia Méndez",
-          "jobTitle": "CEO & Fundadora"
-        }
+          "jobTitle": "CEO & Fundadora",
+        },
       ],
+      "sameAs": ["https://linkedin.com/company/humanis-mexico"],
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.9",
         "reviewCount": "523",
-        "bestRating": "5"
-      }
-    }
+        "bestRating": "5",
+      },
+    },
   };
 
   return (
     <>
       <Head>
+        <html lang="es-MX" />
         <title>¿Por Qué Humanis? | Líder en Executive Search México</title>
-        <meta name="description" content="Humanis: +1,000 ejecutivos verificados, 98% tasa de retención, 9 días promedio de colocación. Descubre por qué somos la firma #1 de executive search en México." />
-        <meta name="keywords" content="por que humanis, humanis mexico, executive search mexico, ventajas humanis, consultoria talento mexico, headhunting mexico" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="robots" content="index, follow" />
+        <meta
+          name="description"
+          content="Humanis: +1,000 ejecutivos verificados, 98% tasa de retención, 9 días promedio de colocación. Descubre por qué somos la firma #1 de executive search en México."
+        />
+        <meta
+          name="keywords"
+          content="por que humanis, humanis mexico, executive search mexico, ventajas humanis, consultoria talento mexico, headhunting mexico, reclutamiento ejecutivo"
+        />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="author" content="Humanis México" />
         <link rel="canonical" href="https://humanis.com.mx/por-que-nosotros" />
-        
+        <link rel="alternate" hrefLang="es-MX" href="https://humanis.com.mx/por-que-nosotros" />
+
         {/* Open Graph */}
         <meta property="og:type" content="website" />
         <meta property="og:title" content="¿Por Qué Humanis? | Executive Search Premium" />
         <meta property="og:description" content="Descubre las ventajas competitivas que hacen de Humanis la firma líder en executive search en México." />
         <meta property="og:image" content="https://humanis.com.mx/og-por-que.jpg" />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta property="og:image:alt" content="Humanis México - Por Qué Nosotros" />
         <meta property="og:url" content="https://humanis.com.mx/por-que-nosotros" />
         <meta property="og:site_name" content="Humanis México" />
-        
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content="¿Por Qué Humanis? - Executive Search" />
-        <meta name="twitter:description" content="La diferencia Humanis en executive search y consultoría de talento" />
-        <meta name="twitter:image" content="https://humanis.com.mx/twitter-por-que.jpg" />
-        
-        <link rel="icon" href="/favicon.ico" />
+        <meta property="og:locale" content="es_MX" />
+
+        {/* Icons */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+        <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#1e40af" />
+
+        {/* Preconnect */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
       </Head>
 
       <Script
@@ -251,9 +262,15 @@ export default function PorQueNosotrosPage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
       />
 
+      <Script
+        id="gtag"
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+      />
+
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-        
+
         * {
           margin: 0;
           padding: 0;
@@ -262,19 +279,34 @@ export default function PorQueNosotrosPage() {
 
         html {
           scroll-behavior: smooth;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           line-height: 1.6;
-          color: #0f172a;
+          color: #1a1a1a;
           background: #ffffff;
           overflow-x: hidden;
         }
 
         ::selection {
-          background: #3b82f6;
-          color: white;
+          background: rgba(59, 130, 246, 0.15);
+          color: #1e40af;
+        }
+
+        ::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: #f8f9fa;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #3b82f6, #1e40af);
+          border-radius: 5px;
         }
 
         .container {
@@ -296,27 +328,33 @@ export default function PorQueNosotrosPage() {
           left: 0;
           right: 0;
           z-index: 1000;
-          background: rgba(255, 255, 255, 0.98);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          transition: all 0.3s ease;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-header.scrolled {
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+          background: rgba(255, 255, 255, 0.98);
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
         }
 
         .nav-wrapper {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 1.25rem 0;
+          padding: 1rem 0;
         }
 
         .logo-container {
           display: flex;
           align-items: center;
           text-decoration: none;
+          transition: transform 0.3s ease;
+        }
+
+        .logo-container:hover {
+          transform: scale(1.05);
         }
 
         .logo-image {
@@ -331,35 +369,38 @@ export default function PorQueNosotrosPage() {
         }
 
         .nav-link {
+          font-size: 0.95rem;
           font-weight: 500;
-          color: #475569;
+          color: #6b7280;
           text-decoration: none;
           position: relative;
           padding: 0.5rem 0;
-          transition: color 0.3s ease;
+          transition: color 0.2s ease;
+        }
+
+        .nav-link.active {
+          color: #1e40af;
         }
 
         .nav-link::after {
           content: '';
           position: absolute;
-          bottom: 0;
-          left: 0;
+          bottom: -2px;
+          left: 50%;
           width: 0;
           height: 2px;
-          background: linear-gradient(90deg, #3b82f6, #1d4ed8);
-          transition: width 0.3s ease;
+          background: #3b82f6;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transform: translateX(-50%);
         }
 
         .nav-link:hover {
-          color: #1e293b;
+          color: #1a1a1a;
         }
 
-        .nav-link:hover::after {
+        .nav-link:hover::after,
+        .nav-link.active::after {
           width: 100%;
-        }
-
-        .nav-link.active {
-          color: #3b82f6;
         }
 
         .nav-cta {
@@ -368,34 +409,35 @@ export default function PorQueNosotrosPage() {
         }
 
         .btn {
-          padding: 0.875rem 2rem;
-          border-radius: 50px;
+          padding: 0.75rem 1.75rem;
+          border-radius: 10px;
+          font-size: 0.95rem;
           font-weight: 600;
           text-decoration: none;
-          transition: all 0.3s ease;
+          transition: all 0.2s ease;
           display: inline-flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.625rem;
           position: relative;
           overflow: hidden;
           cursor: pointer;
         }
 
         .btn-primary {
-          background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+          background: #3b82f6;
           color: white;
-          box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
-          border: none;
+          box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
         }
 
         .btn-primary:hover {
+          background: #2563eb;
           transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
+          box-shadow: 0 8px 20px rgba(59, 130, 246, 0.35);
         }
 
         .btn-secondary {
-          border: 2px solid #e2e8f0;
-          color: #475569;
+          border: 1.5px solid #e5e7eb;
+          color: #6b7280;
           background: white;
         }
 
@@ -405,19 +447,20 @@ export default function PorQueNosotrosPage() {
           background: #f0f9ff;
         }
 
-        /* Mobile Menu */
         .mobile-menu-btn {
           display: none;
           flex-direction: column;
-          gap: 6px;
+          gap: 5px;
           padding: 8px;
           cursor: pointer;
+          background: none;
+          border: none;
         }
 
         .mobile-menu-btn span {
-          width: 28px;
+          width: 26px;
           height: 2px;
-          background: #475569;
+          background: #6b7280;
           transition: all 0.3s ease;
           border-radius: 2px;
         }
@@ -428,6 +471,7 @@ export default function PorQueNosotrosPage() {
 
         .mobile-menu-btn.active span:nth-child(2) {
           opacity: 0;
+          transform: translateX(-10px);
         }
 
         .mobile-menu-btn.active span:nth-child(3) {
@@ -435,7 +479,8 @@ export default function PorQueNosotrosPage() {
         }
 
         @media (max-width: 1024px) {
-          .nav-menu, .nav-cta {
+          .nav-menu,
+          .nav-cta {
             display: none;
           }
 
@@ -446,16 +491,16 @@ export default function PorQueNosotrosPage() {
 
         .mobile-menu {
           position: fixed;
-          top: 80px;
+          top: 96px;
           left: 0;
           right: 0;
           background: white;
           padding: 2rem;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-          transform: translateY(-100%);
+          transform: translateY(-120%);
           opacity: 0;
           visibility: hidden;
-          transition: all 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .mobile-menu.active {
@@ -467,27 +512,146 @@ export default function PorQueNosotrosPage() {
         /* Hero Section */
         .hero {
           min-height: 100vh;
-          background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+          background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #3b82f6 100%);
           position: relative;
           overflow: hidden;
           display: flex;
           align-items: center;
-          padding: 8rem 0 4rem;
+          padding: 7rem 0 4rem;
         }
 
-        .hero-bg {
+        .hero::before {
+          content: '';
           position: absolute;
-          inset: 0;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.2) 0%, transparent 50%),
+            radial-gradient(circle at 40% 20%, rgba(34, 211, 238, 0.2) 0%, transparent 50%);
+          animation: floatAnimation 20s ease-in-out infinite;
+        }
+
+        @keyframes floatAnimation {
+          0%,
+          100% {
+            transform: translate(0, 0) rotate(0deg);
+          }
+          33% {
+            transform: translate(30px, -30px) rotate(1deg);
+          }
+          66% {
+            transform: translate(-20px, 20px) rotate(-1deg);
+          }
+        }
+
+        .hero-pattern {
+          position: absolute;
+          top: 0;
+          right: -10%;
+          width: 60%;
+          height: 100%;
+          opacity: 0.1;
+          background-image: linear-gradient(
+              60deg,
+              #3b82f6 12%,
+              transparent 12.5%,
+              transparent 87%,
+              #3b82f6 87.5%,
+              #3b82f6
+            ),
+            linear-gradient(120deg, #3b82f6 12%, transparent 12.5%, transparent 87%, #3b82f6 87.5%, #3b82f6);
+          background-size: 60px 100px;
+          background-position: 0 0, 30px 50px;
+          animation: waveAnimation 15s linear infinite;
+        }
+
+        @keyframes waveAnimation {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(60px);
+          }
+        }
+
+        .hero-glow {
+          position: absolute;
+          top: 10%;
+          left: -20%;
+          width: 800px;
+          height: 800px;
+          background: radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, transparent 60%);
+          filter: blur(100px);
+          animation: pulseGlow 8s ease-in-out infinite;
+        }
+
+        @keyframes pulseGlow {
+          0%,
+          100% {
+            transform: scale(1) translateY(0);
+          }
+          50% {
+            transform: scale(1.2) translateY(-50px);
+          }
+        }
+
+        .hero::after {
+          content: '';
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          height: 200px;
+          background: linear-gradient(to top, rgba(255, 255, 255, 0.05) 0%, transparent 100%);
+          pointer-events: none;
+        }
+
+        .hero-lines {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          overflow: hidden;
           opacity: 0.1;
         }
 
-        .hero-grid {
+        .hero-line {
           position: absolute;
-          inset: 0;
-          background-image: 
-            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-          background-size: 50px 50px;
+          width: 2px;
+          height: 100%;
+          background: linear-gradient(to bottom, transparent 0%, rgba(147, 197, 253, 0.8) 50%, transparent 100%);
+          animation: lineMove 15s linear infinite;
+          box-shadow: 0 0 20px rgba(147, 197, 253, 0.5);
+        }
+
+        @keyframes lineMove {
+          0% {
+            transform: translateX(0);
+          }
+          100% {
+            transform: translateX(100vw);
+          }
+        }
+
+        @keyframes float {
+          0%,
+          100% {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 0.5;
+          }
+          90% {
+            opacity: 0.5;
+          }
+          50% {
+            transform: translateY(-100vh) translateX(100px);
+            opacity: 0.8;
+          }
         }
 
         .hero-wrapper {
@@ -512,13 +676,14 @@ export default function PorQueNosotrosPage() {
         .hero-badge {
           display: inline-flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.625rem;
           background: rgba(255, 255, 255, 0.1);
           backdrop-filter: blur(10px);
           padding: 0.625rem 1.5rem;
           border-radius: 50px;
           border: 1px solid rgba(255, 255, 255, 0.2);
           margin-bottom: 2rem;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         .badge-dot {
@@ -527,11 +692,21 @@ export default function PorQueNosotrosPage() {
           background: #10b981;
           border-radius: 50%;
           animation: pulse 2s infinite;
+          box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
         }
 
         @keyframes pulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.5; }
+          0%,
+          100% {
+            opacity: 1;
+            transform: scale(1);
+            box-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+          }
+          50% {
+            opacity: 0.8;
+            transform: scale(1.5);
+            box-shadow: 0 0 30px rgba(16, 185, 129, 0.8);
+          }
         }
 
         .badge-text {
@@ -539,63 +714,154 @@ export default function PorQueNosotrosPage() {
           font-weight: 600;
           font-size: 0.875rem;
           letter-spacing: 0.5px;
+          text-transform: uppercase;
         }
 
         .hero-title {
-          font-size: clamp(2.5rem, 8vw, 4.5rem);
+          font-size: clamp(2.5rem, 5vw, 4.5rem);
           font-weight: 900;
           color: white;
           line-height: 1.1;
           margin-bottom: 1.5rem;
+          letter-spacing: -0.03em;
+          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .hero-gradient-text {
-          background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+          background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #fbbf24 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
+          animation: gradientShift 8s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+          0%,
+          100% {
+            filter: hue-rotate(0deg);
+          }
+          50% {
+            filter: hue-rotate(30deg);
+          }
         }
 
         .hero-description {
           font-size: 1.25rem;
-          color: #cbd5e1;
-          line-height: 1.8;
-          margin-bottom: 3rem;
+          color: rgba(255, 255, 255, 0.9);
+          line-height: 1.7;
+          margin-bottom: 2.5rem;
+          max-width: 600px;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
-        .hero-stats-grid {
+        .hero-buttons {
+          display: flex;
+          gap: 1.25rem;
+          flex-wrap: wrap;
+        }
+
+        .hero-stats-container {
+          position: relative;
+          z-index: 10;
+        }
+
+        .hero-stats {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(2, 1fr);
           gap: 2rem;
-          padding: 2rem;
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(10px);
-          border-radius: 20px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 2.5rem;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+          backdrop-filter: blur(20px);
+          border-radius: 24px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+          position: relative;
+        }
+
+        .hero-stats::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          border-radius: 24px;
+          padding: 1px;
+          background: linear-gradient(135deg, rgba(59, 130, 246, 0.5), rgba(147, 51, 234, 0.5));
+          -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+          -webkit-mask-composite: xor;
+          mask-composite: exclude;
+          pointer-events: none;
         }
 
         @media (max-width: 768px) {
-          .hero-stats-grid {
-            grid-template-columns: repeat(2, 1fr);
+          .hero-stats {
+            grid-template-columns: 1fr;
+            padding: 2rem;
           }
         }
 
-        .hero-stat {
+        .stat-card {
           text-align: center;
+          padding: 1.5rem;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          cursor: default;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .stat-card::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+          transform: rotate(45deg);
+          animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+          }
+          50%,
+          100% {
+            transform: translateX(100%) translateY(100%) rotate(45deg);
+          }
+        }
+
+        .stat-card:hover {
+          transform: translateY(-6px) scale(1.02);
+          box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+          border-color: rgba(59, 130, 246, 0.5);
+          background: rgba(255, 255, 255, 0.1);
         }
 
         .stat-value {
-          font-size: 2.5rem;
+          font-size: 3rem;
           font-weight: 900;
           color: white;
-          margin-bottom: 0.25rem;
+          margin-bottom: 0.5rem;
+          font-variant-numeric: tabular-nums;
+          display: flex;
+          align-items: baseline;
+          justify-content: center;
+          gap: 0.25rem;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         .stat-label {
-          color: #94a3b8;
-          font-size: 0.875rem;
+          color: rgba(255, 255, 255, 0.8);
+          font-size: 0.95rem;
+          font-weight: 600;
           text-transform: uppercase;
-          letter-spacing: 1px;
+          letter-spacing: 0.5px;
         }
 
         /* Sections */
@@ -616,59 +882,77 @@ export default function PorQueNosotrosPage() {
         .section-badge {
           display: inline-block;
           padding: 0.5rem 1.25rem;
-          background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
+          background: linear-gradient(135deg, #f0f9ff, #dbeafe);
           color: #3b82f6;
-          border-radius: 50px;
+          border-radius: 30px;
           font-weight: 600;
           font-size: 0.875rem;
           letter-spacing: 0.5px;
           margin-bottom: 1rem;
           text-transform: uppercase;
+          border: 1px solid #bfdbfe;
         }
 
         .section-title {
-          font-size: clamp(2rem, 5vw, 3.5rem);
+          font-size: clamp(2rem, 4vw, 3rem);
           font-weight: 900;
-          color: #0f172a;
-          margin-bottom: 1.5rem;
+          color: #1a1a1a;
+          margin-bottom: 1.25rem;
           line-height: 1.2;
+          letter-spacing: -0.02em;
         }
 
         .section-subtitle {
           font-size: 1.25rem;
-          color: #64748b;
-          max-width: 800px;
+          color: #6b7280;
+          max-width: 700px;
           margin: 0 auto;
-          line-height: 1.8;
+          line-height: 1.7;
         }
 
         /* Differentiators */
         .diff-grid {
           display: grid;
-          grid-template-columns: repeat(2, 1fr);
+          grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
           gap: 2rem;
-        }
-
-        @media (max-width: 768px) {
-          .diff-grid {
-            grid-template-columns: 1fr;
-          }
+          min-height: 400px;
         }
 
         .diff-card {
           background: white;
           border-radius: 20px;
-          padding: 2.5rem;
+          overflow: visible;
           box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
           transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
           position: relative;
-          overflow: hidden;
-          border-top: 4px solid transparent;
+          cursor: pointer;
+          border: 1px solid #e5e7eb;
+        }
+
+        .diff-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, var(--gradient-start), var(--gradient-end));
+          transform: scaleX(0);
+          transition: transform 0.3s ease;
         }
 
         .diff-card:hover {
           transform: translateY(-8px);
-          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12);
+        }
+
+        .diff-card:hover::before {
+          transform: scaleX(1);
+        }
+
+        .diff-content {
+          padding: 2rem;
+          min-height: 300px;
         }
 
         .diff-icon {
@@ -680,93 +964,143 @@ export default function PorQueNosotrosPage() {
           justify-content: center;
           margin-bottom: 1.5rem;
           box-shadow: 0 8px 30px rgba(59, 130, 246, 0.2);
+          background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        }
+
+        .diff-title {
+          font-size: 1.5rem;
+          font-weight: 800;
+          color: #1a1a1a;
+          margin-bottom: 1rem;
+        }
+
+        .diff-description {
+          color: #4b5563;
+          line-height: 1.7;
+          margin-bottom: 1.5rem;
+          font-size: 1rem;
         }
 
         .diff-stats {
           display: flex;
           align-items: baseline;
           gap: 0.5rem;
-          margin-top: 1.5rem;
+          font-size: 3rem;
+          font-weight: 900;
+          background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .diff-unit {
+          font-size: 1rem;
+          font-weight: 600;
+          color: var(--gradient-start);
         }
 
         /* Methodology */
-        .method-grid {
+        .method-timeline {
+          position: relative;
+          margin-top: 4rem;
+          min-height: 600px;
+        }
+
+        .method-line {
+          position: absolute;
+          top: 100px;
+          left: 10%;
+          right: 10%;
+          height: 2px;
+          background: linear-gradient(90deg, transparent, #3b82f6, #3b82f6, transparent);
+          opacity: 0.3;
+          z-index: 0;
+        }
+
+        .method-steps {
           display: grid;
-          gap: 3rem;
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          gap: 2rem;
+          position: relative;
+          padding: 2rem 0;
         }
 
         .method-step {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 3rem;
-          align-items: center;
-        }
-
-        .method-step:nth-child(even) {
-          direction: rtl;
-        }
-
-        .method-step:nth-child(even) > * {
-          direction: ltr;
-        }
-
-        @media (max-width: 768px) {
-          .method-step {
-            grid-template-columns: 1fr;
-          }
-          
-          .method-step:nth-child(even) {
-            direction: ltr;
-          }
-        }
-
-        .method-content {
-          background: white;
-          border-radius: 20px;
-          padding: 2.5rem;
-          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
-        }
-
-        .method-number {
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          width: 60px;
-          height: 60px;
-          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
-          color: white;
-          border-radius: 50%;
-          font-weight: 900;
-          font-size: 1.5rem;
-          margin-bottom: 1.5rem;
-          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+          text-align: center;
+          position: relative;
+          z-index: 1;
+          min-height: 400px;
         }
 
         .method-image {
-          position: relative;
-          height: 320px;
-          border-radius: 20px;
+          width: 160px;
+          height: 160px;
+          margin: 0 auto 1.5rem;
+          border-radius: 50%;
           overflow: hidden;
-          box-shadow: 0 20px 50px rgba(0, 0, 0, 0.1);
+          position: relative;
+          border: 4px solid #e5e7eb;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+          transition: all 0.3s ease;
+          background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        }
+
+        .method-step:hover .method-image {
+          transform: scale(1.05);
+          border-color: #3b82f6;
+          box-shadow: 0 15px 50px rgba(59, 130, 246, 0.2);
+        }
+
+        .method-number {
+          position: absolute;
+          top: -10px;
+          right: 10px;
+          width: 40px;
+          height: 40px;
+          background: linear-gradient(135deg, #3b82f6, #1e40af);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-weight: 900;
+          font-size: 1rem;
+          color: white;
+          z-index: 1;
+          box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+        }
+
+        .method-title {
+          font-size: 1.375rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 0.875rem;
+        }
+
+        .method-description {
+          color: #6b7280;
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          padding: 0 1rem;
+          font-size: 0.95rem;
+        }
+
+        .method-duration {
+          display: inline-block;
+          padding: 0.375rem 1rem;
+          background: linear-gradient(135deg, #f0f9ff, #dbeafe);
+          color: #3b82f6;
+          border-radius: 20px;
+          font-size: 0.875rem;
+          font-weight: 600;
         }
 
         /* Achievements */
         .achievements-grid {
           display: grid;
-          grid-template-columns: repeat(6, 1fr);
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
           gap: 2rem;
-        }
-
-        @media (max-width: 1024px) {
-          .achievements-grid {
-            grid-template-columns: repeat(3, 1fr);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .achievements-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
+          min-height: 300px;
+          padding: 2rem;
         }
 
         .achievement-card {
@@ -776,6 +1110,9 @@ export default function PorQueNosotrosPage() {
           text-align: center;
           box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
           transition: all 0.3s ease;
+          border: 1px solid #e5e7eb;
+          min-height: 150px;
+          opacity: 1 !important;
         }
 
         .achievement-card:hover {
@@ -786,11 +1123,18 @@ export default function PorQueNosotrosPage() {
         .achievement-metric {
           font-size: 2.5rem;
           font-weight: 900;
-          background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+          background: linear-gradient(135deg, #3b82f6, #1e40af);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
           margin-bottom: 0.5rem;
+        }
+
+        .achievement-label {
+          color: #6b7280;
+          font-size: 0.875rem;
+          font-weight: 600;
+          text-transform: uppercase;
         }
 
         /* Industries */
@@ -809,16 +1153,26 @@ export default function PorQueNosotrosPage() {
           margin-bottom: 0.5rem;
         }
 
+        .industry-name {
+          font-weight: 600;
+          color: #1a1a1a;
+        }
+
+        .industry-percentage {
+          font-weight: 700;
+          color: #3b82f6;
+        }
+
         .industry-progress {
           height: 8px;
-          background: #e2e8f0;
+          background: #e5e7eb;
           border-radius: 4px;
           overflow: hidden;
         }
 
         .industry-fill {
           height: 100%;
-          background: linear-gradient(90deg, #3b82f6, #1d4ed8);
+          background: linear-gradient(90deg, #3b82f6, #1e40af);
           border-radius: 4px;
           transition: width 1.5s ease;
         }
@@ -826,25 +1180,22 @@ export default function PorQueNosotrosPage() {
         /* Values */
         .values-grid {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
           gap: 2rem;
-        }
-
-        @media (max-width: 1024px) {
-          .values-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .values-grid {
-            grid-template-columns: 1fr;
-          }
         }
 
         .value-card {
           text-align: center;
           padding: 2rem;
+          background: white;
+          border-radius: 20px;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s ease;
+        }
+
+        .value-card:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.1);
         }
 
         .value-icon {
@@ -864,10 +1215,22 @@ export default function PorQueNosotrosPage() {
           box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
         }
 
+        .value-title {
+          font-size: 1.25rem;
+          font-weight: 700;
+          color: #1a1a1a;
+          margin-bottom: 0.75rem;
+        }
+
+        .value-description {
+          color: #6b7280;
+          line-height: 1.6;
+        }
+
         /* CTA Section */
         .cta-section {
-          background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
           padding: 6rem 0;
+          background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
           position: relative;
           overflow: hidden;
         }
@@ -875,23 +1238,98 @@ export default function PorQueNosotrosPage() {
         .cta-pattern {
           position: absolute;
           inset: 0;
-          background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 1px);
+          background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
           background-size: 40px 40px;
+        }
+
+        .cta-wrapper {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 4rem;
+          align-items: center;
+          position: relative;
+          z-index: 1;
+        }
+
+        @media (max-width: 1024px) {
+          .cta-wrapper {
+            grid-template-columns: 1fr;
+            text-align: center;
+          }
+        }
+
+        .cta-content {
+          color: white;
+        }
+
+        .cta-title {
+          font-size: clamp(2rem, 5vw, 3.5rem);
+          font-weight: 900;
+          margin-bottom: 1.5rem;
+        }
+
+        .cta-description {
+          font-size: 1.25rem;
+          color: rgba(255, 255, 255, 0.9);
+          margin-bottom: 3rem;
+          line-height: 1.8;
+        }
+
+        .cta-buttons {
+          display: flex;
+          gap: 1.25rem;
+          flex-wrap: wrap;
+        }
+
+        .cta-image {
+          position: relative;
+          height: 400px;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 40px 100px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-white {
+          background: white;
+          color: #1e40af;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-white:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-outline-white {
+          border: 2px solid white;
+          color: white;
+          background: transparent;
+        }
+
+        .btn-outline-white:hover {
+          background: white;
+          color: #1e40af;
         }
 
         /* Footer */
         .footer {
           background: #ffffff;
-          color: #0f172a;
+          color: #1a1a1a;
           padding: 4rem 0 2rem;
-          border-top: 1px solid #e2e8f0;
+          border-top: 1px solid #e5e7eb;
         }
 
         .footer-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          grid-template-columns: 2fr 1fr 1fr 1fr;
           gap: 3rem;
           margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+          .footer-grid {
+            grid-template-columns: 1fr;
+          }
         }
 
         .footer-brand {
@@ -910,7 +1348,7 @@ export default function PorQueNosotrosPage() {
         }
 
         .footer-description {
-          color: #64748b;
+          color: #6b7280;
           line-height: 1.8;
           margin-bottom: 1.5rem;
         }
@@ -924,24 +1362,24 @@ export default function PorQueNosotrosPage() {
           width: 40px;
           height: 40px;
           background: #f1f5f9;
-          border-radius: 50%;
+          border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.3s ease;
-          color: #64748b;
+          color: #6b7280;
         }
 
         .social-link:hover {
           background: #3b82f6;
           color: white;
-          transform: translateY(-2px);
+          transform: translateY(-3px);
         }
 
         .footer-column h4 {
           font-weight: 700;
           margin-bottom: 1.5rem;
-          color: #0f172a;
+          color: #1a1a1a;
         }
 
         .footer-links {
@@ -949,7 +1387,7 @@ export default function PorQueNosotrosPage() {
         }
 
         .footer-link {
-          color: #64748b;
+          color: #6b7280;
           text-decoration: none;
           display: block;
           padding: 0.5rem 0;
@@ -957,12 +1395,12 @@ export default function PorQueNosotrosPage() {
         }
 
         .footer-link:hover {
-          color: #0f172a;
+          color: #3b82f6;
         }
 
         .footer-bottom {
           padding-top: 2rem;
-          border-top: 1px solid #e2e8f0;
+          border-top: 1px solid #e5e7eb;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -971,7 +1409,7 @@ export default function PorQueNosotrosPage() {
         }
 
         .footer-copyright {
-          color: #64748b;
+          color: #6b7280;
         }
 
         .footer-legal {
@@ -985,8 +1423,8 @@ export default function PorQueNosotrosPage() {
           transform: translateY(30px);
         }
 
-        .section-visible {
-          animation: fadeInUp 0.8s ease forwards;
+        .in-view {
+          animation: fadeInUp 0.8s cubic-bezier(0.4, 0, 0.2, 1) forwards;
         }
 
         @keyframes fadeInUp {
@@ -994,6 +1432,10 @@ export default function PorQueNosotrosPage() {
             opacity: 1;
             transform: translateY(0);
           }
+        }
+
+        .animate-count {
+          animation: countUp 0.6s ease forwards;
         }
 
         @keyframes countUp {
@@ -1007,15 +1449,46 @@ export default function PorQueNosotrosPage() {
           }
         }
 
-        .animate-count {
-          animation: countUp 0.6s ease forwards;
-        }
-
         /* Responsive */
         @media (max-width: 768px) {
-          .section {
-            padding: 4rem 0;
+          .hero-title {
+            font-size: 2.25rem;
           }
+
+          .section-title {
+            font-size: 2rem;
+          }
+
+          .diff-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .method-steps {
+            grid-template-columns: 1fr;
+          }
+
+          .method-line {
+            display: none;
+          }
+
+          .achievements-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
+
+          .values-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .stat-value {
+            font-size: 2.25rem;
+          }
+        }
+
+        /* Focus states */
+        a:focus-visible,
+        button:focus-visible {
+          outline: 2px solid #3b82f6;
+          outline-offset: 2px;
         }
       `}</style>
 
@@ -1023,10 +1496,10 @@ export default function PorQueNosotrosPage() {
         <div className="container">
           <div className="nav-wrapper">
             <Link href="/" className="logo-container">
-              <Image 
+              <Image
                 src="/images/logohumanis.png"
-                alt="Humanis Logo"
-                width={200}
+                alt="Humanis México - Executive Search"
+                width={240}
                 height={80}
                 className="logo-image"
                 priority
@@ -1037,7 +1510,7 @@ export default function PorQueNosotrosPage() {
               <Link href="/" className="nav-link">Inicio</Link>
               <Link href="/#servicios" className="nav-link">Servicios</Link>
               <Link href="/#proceso" className="nav-link">Proceso</Link>
-              <Link href="/nosotros" className="nav-link active">¿Por qué nosotros?</Link>
+              <Link href="/por-que-nosotros" className="nav-link active">¿Por qué nosotros?</Link>
               <Link href="/consulta" className="nav-link">Contactar</Link>
             </nav>
 
@@ -1047,9 +1520,10 @@ export default function PorQueNosotrosPage() {
               </Link>
             </div>
 
-            <button 
+            <button
               className={`mobile-menu-btn ${mobileMenuOpen ? 'active' : ''}`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Menu"
             >
               <span></span>
               <span></span>
@@ -1060,11 +1534,21 @@ export default function PorQueNosotrosPage() {
 
         <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
           <nav style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <Link href="/" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Inicio</Link>
-            <Link href="/#servicios" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Servicios</Link>
-            <Link href="/#proceso" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Proceso</Link>
-            <Link href="/por-que-nosotros" className="nav-link active" onClick={() => setMobileMenuOpen(false)}>¿Por qué nosotros?</Link>
-            <Link href="/consulta" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Contactar</Link>
+            <Link href="/" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
+              Inicio
+            </Link>
+            <Link href="/#servicios" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
+              Servicios
+            </Link>
+            <Link href="/#proceso" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
+              Proceso
+            </Link>
+            <Link href="/por-que-nosotros" className="nav-link active" onClick={() => setMobileMenuOpen(false)}>
+              ¿Por qué nosotros?
+            </Link>
+            <Link href="/consulta" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
+              Contactar
+            </Link>
             <div style={{ marginTop: '1rem' }}>
               <Link href="/consulta" className="btn btn-primary" style={{ width: '100%', justifyContent: 'center' }}>
                 Consulta Gratuita
@@ -1074,379 +1558,387 @@ export default function PorQueNosotrosPage() {
         </div>
       </header>
 
-      <section className="hero">
-        <div className="hero-bg" style={{
-          backgroundImage: `radial-gradient(circle at ${mousePosition.x}% ${mousePosition.y}%, rgba(59, 130, 246, 0.15), transparent 50%)`
-        }}></div>
-        <div className="hero-grid" data-parallax="0.1"></div>
-        
-        <div className="container">
-          <div className="hero-wrapper">
-            <div className="hero-content" data-animate id="hero-content">
-              <div className="hero-badge">
-                <span className="badge-dot"></span>
-                <span className="badge-text">La Diferencia Humanis</span>
-              </div>
+      <main>
+        <section id="inicio" className="hero">
+          <div className="hero-pattern" data-parallax="0.1"></div>
+          <div
+            className="hero-glow"
+            style={{
+              transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`,
+            }}
+          ></div>
 
-              <h1 className="hero-title">
-                ¿Por Qué <span className="hero-gradient-text">Elegir Humanis</span>?
-              </h1>
-
-              <p className="hero-description">
-                Somos más que una consultora de talento. Somos tu socio estratégico para construir 
-                equipos ejecutivos excepcionales que impulsen el crecimiento sostenible de tu empresa. 
-                Descubre qué nos hace únicos en el mercado mexicano.
-              </p>
-
-              <div style={{ display: 'flex', gap: '1.25rem', marginBottom: '3rem', flexWrap: 'wrap' }}>
-                <Link href="/consulta" className="btn btn-primary">
-                  Iniciar Consulta
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                    <path d="M5 12h14M12 5l7 7-7 7"/>
-                  </svg>
-                </Link>
-                <a href="#metodologia" className="btn btn-secondary">
-                  Ver Metodología
-                </a>
-              </div>
-            </div>
-
-            <div data-animate id="hero-stats">
-              <div className="hero-stats-grid">
-                <div className="hero-stat">
-                  <div className="stat-value">1K+</div>
-                  <div className="stat-label">Ejecutivos</div>
-                </div>
-                <div className="hero-stat">
-                  <div className="stat-value">98%</div>
-                  <div className="stat-label">Retención</div>
-                </div>
-                <div className="hero-stat">
-                  <div className="stat-value">9</div>
-                  <div className="stat-label">Días Promedio</div>
-                </div>
-                <div className="hero-stat">
-                  <div className="stat-value">50+</div>
-                  <div className="stat-label">Empresas</div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-header" data-animate id="diff-header">
-            <span className="section-badge">Ventajas Competitivas</span>
-            <h2 className="section-title">Lo que Nos Hace Únicos</h2>
-            <p className="section-subtitle">
-              Factores clave que nos posicionan como la firma de executive search 
-              más confiable y efectiva en México.
-            </p>
-          </div>
-
-          <div className="diff-grid">
-            {differentiators.map((diff, index) => (
-              <div 
-                key={index}
-                className="diff-card"
-                data-animate
-                id={`diff-${index}`}
-              >
-                <div 
-                  className="diff-icon"
-                  style={{
-                    background: `linear-gradient(135deg, ${diff.gradientStart}, ${diff.gradientEnd})`
-                  }}
-                >
-                  <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
-                    {diff.icon === 'network' && (
-                      <>
-                        <circle cx="12" cy="5" r="3"/>
-                        <circle cx="12" cy="19" r="3"/>
-                        <circle cx="5" cy="12" r="3"/>
-                        <circle cx="19" cy="12" r="3"/>
-                        <line x1="12" y1="8" x2="12" y2="16"/>
-                        <line x1="8" y1="12" x2="16" y2="12"/>
-                      </>
-                    )}
-                    {diff.icon === 'filter' && (
-                      <>
-                        <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
-                      </>
-                    )}
-                    {diff.icon === 'shield' && (
-                      <>
-                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                        <polyline points="9 12 12 15 16 10"/>
-                      </>
-                    )}
-                    {diff.icon === 'clock' && (
-                      <>
-                        <circle cx="12" cy="12" r="10"/>
-                        <polyline points="12 6 12 12 16 14"/>
-                      </>
-                    )}
-                  </svg>
-                </div>
-                <h3 style={{ fontSize: '1.5rem', fontWeight: '700', color: '#0f172a', marginBottom: '1rem' }}>
-                  {diff.title}
-                </h3>
-                <p style={{ color: '#64748b', lineHeight: '1.8', marginBottom: '1.5rem' }}>
-                  {diff.description}
-                </p>
-                <div className="diff-stats">
-                  <span 
-                    style={{
-                      background: `linear-gradient(135deg, ${diff.gradientStart}, ${diff.gradientEnd})`,
-                      WebkitBackgroundClip: 'text',
-                      WebkitTextFillColor: 'transparent',
-                      backgroundClip: 'text',
-                      fontSize: '3rem',
-                      fontWeight: '900',
-                      lineHeight: '1'
-                    }}
-                  >
-                    {diff.stats}
-                  </span>
-                  <span 
-                    style={{
-                      color: diff.gradientStart,
-                      fontSize: '1rem',
-                      fontWeight: '600',
-                      marginLeft: '0.5rem'
-                    }}
-                  >
-                    {diff.unit}
-                  </span>
-                </div>
-              </div>
+          <div className="hero-lines">
+            {[...Array(5)].map((_, i) => (
+              <div
+                key={`line-${i}`}
+                className="hero-line"
+                style={{
+                  left: `${i * 25}%`,
+                  animationDelay: `${i * 2}s`,
+                  animationDuration: `${10 + i * 2}s`,
+                }}
+              />
             ))}
           </div>
-        </div>
-      </section>
 
-      <section id="metodologia" className="section section-alt">
-        <div className="container">
-          <div className="section-header" data-animate id="method-header">
-            <span className="section-badge">Metodología</span>
-            <h2 className="section-title">Nuestro Proceso Comprobado</h2>
-            <p className="section-subtitle">
-              Un sistema de 5 pasos diseñado para garantizar que encuentres exactamente 
-              el talento ejecutivo que necesitas, cuando lo necesitas.
-            </p>
+          <div
+            style={{
+              position: 'absolute',
+              width: '100%',
+              height: '100%',
+              overflow: 'hidden',
+            }}
+          >
+            {[...Array(20)].map((_, i) => (
+              <div
+                key={i}
+                style={{
+                  position: 'absolute',
+                  width: `${Math.random() * 4 + 2}px`,
+                  height: `${Math.random() * 4 + 2}px`,
+                  background: 'rgba(255, 255, 255, 0.5)',
+                  borderRadius: '50%', // Fixed: Changed from border-radius to borderRadius
+                  left: `${Math.random() * 100}%`,
+                  top: `${Math.random() * 100}%`,
+                  animation: `float ${Math.random() * 10 + 10}s ${Math.random() * 5}s infinite ease-in-out`,
+                  boxShadow: '0 0 10px rgba(255, 255, 255, 0.3)', // Fixed: Changed from box-shadow to boxShadow
+                }}
+              />
+            ))}
           </div>
 
-          <div className="method-grid">
-            {methodology.map((step, index) => (
-              <div key={index} className="method-step" data-animate id={`method-${index}`}>
-                <div className="method-content">
-                  <div className="method-number">{step.step}</div>
-                  <h3 style={{ fontSize: '1.75rem', fontWeight: '700', color: '#0f172a', marginBottom: '1rem' }}>
-                    {step.title}
-                  </h3>
-                  <p style={{ color: '#64748b', lineHeight: '1.8', marginBottom: '1rem' }}>
-                    {step.description}
-                  </p>
-                  <div style={{ display: 'inline-block', padding: '0.5rem 1rem', background: '#f0f9ff', color: '#3b82f6', borderRadius: '20px', fontSize: '0.875rem', fontWeight: '600' }}>
-                    Duración: {step.duration}
+          <div className="container">
+            <div className="hero-wrapper">
+              <div className="hero-content" data-animate id="hero-content">
+                <div className="hero-badge">
+                  <span className="badge-dot"></span>
+                  <span className="badge-text">La Diferencia Humanis</span>
+                </div>
+
+                <h1 className="hero-title">
+                  ¿Por Qué <span className="hero-gradient-text">Elegir Humanis</span>?
+                </h1>
+
+                <p className="hero-description">
+                  Somos más que una consultora de talento. Somos tu socio estratégico para construir equipos ejecutivos
+                  excepcionales que impulsen el crecimiento sostenible de tu empresa. Descubre qué nos hace únicos en el
+                  mercado mexicano.
+                </p>
+
+                <div className="hero-buttons">
+                  <Link
+                    href="/consulta"
+                    className="btn btn-primary"
+                    style={{
+                      background: 'white',
+                      color: '#1e40af',
+                      boxShadow: '0 10px 40px rgba(255, 255, 255, 0.2)',
+                    }}
+                  >
+                    Iniciar Consulta
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                  <a href="#metodologia" className="btn btn-secondary">
+                    Ver Metodología
+                  </a>
+                </div>
+              </div>
+
+              <div className="hero-stats-container" data-animate id="hero-stats">
+                <div className="hero-stats">
+                  <div className="stat-card">
+                    <div className="stat-value">1K+</div>
+                    <div className="stat-label">Ejecutivos</div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-value">98%</div>
+                    <div className="stat-label">Retención</div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-value">9</div>
+                    <div className="stat-label">Días Promedio</div>
+                  </div>
+                  <div className="stat-card">
+                    <div className="stat-value">50+</div>
+                    <div className="stat-label">Empresas</div>
                   </div>
                 </div>
-                <div className="method-image">
-                  <Image 
-                    src={step.image}
-                    alt={step.title}
-                    fill
-                    style={{ objectFit: 'cover' }}
-                  />
-                </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section section-alt">
-        <div className="container">
-          <div className="section-header" data-animate id="achievements-header">
-            <span className="section-badge">Resultados</span>
-            <h2 className="section-title">Números que Hablan</h2>
-            <p className="section-subtitle">
-              Nuestros resultados reflejan años de excelencia y compromiso con el éxito de nuestros clientes.
-            </p>
-          </div>
-
-          <div className="achievements-grid">
-            {achievements.map((achievement, index) => (
-              <div 
-                key={index} 
-                className="achievement-card" 
-                data-animate 
-                id={`achievement-${index}`}
-                style={{ animationDelay: `${index * 0.1}s` }}
-              >
-                <div className={`achievement-metric ${countingStarted ? 'animate-count' : ''}`}>
-                  {achievement.metric}
-                </div>
-                <div style={{ color: '#64748b', fontSize: '0.875rem', fontWeight: '600' }}>
-                  {achievement.label}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-header" data-animate id="industries-header">
-            <span className="section-badge">Expertise</span>
-            <h2 className="section-title">Industrias que Servimos</h2>
-            <p className="section-subtitle">
-              Experiencia profunda en los sectores más dinámicos de México.
-            </p>
-          </div>
-
-          <div className="industries-container">
-            {industries.map((industry, index) => (
-              <div key={index} className="industry-bar" data-animate id={`industry-${index}`}>
-                <div className="industry-header">
-                  <span style={{ fontWeight: '600', color: '#0f172a' }}>{industry.name}</span>
-                  <span style={{ fontWeight: '700', color: '#3b82f6' }}>{industry.percentage}%</span>
-                </div>
-                <div className="industry-progress">
-                  <div 
-                    className="industry-fill" 
-                    style={{ 
-                      width: visibleSections.has(`industry-${index}`) ? `${industry.percentage}%` : '0%' 
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section section-alt">
-        <div className="container">
-          <div className="section-header" data-animate id="values-header">
-            <span className="section-badge">Valores</span>
-            <h2 className="section-title">Nuestros Principios</h2>
-            <p className="section-subtitle">
-              Los valores que guían cada búsqueda y cada relación con nuestros clientes.
-            </p>
-          </div>
-
-          <div className="values-grid">
-            {values.map((value, index) => (
-              <div key={index} className="value-card" data-animate id={`value-${index}`}>
-                <div className="value-icon">
-                  <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2">
-                    {value.icon === 'star' && (
-                      <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
-                    )}
-                    {value.icon === 'shield' && (
-                      <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-                    )}
-                    {value.icon === 'lightbulb' && (
-                      <>
-                        <line x1="12" y1="2" x2="12" y2="6"/>
-                        <line x1="12" y1="18" x2="12" y2="22"/>
-                        <line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/>
-                        <line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/>
-                        <line x1="2" y1="12" x2="6" y2="12"/>
-                        <line x1="18" y1="12" x2="22" y2="12"/>
-                        <line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/>
-                        <line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/>
-                      </>
-                    )}
-                    {value.icon === 'lock' && (
-                      <>
-                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                        <path d="M7 11V7a5 5 0 0110 0v4"/>
-                      </>
-                    )}
-                  </svg>
-                </div>
-                <h3 style={{ fontSize: '1.25rem', fontWeight: '700', color: '#0f172a', marginBottom: '0.75rem' }}>
-                  {value.title}
-                </h3>
-                <p style={{ color: '#64748b', lineHeight: '1.6' }}>
-                  {value.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="cta-section">
-        <div className="cta-pattern"></div>
-        <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-          <div style={{ textAlign: 'center' }}>
-            <h2 style={{ fontSize: 'clamp(2rem, 5vw, 3.5rem)', fontWeight: '900', color: 'white', marginBottom: '1.5rem' }}>
-              Experimenta la Diferencia Humanis
-            </h2>
-            <p style={{ fontSize: '1.25rem', color: 'rgba(255, 255, 255, 0.9)', marginBottom: '3rem', maxWidth: '700px', margin: '0 auto 3rem' }}>
-              Ahora que conoces por qué somos líderes, es momento de experimentar 
-              nuestro servicio excepcional. Comienza con una consulta gratuita.
-            </p>
-            <div style={{ display: 'flex', gap: '1.25rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-              <Link 
-                href="/consulta"
-                className="btn"
-                style={{ background: 'white', color: '#1e40af', padding: '1rem 2rem' }}
-              >
-                Consulta Gratuita
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M5 12h14M12 5l7 7-7 7"/>
-                </svg>
-              </Link>
-              <a 
-                href="tel:+525555550100"
-                className="btn"
-                style={{ border: '2px solid white', color: 'white', padding: '1rem 2rem' }}
-              >
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72"></path>
-                </svg>
-                Llamar: (55) 5555-0100
-              </a>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
 
+        <section className="section">
+          <div className="container">
+            <div className="section-header" data-animate id="diff-header">
+              <span className="section-badge">Ventajas Competitivas</span>
+              <h2 className="section-title">Lo que Nos Hace Únicos</h2>
+              <p className="section-subtitle">
+                Factores clave que nos posicionan como la firma de executive search más confiable y efectiva en México.
+              </p>
+            </div>
+
+            <div className="diff-grid">
+              {differentiators.map((diff, index) => (
+                <div
+                  key={index}
+                  className="diff-card in-view"
+                  data-animate
+                  id={`diff-${index}`}
+                  style={{ '--gradient-start': diff.gradient.split(' ')[1], '--gradient-end': diff.gradient.split(' ')[3] }}
+                >
+                  <div className="diff-content">
+                    <div className="diff-icon">
+                      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2">
+                        {diff.icon === 'network' && (
+                          <>
+                            <circle cx="12" cy="5" r="3" />
+                            <circle cx="12" cy="19" r="3" />
+                            <circle cx="5" cy="12" r="3" />
+                            <circle cx="19" cy="12" r="3" />
+                            <line x1="12" y1="8" x2="12" y2="16" />
+                            <line x1="8" y1="12" x2="16" y2="12" />
+                          </>
+                        )}
+                        {diff.icon === 'filter' && (
+                          <>
+                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
+                          </>
+                        )}
+                        {diff.icon === 'shield' && (
+                          <>
+                            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                            <polyline points="9 12 12 15 16 10" />
+                          </>
+                        )}
+                        {diff.icon === 'clock' && (
+                          <>
+                            <circle cx="12" cy="12" r="10" />
+                            <polyline points="12 6 12 12 16 14" />
+                          </>
+                        )}
+                      </svg>
+                    </div>
+                    <h3 className="diff-title">{diff.title}</h3>
+                    <p className="diff-description">{diff.description}</p>
+                    <div className="diff-stats">
+                      <span>{diff.stats}</span>
+                      <span className="diff-unit">{diff.unit}</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section id="metodologia" className="section section-alt">
+          <div className="container">
+            <div className="section-header" data-animate id="method-header">
+              <span className="section-badge">Metodología</span>
+              <h2 className="section-title">Nuestro Proceso Comprobado</h2>
+              <p className="section-subtitle">
+                Un sistema de 5 pasos diseñado para garantizar que encuentres exactamente el talento ejecutivo que necesitas,
+                cuando lo necesitas.
+              </p>
+            </div>
+
+            <div className="method-timeline">
+              <div className="method-line"></div>
+              <div className="method-steps">
+                {methodology.map((step, index) => (
+                  <div key={index} className="method-step in-view" data-animate id={`method-${index}`}>
+                    <div className="method-image">
+                      <Image src={step.image} alt={step.title} fill style={{ objectFit: 'cover' }} />
+                      <div className="method-number">{step.step}</div>
+                    </div>
+                    <h3 className="method-title">{step.title}</h3>
+                    <p className="method-description">{step.description}</p>
+                    <span className="method-duration">{step.duration}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section className="section section-alt">
+          <div className="container">
+            <div className="section-header" data-animate id="achievements-header">
+              <span className="section-badge">Resultados</span>
+              <h2 className="section-title">Números que Hablan</h2>
+              <p className="section-subtitle">
+                Nuestros resultados reflejan años de excelencia y compromiso con el éxito de nuestros clientes.
+              </p>
+            </div>
+
+            <div className="achievements-grid">
+              {achievements.map((achievement, index) => (
+                <div
+                  key={index}
+                  className={`achievement-card ${countingStarted ? 'in-view' : ''}`}
+                  data-animate
+                  id={`achievement-${index}`}
+                >
+                  <div className="achievement-metric">{achievement.metric}</div>
+                  <div className="achievement-label">{achievement.label}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section">
+          <div className="container">
+            <div className="section-header" data-animate id="industries-header">
+              <span className="section-badge">Expertise</span>
+              <h2 className="section-title">Industrias que Servimos</h2>
+              <p className="section-subtitle">Experiencia profunda en los sectores más dinámicos de México.</p>
+            </div>
+
+            <div className="industries-container">
+              {industries.map((industry, index) => (
+                <div key={index} className="industry-bar" data-animate id={`industry-${index}`}>
+                  <div className="industry-header">
+                    <span className="industry-name">{industry.name}</span>
+                    <span className="industry-percentage">{industry.percentage}%</span>
+                  </div>
+                  <div className="industry-progress">
+                    <div
+                      className="industry-fill"
+                      style={{
+                        width: visibleSections.has(`industry-${index}`) ? `${industry.percentage}%` : '0%',
+                      }}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="section section-alt">
+          <div className="container">
+            <div className="section-header" data-animate id="values-header">
+              <span className="section-badge">Valores</span>
+              <h2 className="section-title">Nuestros Principios</h2>
+              <p className="section-subtitle">Los valores que guían cada búsqueda y cada relación con nuestros clientes.</p>
+            </div>
+
+            <div className="values-grid">
+              {values.map((value, index) => (
+                <div key={index} className="value-card" data-animate id={`value-${index}`}>
+                  <div className="value-icon">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" strokeWidth="2">
+                      {value.icon === 'star' && (
+                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" />
+                      )}
+                      {value.icon === 'shield' && (
+                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                      )}
+                      {value.icon === 'lightbulb' && (
+                        <>
+                          <line x1="12" y1="2" x2="12" y2="6" />
+                          <line x1="12" y1="18" x2="12" y2="22" />
+                          <line x1="4.93" y1="4.93" x2="7.76" y2="7.76" />
+                          <line x1="16.24" y1="16.24" x2="19.07" y2="19.07" />
+                          <line x1="2" y1="12" x2="6" y2="12" />
+                          <line x1="18" y1="12" x2="22" y2="12" />
+                          <line x1="4.93" y1="19.07" x2="7.76" y2="16.24" />
+                          <line x1="16.24" y1="7.76" x2="19.07" y2="4.93" />
+                        </>
+                      )}
+                      {value.icon === 'lock' && (
+                        <>
+                          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                          <path d="M7 11V7a5 5 0 0110 0v4" />
+                        </>
+                      )}
+                    </svg>
+                  </div>
+                  <h3 className="value-title">{value.title}</h3>
+                  <p className="value-description">{value.description}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section className="cta-section">
+          <div className="cta-pattern"></div>
+          <div className="container">
+            <div className="cta-wrapper">
+              <div className="cta-content">
+                <h2 className="cta-title">Experimenta la Diferencia Humanis</h2>
+                <p className="cta-description">
+                  Ahora que conoces por qué somos líderes, es momento de experimentar nuestro servicio excepcional.
+                  Comienza con una consulta gratuita.
+                </p>
+                <div className="cta-buttons">
+                  <Link href="/consulta" className="btn btn-white">
+                    Consulta Gratuita
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                  <a href="tel:+525544167974" className="btn btn-outline-white">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                      <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72"></path>
+                    </svg>
+                    Llamar: (55) 4416-7974
+                  </a>
+                </div>
+              </div>
+              <div className="cta-image" data-animate id="cta-image">
+                <Image src="/images/cta-success.jpg" alt="Humanis Success" fill style={{ objectFit: 'cover' }} />
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+      
       <footer className="footer">
         <div className="container">
           <div className="footer-grid">
             <div className="footer-brand">
               <div className="footer-logo">
-                <Image 
+                <Image
                   src="/images/logohumanis.png"
-                  alt="Humanis Logo"
+                  alt="Humanis México"
                   width={240}
-                  height={96}
+                  height={80}
                   className="footer-logo-image"
-                  priority={true}
+                  priority
                 />
               </div>
               <p className="footer-description">
-                Firma líder en executive search y consultoría de talento en México. 
-                Transformamos organizaciones conectando líderes excepcionales con empresas extraordinarias.
+                Firma líder en executive search y consultoría de talento en México. Transformamos organizaciones conectando
+                líderes excepcionales con empresas extraordinarias.
               </p>
               <div className="footer-social">
-                <a 
+                <a
                   href="https://linkedin.com/company/humanis-mexico"
-                  target="_blank"
-                  rel="noopener noreferrer"
                   className="social-link"
                   aria-label="LinkedIn"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+                  </svg>
+                </a>
+                <a
+                  href="https://twitter.com/humanismx"
+                  className="social-link"
+                  aria-label="Twitter"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" />
                   </svg>
                 </a>
               </div>
@@ -1455,26 +1947,50 @@ export default function PorQueNosotrosPage() {
             <div className="footer-column">
               <h4>Enlaces Rápidos</h4>
               <ul className="footer-links">
-                <li><Link href="/" className="footer-link">Inicio</Link></li>
-                <li><Link href="/#servicios" className="footer-link">Servicios</Link></li>
-                <li><Link href="/#proceso" className="footer-link">Proceso</Link></li>
-                <li><Link href="/por-que-nosotros" className="footer-link">¿Por qué Humanis?</Link></li>
+                <li>
+                  <Link href="/" className="footer-link">
+                    Inicio
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#servicios" className="footer-link">
+                    Servicios
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#proceso" className="footer-link">
+                    Proceso
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/por-que-nosotros" className="footer-link">
+                    ¿Por qué Humanis?
+                  </Link>
+                </li>
               </ul>
             </div>
 
             <div className="footer-column">
               <h4>Páginas</h4>
               <ul className="footer-links">
-                <li><Link href="/consulta" className="footer-link">Consulta Gratuita</Link></li>
-                <li><Link href="/por-que-nosotros" className="footer-link">¿Por qué nosotros?</Link></li>
+                <li>
+                  <Link href="/consulta" className="footer-link">
+                    Consulta Gratuita
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/por-que-nosotros" className="footer-link">
+                    ¿Por qué nosotros?
+                  </Link>
+                </li>
               </ul>
             </div>
 
             <div className="footer-column">
-              <h4>Contacto Principal</h4>
+              <h4>Contacto</h4>
               <ul className="footer-links">
                 <li>
-                  <a href="tel:+525555550100" className="footer-link">
+                  <a href="tel:+525544167974" className="footer-link">
                     +52 (55) 4416-7974
                   </a>
                 </li>
@@ -1483,20 +1999,20 @@ export default function PorQueNosotrosPage() {
                     contacto@humanis.com.mx
                   </a>
                 </li>
-                <li className="footer-link">
-                  Lun - Vie: 9:00 - 18:00
-                </li>
+                <li className="footer-link">Lun - Vie: 9:00 - 18:00</li>
               </ul>
             </div>
           </div>
 
           <div className="footer-bottom">
-            <p className="footer-copyright">
-              © 2025 Humanis México. Todos los derechos reservados.
-            </p>
+            <p className="footer-copyright">© 2025 Humanis México. Todos los derechos reservados.</p>
             <div className="footer-legal">
-              <Link href="/privacidad" className="footer-link">Aviso de Privacidad</Link>
-              <Link href="/terminos" className="footer-link">Términos y Condiciones</Link>
+              <Link href="/privacidad" className="footer-link">
+                Aviso de Privacidad
+              </Link>
+              <Link href="/terminos" className="footer-link">
+                Términos y Condiciones
+              </Link>
             </div>
           </div>
         </div>
