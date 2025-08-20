@@ -2515,10 +2515,10 @@ export default function ConsultaPage() {
                 &copy; {new Date().getFullYear()} Humanis México. Todos los derechos reservados.
               </p>
               <div className="footer-legal">
-                <Link href="/aviso-de-privacidad" className="footer-link">
+                <Link href="/privacidad" className="footer-link">
                   Aviso de Privacidad
                 </Link>
-                <Link href="/terminos-y-condiciones" className="footer-link">
+                <Link href="/terminos" className="footer-link">
                   Términos y Condiciones
                 </Link>
               </div>
