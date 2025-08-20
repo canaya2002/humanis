@@ -12,7 +12,7 @@ export default function PrivacyPage() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
+      setIsScrolled(window.scrollY > 10);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -26,14 +26,14 @@ export default function PrivacyPage() {
     "@context": "https://schema.org",
     "@type": "WebPage",
     "name": "Aviso de Privacidad - Humanis México",
-    "url": "https://humanis.com.mx/privacidad",
+    "url": "https://humanis.com.mx/aviso-de-privacidad",
     "description": "Aviso de Privacidad de Humanis México, conforme a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares.",
     "publisher": {
       "@type": "Organization",
       "name": "Humanis México",
       "logo": {
         "@type": "ImageObject",
-        "url": "https://humanis.com.mx/logo.svg"
+        "url": "https://humanis.com.mx/images/logohumanis.png"
       }
     },
     "address": {
@@ -58,9 +58,10 @@ export default function PrivacyPage() {
           name="keywords"
           content="aviso de privacidad, humanis méxico, protección de datos, consultoría de talento, privacidad"
         />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="robots" content="index, follow" />
-        <link rel="canonical" href="https://humanis.com.mx/privacidad" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+        <meta name="author" content="Humanis México" />
+        <link rel="canonical" href="https://humanis.com.mx/aviso-de-privacidad" />
 
         {/* Open Graph */}
         <meta property="og:type" content="website" />
@@ -72,13 +73,12 @@ export default function PrivacyPage() {
         <meta property="og:image" content="https://humanis.com.mx/og-image.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:url" content="https://humanis.com.mx/privacidad" />
+        <meta property="og:url" content="https://humanis.com.mx/aviso-de-privacidad" />
         <meta property="og:site_name" content="Humanis México" />
         <meta property="og:locale" content="es_MX" />
 
         {/* Twitter Card */}
         <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@humanismx" />
         <meta name="twitter:title" content="Aviso de Privacidad | Humanis México" />
         <meta
           name="twitter:description"
@@ -86,9 +86,14 @@ export default function PrivacyPage() {
         />
         <meta name="twitter:image" content="https://humanis.com.mx/twitter-card.jpg" />
 
-        <link rel="icon" href="/favicon.ico" />
+        {/* Icons */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
+        <meta name="theme-color" content="#1e40af" />
+
+        {/* Preconnect */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </Head>
@@ -110,19 +115,34 @@ export default function PrivacyPage() {
 
         html {
           scroll-behavior: smooth;
+          -webkit-font-smoothing: antialiased;
+          -moz-osx-font-smoothing: grayscale;
         }
 
         body {
-          font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+          font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
           line-height: 1.6;
-          color: #0f172a;
+          color: #1a1a1a;
           background: #ffffff;
           overflow-x: hidden;
         }
 
         ::selection {
-          background: #3b82f6;
-          color: white;
+          background: rgba(59, 130, 246, 0.15);
+          color: #1e40af;
+        }
+
+        ::-webkit-scrollbar {
+          width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+          background: #f8f9fa;
+        }
+
+        ::-webkit-scrollbar-thumb {
+          background: linear-gradient(180deg, #3b82f6, #1e40af);
+          border-radius: 5px;
         }
 
         .container {
@@ -144,27 +164,33 @@ export default function PrivacyPage() {
           left: 0;
           right: 0;
           z-index: 1000;
-          background: rgba(255, 255, 255, 0.98);
-          backdrop-filter: blur(20px);
-          -webkit-backdrop-filter: blur(20px);
-          transition: all 0.3s ease;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .nav-header.scrolled {
-          box-shadow: 0 4px 30px rgba(0, 0, 0, 0.08);
+          background: rgba(255, 255, 255, 0.98);
+          box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
         }
 
         .nav-wrapper {
           display: flex;
           align-items: center;
           justify-content: space-between;
-          padding: 1.25rem 0;
+          padding: 1rem 0;
         }
 
         .logo-container {
           display: flex;
           align-items: center;
           text-decoration: none;
+          transition: transform 0.3s ease;
+        }
+
+        .logo-container:hover {
+          transform: scale(1.05);
         }
 
         .logo-image {
@@ -179,30 +205,37 @@ export default function PrivacyPage() {
         }
 
         .nav-link {
+          font-size: 0.95rem;
           font-weight: 500;
-          color: #475569;
+          color: #6b7280;
           text-decoration: none;
           position: relative;
           padding: 0.5rem 0;
-          transition: color 0.3s ease;
+          transition: color 0.2s ease;
+        }
+
+        .nav-link.active {
+          color: #1e40af;
         }
 
         .nav-link::after {
           content: '';
           position: absolute;
-          bottom: 0;
-          left: 0;
+          bottom: -2px;
+          left: 50%;
           width: 0;
           height: 2px;
-          background: linear-gradient(90deg, #3b82f6, #1d4ed8);
-          transition: width 0.3s ease;
+          background: #3b82f6;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          transform: translateX(-50%);
         }
 
         .nav-link:hover {
-          color: #1e293b;
+          color: #1a1a1a;
         }
 
-        .nav-link:hover::after {
+        .nav-link:hover::after,
+        .nav-link.active::after {
           width: 100%;
         }
 
@@ -212,30 +245,36 @@ export default function PrivacyPage() {
         }
 
         .btn {
-          padding: 0.875rem 2rem;
-          border-radius: 50px;
+          padding: 0.75rem 1.75rem;
+          border-radius: 12px;
+          font-size: 0.95rem;
           font-weight: 600;
           text-decoration: none;
-          transition: all 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
           display: inline-flex;
           align-items: center;
-          gap: 0.75rem;
+          gap: 0.625rem;
+          position: relative;
+          overflow: hidden;
+          cursor: pointer;
+          border: none;
         }
 
         .btn-primary {
-          background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+          background: linear-gradient(135deg, #3b82f6, #2563eb);
           color: white;
-          box-shadow: 0 4px 20px rgba(59, 130, 246, 0.3);
+          box-shadow: 0 4px 14px rgba(59, 130, 246, 0.35);
         }
 
         .btn-primary:hover {
+          background: linear-gradient(135deg, #2563eb, #1d4ed8);
           transform: translateY(-2px);
-          box-shadow: 0 8px 30px rgba(59, 130, 246, 0.4);
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.45);
         }
 
         .btn-secondary {
-          border: 2px solid #e2e8f0;
-          color: #475569;
+          border: 2px solid #e5e7eb;
+          color: #6b7280;
           background: white;
         }
 
@@ -248,15 +287,17 @@ export default function PrivacyPage() {
         .mobile-menu-btn {
           display: none;
           flex-direction: column;
-          gap: 6px;
+          gap: 5px;
           padding: 8px;
           cursor: pointer;
+          background: none;
+          border: none;
         }
 
         .mobile-menu-btn span {
-          width: 28px;
+          width: 26px;
           height: 2px;
-          background: #475569;
+          background: #6b7280;
           transition: all 0.3s ease;
           border-radius: 2px;
         }
@@ -267,30 +308,11 @@ export default function PrivacyPage() {
 
         .mobile-menu-btn.active span:nth-child(2) {
           opacity: 0;
+          transform: translateX(-10px);
         }
 
         .mobile-menu-btn.active span:nth-child(3) {
           transform: rotate(-45deg) translate(6px, -6px);
-        }
-
-        .mobile-menu {
-          position: fixed;
-          top: 80px;
-          left: 0;
-          right: 0;
-          background: white;
-          padding: 2rem;
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
-          transform: translateY(-100%);
-          opacity: 0;
-          visibility: hidden;
-          transition: all 0.3s ease;
-        }
-
-        .mobile-menu.active {
-          transform: translateY(0);
-          opacity: 1;
-          visibility: visible;
         }
 
         @media (max-width: 1024px) {
@@ -304,10 +326,30 @@ export default function PrivacyPage() {
           }
         }
 
+        .mobile-menu {
+          position: fixed;
+          top: 96px;
+          left: 0;
+          right: 0;
+          background: white;
+          padding: 2rem;
+          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+          transform: translateY(-120%);
+          opacity: 0;
+          visibility: hidden;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .mobile-menu.active {
+          transform: translateY(0);
+          opacity: 1;
+          visibility: visible;
+        }
+
         /* Hero Section */
         .privacy-hero {
-          background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-          padding: 10rem 0 4rem; /* Aumentado padding-top de 8rem a 10rem */
+          background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #3b82f6 100%);
+          padding: 12rem 0 4rem;
           position: relative;
           overflow: hidden;
         }
@@ -315,18 +357,34 @@ export default function PrivacyPage() {
         .privacy-hero::before {
           content: '';
           position: absolute;
-          inset: 0;
-          background-image: 
-            linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
-          background-size: 50px 50px;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.3) 0%, transparent 50%),
+            radial-gradient(circle at 80% 80%, rgba(147, 51, 234, 0.2) 0%, transparent 50%),
+            radial-gradient(circle at 40% 20%, rgba(34, 211, 238, 0.2) 0%, transparent 50%);
+          animation: floatAnimation 20s ease-in-out infinite;
+        }
+
+        @keyframes floatAnimation {
+          0%,
+          100% {
+            transform: translate(0, 0) rotate(0deg);
+          }
+          33% {
+            transform: translate(30px, -30px) rotate(1deg);
+          }
+          66% {
+            transform: translate(-20px, 20px) rotate(-1deg);
+          }
         }
 
         .privacy-hero-content {
           position: relative;
           z-index: 1;
           text-align: center;
-          max-width: 800px;
+          max-width: 900px;
           margin: 0 auto;
         }
 
@@ -339,7 +397,8 @@ export default function PrivacyPage() {
           padding: 0.625rem 1.5rem;
           border-radius: 50px;
           border: 1px solid rgba(255, 255, 255, 0.2);
-          margin-bottom: 3rem; /* Aumentado de 2rem a 3rem */
+          margin-bottom: 2.5rem;
+          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         }
 
         .badge-text {
@@ -347,63 +406,102 @@ export default function PrivacyPage() {
           font-weight: 600;
           font-size: 0.875rem;
           letter-spacing: 0.5px;
+          text-transform: uppercase;
         }
 
         .privacy-hero-title {
-          font-size: clamp(2.5rem, 8vw, 4rem);
+          font-size: clamp(2.5rem, 5vw, 4.5rem);
           font-weight: 900;
           color: white;
           line-height: 1.1;
-          margin-bottom: 2.5rem; /* Aumentado de 1.5rem a 2.5rem */
+          margin-bottom: 2rem;
+          letter-spacing: -0.03em;
+          text-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
         }
 
         .privacy-hero-gradient {
-          background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 100%);
+          background: linear-gradient(135deg, #60a5fa 0%, #a78bfa 50%, #fbbf24 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
+          animation: gradientShift 8s ease-in-out infinite;
+        }
+
+        @keyframes gradientShift {
+          0%,
+          100% {
+            filter: hue-rotate(0deg);
+          }
+          50% {
+            filter: hue-rotate(30deg);
+          }
         }
 
         .privacy-hero-subtitle {
           font-size: 1.25rem;
-          color: #cbd5e1;
-          line-height: 1.8;
-          margin-bottom: 4rem; /* Aumentado de 3rem a 4rem */
+          color: rgba(255, 255, 255, 0.9);
+          line-height: 1.7;
+          margin-bottom: 3rem;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
         }
 
         .privacy-meta {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 2.5rem; /* Aumentado de 2rem a 2.5rem */
-          padding: 2rem;
-          background: rgba(255, 255, 255, 0.05);
-          backdrop-filter: blur(10px);
-          border-radius: 20px;
-          border: 1px solid rgba(255, 255, 255, 0.1);
+          grid-template-columns: repeat(3, 1fr);
+          gap: 2rem;
+          padding: 2.5rem;
+          background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+          backdrop-filter: blur(20px);
+          border-radius: 24px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        @media (max-width: 768px) {
+          .privacy-meta {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            padding: 2rem;
+          }
         }
 
         .privacy-meta-item {
           text-align: center;
+          padding: 1.5rem;
+          background: rgba(255, 255, 255, 0.05);
+          backdrop-filter: blur(10px);
+          border-radius: 16px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .privacy-meta-item:hover {
+          transform: translateY(-6px) scale(1.02);
+          box-shadow: 0 15px 40px rgba(59, 130, 246, 0.3);
+          border-color: rgba(59, 130, 246, 0.5);
+          background: rgba(255, 255, 255, 0.1);
         }
 
         .privacy-meta-label {
-          color: #94a3b8;
+          color: rgba(255, 255, 255, 0.8);
           font-size: 0.875rem;
           text-transform: uppercase;
           letter-spacing: 1px;
           margin-bottom: 0.5rem;
+          font-weight: 600;
         }
 
         .privacy-meta-value {
           color: white;
-          font-weight: 600;
+          font-weight: 700;
           font-size: 1.125rem;
+          text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
         }
 
         /* Privacy Content Section */
         .privacy-section {
           padding: 6rem 0;
-          background: #ffffff;
+          background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
         }
 
         .privacy-content {
@@ -412,45 +510,78 @@ export default function PrivacyPage() {
         }
 
         .privacy-nav {
-          background: #f8fafc;
-          border-radius: 16px;
-          padding: 2rem;
+          background: white;
+          border-radius: 24px;
+          padding: 3rem;
           margin-bottom: 4rem;
           border: 1px solid #e2e8f0;
+          box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+          position: relative;
+          overflow: hidden;
+        }
+
+        .privacy-nav::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 4px;
+          background: linear-gradient(90deg, #3b82f6, #8b5cf6, #06b6d4);
+          background-size: 200% 100%;
+          animation: gradientSlide 3s ease-in-out infinite;
+        }
+
+        @keyframes gradientSlide {
+          0%, 100% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
         }
 
         .privacy-nav h3 {
-          font-size: 1.25rem;
-          font-weight: 700;
+          font-size: 1.5rem;
+          font-weight: 800;
           color: #0f172a;
-          margin-bottom: 1.5rem;
+          margin-bottom: 2rem;
+          text-align: center;
         }
 
         .privacy-nav-list {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-          gap: 0.75rem;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1rem;
           list-style: none;
         }
 
+        @media (max-width: 768px) {
+          .privacy-nav-list {
+            grid-template-columns: 1fr;
+          }
+        }
+
         .privacy-nav-item {
-          padding: 0.75rem 1rem;
-          background: white;
-          border-radius: 8px;
+          padding: 1rem 1.5rem;
+          background: #f8fafc;
+          border-radius: 12px;
           border: 1px solid #e2e8f0;
-          transition: all 0.3s ease;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .privacy-nav-item:hover {
           border-color: #3b82f6;
           background: #f0f9ff;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.15);
         }
 
         .privacy-nav-link {
           color: #64748b;
           text-decoration: none;
-          font-weight: 500;
-          font-size: 0.875rem;
+          font-weight: 600;
+          font-size: 0.9rem;
         }
 
         .privacy-nav-item:hover .privacy-nav-link {
@@ -458,11 +589,11 @@ export default function PrivacyPage() {
         }
 
         .privacy-section-title {
-          font-size: 1.75rem;
+          font-size: 2rem;
           font-weight: 800;
           color: #0f172a;
-          margin-bottom: 1.5rem;
-          padding-bottom: 0.75rem;
+          margin-bottom: 2rem;
+          padding-bottom: 1rem;
           border-bottom: 3px solid #3b82f6;
           position: relative;
         }
@@ -471,10 +602,10 @@ export default function PrivacyPage() {
           content: counter(section);
           counter-increment: section;
           position: absolute;
-          left: -3rem;
+          left: -4rem;
           top: 0;
-          width: 2rem;
-          height: 2rem;
+          width: 2.5rem;
+          height: 2.5rem;
           background: linear-gradient(135deg, #3b82f6, #1d4ed8);
           color: white;
           border-radius: 50%;
@@ -482,7 +613,14 @@ export default function PrivacyPage() {
           align-items: center;
           justify-content: center;
           font-weight: 900;
-          font-size: 0.875rem;
+          font-size: 1rem;
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+        }
+
+        @media (max-width: 768px) {
+          .privacy-section-title::before {
+            display: none;
+          }
         }
 
         .privacy-content {
@@ -498,7 +636,7 @@ export default function PrivacyPage() {
 
         .privacy-text strong {
           color: #0f172a;
-          font-weight: 600;
+          font-weight: 700;
         }
 
         .privacy-list {
@@ -510,11 +648,18 @@ export default function PrivacyPage() {
           display: flex;
           align-items: flex-start;
           gap: 1rem;
-          margin-bottom: 1.25rem;
-          padding: 1rem;
-          background: #f8fafc;
-          border-radius: 8px;
+          margin-bottom: 1.5rem;
+          padding: 1.5rem;
+          background: white;
+          border-radius: 16px;
           border-left: 4px solid #3b82f6;
+          box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+          transition: all 0.3s ease;
+        }
+
+        .privacy-list li:hover {
+          transform: translateX(8px);
+          box-shadow: 0 8px 30px rgba(59, 130, 246, 0.15);
         }
 
         .privacy-list li::before {
@@ -523,95 +668,182 @@ export default function PrivacyPage() {
           font-size: 1.25rem;
           font-weight: 900;
           flex-shrink: 0;
-          width: 1.5rem;
-          height: 1.5rem;
+          width: 2rem;
+          height: 2rem;
           background: #dcfce7;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
+          box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
         }
 
         .privacy-highlight {
-          background: linear-gradient(135deg, #eff6ff 0%, #f0f9ff 100%);
-          border: 1px solid #bfdbfe;
-          border-radius: 12px;
-          padding: 2rem;
-          margin: 2rem 0;
+          background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+          border: 2px solid #93c5fd;
+          border-radius: 20px;
+          padding: 2.5rem;
+          margin: 3rem 0;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .privacy-highlight::before {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+          transform: rotate(45deg);
+          animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%) translateY(-100%) rotate(45deg);
+          }
+          50%,
+          100% {
+            transform: translateX(100%) translateY(100%) rotate(45deg);
+          }
         }
 
         .privacy-highlight h4 {
           color: #1e40af;
-          font-weight: 700;
+          font-weight: 800;
           margin-bottom: 1rem;
           display: flex;
           align-items: center;
           gap: 0.75rem;
+          font-size: 1.25rem;
+          position: relative;
+          z-index: 1;
         }
 
         .privacy-highlight h4::before {
           content: '💡';
-          font-size: 1.25rem;
+          font-size: 1.5rem;
+        }
+
+        .privacy-highlight p {
+          position: relative;
+          z-index: 1;
         }
 
         .privacy-contact-box {
-          background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+          background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
           color: white;
-          border-radius: 16px;
-          padding: 2.5rem;
-          margin: 3rem 0;
+          border-radius: 24px;
+          padding: 3rem;
+          margin: 4rem 0;
           text-align: center;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .privacy-contact-box::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background-image: radial-gradient(circle at 1px 1px, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+          background-size: 40px 40px;
         }
 
         .privacy-contact-box h3 {
-          font-size: 1.5rem;
-          font-weight: 800;
+          font-size: 2rem;
+          font-weight: 900;
           margin-bottom: 1rem;
+          position: relative;
+          z-index: 1;
         }
 
         .privacy-contact-box p {
-          margin-bottom: 1.5rem;
+          margin-bottom: 2rem;
           opacity: 0.9;
+          position: relative;
+          z-index: 1;
+          font-size: 1.125rem;
         }
 
         .privacy-contact-info {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          gap: 1rem;
-          margin-top: 1.5rem;
+          grid-template-columns: repeat(2, 1fr);
+          gap: 1.5rem;
+          margin-top: 2rem;
+          position: relative;
+          z-index: 1;
+        }
+
+        @media (max-width: 768px) {
+          .privacy-contact-info {
+            grid-template-columns: 1fr;
+          }
         }
 
         .privacy-contact-item {
           background: rgba(255, 255, 255, 0.1);
-          padding: 1rem;
-          border-radius: 8px;
+          padding: 1.5rem;
+          border-radius: 16px;
           backdrop-filter: blur(10px);
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          transition: all 0.3s ease;
+        }
+
+        .privacy-contact-item:hover {
+          background: rgba(255, 255, 255, 0.15);
+          transform: translateY(-4px);
+          box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
         }
 
         .privacy-section-content {
           margin-bottom: 4rem;
-          padding-bottom: 3rem;
-          border-bottom: 1px solid #e2e8f0;
+          padding: 3rem;
+          background: white;
+          border-radius: 24px;
+          box-shadow: 0 15px 50px rgba(0, 0, 0, 0.06);
+          border: 1px solid #f1f5f9;
+          position: relative;
+          overflow: hidden;
+        }
+
+        .privacy-section-content::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          right: 0;
+          width: 200px;
+          height: 200px;
+          background: radial-gradient(circle, rgba(59, 130, 246, 0.03) 0%, transparent 70%);
+          border-radius: 50%;
+          transform: translate(30%, -30%);
+          pointer-events: none;
         }
 
         .privacy-section-content:last-child {
-          border-bottom: none;
           margin-bottom: 0;
         }
 
         /* Footer */
         .footer {
           background: #ffffff;
-          color: #0f172a;
+          color: #1a1a1a;
           padding: 4rem 0 2rem;
-          border-top: 1px solid #e2e8f0;
+          border-top: 1px solid #e5e7eb;
         }
 
         .footer-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+          grid-template-columns: 2fr 1fr 1fr;
           gap: 3rem;
           margin-bottom: 3rem;
+        }
+
+        @media (max-width: 768px) {
+          .footer-grid {
+            grid-template-columns: 1fr;
+          }
         }
 
         .footer-brand {
@@ -625,12 +857,12 @@ export default function PrivacyPage() {
         }
 
         .footer-logo-image {
-          width: 240px;
-          height: auto; /* Mantiene proporciones */
+          height: 80px;
+          width: auto;
         }
 
         .footer-description {
-          color: #64748b;
+          color: #6b7280;
           line-height: 1.8;
           margin-bottom: 1.5rem;
         }
@@ -641,27 +873,30 @@ export default function PrivacyPage() {
         }
 
         .social-link {
-          width: 40px;
-          height: 40px;
-          background: #f1f5f9;
-          border-radius: 50%;
+          width: 44px;
+          height: 44px;
+          background: #f8fafc;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.3s ease;
           color: #64748b;
+          border: 1px solid #e2e8f0;
         }
 
         .social-link:hover {
           background: #3b82f6;
           color: white;
-          transform: translateY(-2px);
+          transform: translateY(-3px);
+          box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+          border-color: #3b82f6;
         }
 
         .footer-column h4 {
           font-weight: 700;
           margin-bottom: 1.5rem;
-          color: #0f172a;
+          color: #1a1a1a;
         }
 
         .footer-links {
@@ -669,7 +904,7 @@ export default function PrivacyPage() {
         }
 
         .footer-link {
-          color: #64748b;
+          color: #6b7280;
           text-decoration: none;
           display: block;
           padding: 0.5rem 0;
@@ -677,12 +912,12 @@ export default function PrivacyPage() {
         }
 
         .footer-link:hover {
-          color: #0f172a;
+          color: #3b82f6;
         }
 
         .footer-bottom {
           padding-top: 2rem;
-          border-top: 1px solid #e2e8f0;
+          border-top: 1px solid #e5e7eb;
           display: flex;
           justify-content: space-between;
           align-items: center;
@@ -691,7 +926,7 @@ export default function PrivacyPage() {
         }
 
         .footer-copyright {
-          color: #64748b;
+          color: #6b7280;
         }
 
         .footer-legal {
@@ -705,58 +940,45 @@ export default function PrivacyPage() {
           text-decoration: none;
           font-weight: 600;
           border-bottom: 1px solid transparent;
-          transition: border-color 0.3s ease;
+          transition: all 0.3s ease;
         }
 
         .privacy-link:hover {
           border-bottom-color: #3b82f6;
+          transform: translateX(2px);
         }
 
         @media (max-width: 768px) {
           .privacy-hero {
-            padding: 7rem 0 3rem; /* Reducido de 10rem a 7rem en móviles */
-          }
-
-          .privacy-badge {
-            margin-bottom: 2rem; /* Reducido de 3rem a 2rem en móviles */
-          }
-
-          .privacy-hero-title {
-            font-size: clamp(2rem, 6vw, 3rem);
-            margin-bottom: 1.5rem; /* Reducido de 2.5rem a 1.5rem */
-          }
-
-          .privacy-hero-subtitle {
-            font-size: 1rem;
-            margin-bottom: 2.5rem; /* Reducido de 4rem a 2.5rem */
-          }
-
-          .privacy-meta {
-            grid-template-columns: 1fr; /* Apila en una columna en móviles */
-            gap: 1.5rem; /* Reducido de 2.5rem a 1.5rem */
-            padding: 1.5rem;
+            padding: 7rem 0 3rem;
           }
 
           .privacy-section {
             padding: 4rem 0;
           }
 
-          .privacy-section-title::before {
-            display: none;
+          .privacy-nav {
+            padding: 2rem;
           }
 
-          .privacy-nav-list {
-            grid-template-columns: 1fr;
+          .privacy-section-content {
+            padding: 2rem;
           }
 
-          .footer-grid {
-            grid-template-columns: 1fr;
+          .privacy-contact-box {
+            padding: 2rem;
           }
 
-          .footer-logo-image {
-            width: 180px; /* Reducido en móviles para mejor ajuste */
-            height: auto;
+          .privacy-contact-box h3 {
+            font-size: 1.5rem;
           }
+        }
+
+        /* Focus states */
+        a:focus-visible,
+        button:focus-visible {
+          outline: 2px solid #3b82f6;
+          outline-offset: 2px;
         }
       `}</style>
 
@@ -766,8 +988,8 @@ export default function PrivacyPage() {
             <Link href="/" className="logo-container">
               <Image 
                 src="/images/logohumanis.png"
-                alt="Humanis Logo"
-                width={200}
+                alt="Humanis México - Executive Search"
+                width={240}
                 height={80}
                 className="logo-image"
                 priority
@@ -775,25 +997,36 @@ export default function PrivacyPage() {
             </Link>
 
             <nav className="nav-menu">
-              <a href="/#inicio" className="nav-link">Inicio</a>
-              <a href="/#servicios" className="nav-link">Servicios</a>
-              <a href="/#proceso" className="nav-link">Proceso</a>
-              <a href="/#nosotros" className="nav-link">Nosotros</a>
-              <a href="/#clientes" className="nav-link">Clientes</a>
+              <Link href="/" className="nav-link">
+                Inicio
+              </Link>
+              <Link href="/#servicios" className="nav-link">
+                Servicios
+              </Link>
+              <Link href="/#proceso" className="nav-link">
+                Proceso
+              </Link>
+              <Link href="/por-que-nosotros" className="nav-link">
+                ¿Por qué nosotros?
+              </Link>
+              <Link href="/consulta" className="nav-link">
+                Consulta
+              </Link>
             </nav>
 
             <div className="nav-cta">
-              <Link href="/por-que-nosotros" className="btn btn-secondary">
-                ¿Por qué nosotros?
-              </Link>
-              <Link href="/consulta" className="btn btn-primary">
-                Contactar
-              </Link>
+              <a href="tel:+525544167974" className="btn btn-primary">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"></path>
+                </svg>
+                Llamar Ahora
+              </a>
             </div>
 
             <button
               className={`mobile-menu-btn ${mobileMenuOpen ? 'active' : ''}`}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              aria-label="Menu"
             >
               <span></span>
               <span></span>
@@ -803,14 +1036,29 @@ export default function PrivacyPage() {
 
           <div className={`mobile-menu ${mobileMenuOpen ? 'active' : ''}`}>
             <nav style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-              <a href="/#inicio" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Inicio</a>
-              <a href="/#servicios" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Servicios</a>
-              <a href="/#proceso" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Proceso</a>
-              <a href="/#nosotros" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Nosotros</a>
-              <a href="/#clientes" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Clientes</a>
-              <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                <Link href="/por-que-nosotros" className="btn btn-secondary">¿Por qué nosotros?</Link>
-                <Link href="/consulta" className="btn btn-primary">Contactar</Link>
+              <Link href="/" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
+                Inicio
+              </Link>
+              <Link href="/#servicios" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
+                Servicios
+              </Link>
+              <Link href="/#proceso" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
+                Proceso
+              </Link>
+              <Link href="/por-que-nosotros" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
+                ¿Por qué nosotros?
+              </Link>
+              <Link href="/consulta" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
+                Consulta
+              </Link>
+              <div style={{ marginTop: '1rem' }}>
+                <a
+                  href="tel:+525544167974"
+                  className="btn btn-primary"
+                  style={{ width: '100%', justifyContent: 'center' }}
+                >
+                  Llamar Ahora
+                </a>
               </div>
             </nav>
           </div>
@@ -1035,7 +1283,7 @@ export default function PrivacyPage() {
             <div id="cambios" className="privacy-section-content">
               <h2 className="privacy-section-title">Cambios al Aviso de Privacidad</h2>
               <p className="privacy-text">
-                Nos reservamos el derecho de actualizar este Aviso de Privacidad para reflejar cambios en nuestras prácticas o en la legislación aplicable. Las modificaciones serán publicadas en <Link href="/privacidad" className="privacy-link">humanis.com.mx/privacidad</Link> y, en caso de cambios significativos, notificaremos a los usuarios registrados por correo electrónico.
+                Nos reservamos el derecho de actualizar este Aviso de Privacidad para reflejar cambios en nuestras prácticas o en la legislación aplicable. Las modificaciones serán publicadas en <Link href="/aviso-de-privacidad" className="privacy-link">humanis.com.mx/aviso-de-privacidad</Link> y, en caso de cambios significativos, notificaremos a los usuarios registrados por correo electrónico.
               </p>
             </div>
 
@@ -1092,30 +1340,29 @@ export default function PrivacyPage() {
         <div className="container">
           <div className="footer-grid">
             <div className="footer-brand">
-              <div className="footer-logo">
+              <Link href="/" className="footer-logo">
                 <Image 
                   src="/images/logohumanis.png"
-                  alt="Humanis Logo"
+                  alt="Humanis México - Executive Search"
                   width={240}
-                  height={96}
+                  height={80}
                   className="footer-logo-image"
-                  priority={true}
                 />
-              </div>
+              </Link>
               <p className="footer-description">
-                Firma líder en executive search y consultoría de talento en México. 
-                Transformamos organizaciones conectando líderes excepcionales con empresas extraordinarias.
+                Humanis es líder en executive search en México, especializado en conectar empresas con talento C-Level
+                excepcional. Transformamos organizaciones a través de líderes visionarios.
               </p>
               <div className="footer-social">
-                <a 
+                <a
                   href="https://linkedin.com/company/humanis-mexico"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="social-link"
                   aria-label="LinkedIn"
                 >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                  <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                    <path d="M19 3a2 2 0 012 2v14a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h14m-.5 15.5v-5.3a3.26 3.26 0 00-3.26-3.26c-.85 0-1.84.52-2.32 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 011.4 1.4v4.93h2.79M6.88 8.56a1.68 1.68 0 001.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 00-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"></path>
                   </svg>
                 </a>
               </div>
@@ -1124,18 +1371,26 @@ export default function PrivacyPage() {
             <div className="footer-column">
               <h4>Enlaces Rápidos</h4>
               <ul className="footer-links">
-                <li><a href="/#inicio" className="footer-link">Inicio</a></li>
-                <li><a href="/#servicios" className="footer-link">Servicios</a></li>
-                <li><a href="/#proceso" className="footer-link">Proceso</a></li>
-                <li><a href="/#nosotros" className="footer-link">Nosotros</a></li>
-              </ul>
-            </div>
-
-            <div className="footer-column">
-              <h4>Páginas</h4>
-              <ul className="footer-links">
-                <li><Link href="/consulta" className="footer-link">Consulta Gratuita</Link></li>
-                <li><Link href="/por-que-nosotros" className="footer-link">¿Por qué Humanis?</Link></li>
+                <li>
+                  <Link href="/#servicios" className="footer-link">
+                    Servicios
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/#proceso" className="footer-link">
+                    Proceso
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/por-que-nosotros" className="footer-link">
+                    ¿Por Qué Nosotros?
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/consulta" className="footer-link">
+                    Consulta
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -1152,8 +1407,10 @@ export default function PrivacyPage() {
                     contacto@humanis.com.mx
                   </a>
                 </li>
-                <li className="footer-link">
-                  Lun - Vie: 9:00 - 18:00
+                <li>
+                  <a href="https://wa.me/525544167974" className="footer-link">
+                    WhatsApp
+                  </a>
                 </li>
               </ul>
             </div>
@@ -1161,11 +1418,15 @@ export default function PrivacyPage() {
 
           <div className="footer-bottom">
             <p className="footer-copyright">
-              © 2025 Humanis México. Todos los derechos reservados.
+              &copy; {new Date().getFullYear()} Humanis México. Todos los derechos reservados.
             </p>
             <div className="footer-legal">
-              <Link href="/privacidad" className="footer-link">Aviso de Privacidad</Link>
-              <Link href="/terminos" className="footer-link">Términos y Condiciones</Link>
+              <Link href="/aviso-de-privacidad" className="footer-link">
+                Aviso de Privacidad
+              </Link>
+              <Link href="/terminos-y-condiciones" className="footer-link">
+                Términos y Condiciones
+              </Link>
             </div>
           </div>
         </div>

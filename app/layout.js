@@ -42,14 +42,6 @@ export const metadata = {
     siteName: "Humanis México",
     locale: "es_MX",
   },
-  twitter: {
-    card: "summary_large_image",
-    site: "@humanismx",
-    creator: "@humanismx",
-    title: "Humanis | Executive Search Premium México",
-    description: "Líderes en headhunting y consultoría de talento ejecutivo. 98% retención, 9 días promedio.",
-    images: ["https://humanis.com.mx/twitter-card.jpg"],
-  },
   icons: {
     icon: [
       { url: "/favicon.ico", sizes: "any" },
@@ -93,7 +85,7 @@ const schemaData = {
     opens: "09:00",
     closes: "18:00",
   },
-  sameAs: ["https://linkedin.com/company/humanis-mexico", "https://twitter.com/humanismx"],
+  sameAs: ["https://www.linkedin.com/company/humanismx/?viewAsMember=true"],
   aggregateRating: {
     "@type": "AggregateRating",
     ratingValue: "4.9",

@@ -1,10 +1,8 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import Script from 'next/script';
 
 export default function HomePage() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -19,7 +17,6 @@ export default function HomePage() {
 
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 10);
-      
       const parallaxElements = document.querySelectorAll('[data-parallax]');
       parallaxElements.forEach(el => {
         const speed = el.dataset.parallax;
@@ -176,108 +173,8 @@ export default function HomePage() {
     }
   ];
 
-  const schemaData = {
-    "@context": "https://schema.org",
-    "@type": "ProfessionalService",
-    "name": "Humanis México",
-    "alternateName": "Humanis Consultoría Executive Search",
-    "url": "https://humanis.com.mx",
-    "logo": "https://humanis.com.mx/images/logohumanis.png",
-    "image": "https://humanis.com.mx/og-image.jpg",
-    "description": "Humanis México es la firma líder en executive search, headhunting y consultoría de talento ejecutivo. Especialistas en reclutamiento C-Level con 98% de retención.",
-    "address": {
-      "@type": "PostalAddress",
-      "streetAddress": "Av. Paseo de la Reforma 250, Piso 15",
-      "addressLocality": "Ciudad de México",
-      "addressRegion": "CDMX",
-      "postalCode": "06600",
-      "addressCountry": "MX"
-    },
-    "geo": {
-      "@type": "GeoCoordinates",
-      "latitude": "19.4326",
-      "longitude": "-99.1332"
-    },
-    "telephone": "+52-55-4416-7974",
-    "email": "contacto@humanis.com.mx",
-    "priceRange": "$$$",
-    "openingHoursSpecification": {
-      "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
-      "opens": "09:00",
-      "closes": "18:00"
-    },
-    "sameAs": [
-      "https://linkedin.com/company/humanis-mexico",
-      "https://twitter.com/humanismx"
-    ],
-    "aggregateRating": {
-      "@type": "AggregateRating",
-      "ratingValue": "4.9",
-      "reviewCount": "523",
-      "bestRating": "5"
-    }
-  };
-
   return (
     <>
-      <Head>
-        <html lang="es-MX" />
-        <title>Humanis México | Executive Search, Headhunting y Consultoría de Talento Líder | Reclutamiento C-Level Premium</title>
-        <meta name="description" content="Humanis México: Firma #1 de executive search y headhunting. Especialistas en reclutamiento C-Level con 98% retención. Transformamos organizaciones conectando líderes excepcionales con empresas Fortune 500. ✓300+ ejecutivos colocados ✓9 días promedio ✓Garantía 60 días. Consulta gratuita disponible." />
-        <meta name="keywords" content="humanis mexico, executive search mexico, headhunting mexico, headhunting cdmx, reclutamiento ejecutivo, consultoria talento mexico, c-level recruitment mexico, talent acquisition, humanis consultoria, busqueda ejecutivos, firma headhunting, reclutamiento directivo" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
-        <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-        <meta name="author" content="Humanis México" />
-        <meta name="generator" content="Next.js" />
-        <link rel="canonical" href="https://humanis.com.mx" />
-        <link rel="alternate" hrefLang="es-MX" href="https://humanis.com.mx" />
-        
-        {/* Open Graph */}
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content="Humanis México | Executive Search & Headhunting Premium #1" />
-        <meta property="og:description" content="Firma líder de executive search en México. 300+ ejecutivos colocados, 98% retención. Transformamos empresas con talento C-Level excepcional." />
-        <meta property="og:image" content="https://humanis.com.mx/og-image.jpg" />
-        <meta property="og:image:width" content="1200" />
-        <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Humanis México - Executive Search Premium" />
-        <meta property="og:url" content="https://humanis.com.mx" />
-        <meta property="og:site_name" content="Humanis México" />
-        <meta property="og:locale" content="es_MX" />
-        
-        {/* Twitter Card */}
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:site" content="@humanismx" />
-        <meta name="twitter:creator" content="@humanismx" />
-        <meta name="twitter:title" content="Humanis | Executive Search Premium México" />
-        <meta name="twitter:description" content="Líderes en headhunting y consultoría de talento ejecutivo. 98% retención, 9 días promedio." />
-        <meta name="twitter:image" content="https://humanis.com.mx/twitter-card.jpg" />
-        
-        {/* Icons */}
-        <link rel="icon" href="/favicon.ico" sizes="any" />
-        <link rel="icon" href="/icon.svg" type="image/svg+xml" />
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
-        <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#1e40af" />
-        
-        {/* Preconnect */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-      </Head>
-
-      <Script
-        id="schema-org"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(schemaData) }}
-      />
-
-      <Script
-        id="gtag"
-        strategy="afterInteractive"
-        src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
-      />
-
       <style jsx global>{`
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
         
@@ -306,7 +203,6 @@ export default function HomePage() {
           color: #1e40af;
         }
 
-        /* Scrollbar */
         ::-webkit-scrollbar {
           width: 10px;
         }
@@ -332,7 +228,6 @@ export default function HomePage() {
           }
         }
 
-        /* Loading */
         .loader {
           position: fixed;
           inset: 0;
@@ -394,7 +289,6 @@ export default function HomePage() {
           }
         }
 
-        /* Navigation */
         .nav-header {
           position: fixed;
           top: 0;
@@ -515,7 +409,6 @@ export default function HomePage() {
           background: #f0f9ff;
         }
 
-        /* Mobile Menu */
         .mobile-menu-btn {
           display: none;
           flex-direction: column;
@@ -577,7 +470,6 @@ export default function HomePage() {
           visibility: visible;
         }
 
-        /* Hero Section */
         .hero {
           min-height: 100vh;
           background: linear-gradient(135deg, #0f172a 0%, #1e40af 50%, #3b82f6 100%);
@@ -909,7 +801,6 @@ export default function HomePage() {
           backdrop-filter: blur(10px);
         }
 
-        /* Clients Section */
         .clients-section {
           padding: 6rem 0;
           background: white;
@@ -978,8 +869,8 @@ export default function HomePage() {
         }
 
         .client-logo {
-          width: 220px;
-          height: 100px;
+          width: 300px;
+          height: 120px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -987,7 +878,6 @@ export default function HomePage() {
           background: white;
           border-radius: 12px;
           padding: 1.5rem;
-          box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
           filter: grayscale(100%);
           opacity: 0.7;
           transition: all 0.3s ease;
@@ -998,7 +888,6 @@ export default function HomePage() {
           filter: grayscale(0%);
           opacity: 1;
           transform: scale(1.1);
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
         }
 
         .client-logo img {
@@ -1007,7 +896,6 @@ export default function HomePage() {
           object-fit: contain;
         }
 
-        /* Services Section */
         .services-section {
           padding: 6rem 0;
           background: #f8fafc;
@@ -1127,7 +1015,6 @@ export default function HomePage() {
           stroke-width: 3;
         }
 
-        /* Process Section */
         .process-section {
           padding: 6rem 0;
           background: white;
@@ -1223,7 +1110,6 @@ export default function HomePage() {
           font-weight: 600;
         }
 
-        /* Achievements Section */
         .achievements-section {
           padding: 6rem 0;
           background: #f8fafc;
@@ -1277,7 +1163,6 @@ export default function HomePage() {
           line-height: 1.6;
         }
 
-        /* About Section */
         .about-section {
           background: white;
           padding: 6rem 0;
@@ -1358,7 +1243,6 @@ export default function HomePage() {
           font-size: 0.875rem;
         }
 
-        /* CTA Section */
         .cta-section {
           padding: 6rem 0;
           background: linear-gradient(135deg, #1e40af 0%, #3b82f6 100%);
@@ -1442,7 +1326,6 @@ export default function HomePage() {
           color: #1e40af;
         }
 
-        /* Footer */
         .footer {
           background: #ffffff;
           color: #1a1a1a;
@@ -1548,7 +1431,6 @@ export default function HomePage() {
           gap: 2rem;
         }
 
-        /* Animations */
         [data-animate] {
           opacity: 0;
           transform: translateY(30px);
@@ -1565,7 +1447,6 @@ export default function HomePage() {
           }
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
           .hero-title {
             font-size: 2.25rem;
@@ -1605,12 +1486,11 @@ export default function HomePage() {
           }
 
           .client-logo {
-            width: 180px;
+            width: 200px;
             height: 80px;
           }
         }
 
-        /* Focus states */
         a:focus-visible,
         button:focus-visible {
           outline: 2px solid #3b82f6;
@@ -1701,7 +1581,6 @@ export default function HomePage() {
             transform: `translate(${mousePosition.x * 0.5}px, ${mousePosition.y * 0.5}px)`
           }}></div>
           
-          {/* Líneas de luz */}
           <div className="hero-lines">
             {[...Array(5)].map((_, i) => (
               <div
@@ -1716,7 +1595,6 @@ export default function HomePage() {
             ))}
           </div>
           
-          {/* Partículas flotantes */}
           <div style={{
             position: 'absolute',
             width: '100%',
@@ -1826,7 +1704,7 @@ export default function HomePage() {
                   <Image 
                     src={client} 
                     alt={`Cliente ${(index % 8) + 1}`}
-                    width={200}
+                    width={280}
                     height={100}
                     style={{ maxWidth: '100%', maxHeight: '100%', objectFit: 'contain' }}
                   />
@@ -1842,8 +1720,8 @@ export default function HomePage() {
               <span className="section-badge">Nuestros Servicios</span>
               <h2 className="section-title">Soluciones Premium de Talento Ejecutivo</h2>
               <p className="section-subtitle">
-                Metodología propietaria respaldada por tecnología de vanguardia y una red exclusiva 
-                de más de 1,000 ejecutivos verificados en toda la República Mexicana.
+                Metodología propietaria respaldada por tecnología de vanguardia 
+                y una red exclusiva de más de 1,000 ejecutivos verificados en toda la República Mexicana.
               </p>
             </div>
 
@@ -2107,11 +1985,6 @@ export default function HomePage() {
                 <a href="https://linkedin.com/company/humanis-mexico" className="social-link" aria-label="LinkedIn">
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-                  </svg>
-                </a>
-                <a href="https://twitter.com/humanismx" className="social-link" aria-label="Twitter">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/>
                   </svg>
                 </a>
               </div>

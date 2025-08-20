@@ -86,14 +86,6 @@ export default function PorQueNosotrosPage() {
       unit: 'Días de Garantía',
       gradient: 'from-cyan-500 to-blue-600',
     },
-    {
-      title: 'Tiempo de Colocación Récord',
-      description: 'Colocamos talento ejecutivo 60% más rápido que la competencia gracias a nuestra metodología optimizada y red establecida.',
-      icon: 'clock',
-      stats: '9',
-      unit: 'Días Promedio',
-      gradient: 'from-blue-600 to-blue-800',
-    },
   ];
 
   const methodology = [
@@ -138,7 +130,6 @@ export default function PorQueNosotrosPage() {
     { metric: '50+', label: 'Empresas Clientes', icon: 'building' },
     { metric: '300+', label: 'Ejecutivos Colocados', icon: 'users' },
     { metric: '98%', label: 'Tasa de Retención', icon: 'chart' },
-    { metric: '24h', label: 'Respuesta Inicial', icon: 'clock' },
     { metric: '90%', label: 'Clientes Recurrentes', icon: 'repeat' },
     { metric: '4.9/5', label: 'Calificación Promedio', icon: 'star' },
   ];
@@ -178,8 +169,8 @@ export default function PorQueNosotrosPage() {
     "@context": "https://schema.org",
     "@type": "AboutPage",
     "name": "Por Qué Humanis - Executive Search México",
-    "description": "Descubre por qué Humanis es la firma líder en executive search en México. +1,000 ejecutivos verificados, 98% retención, metodología probada.",
-    "url": "https://humanis.com.mx/por-que-nosotros",
+    "description": "Descubre por qué Humanis es la firma líder en executive search en México. Red de +1,000 ejecutivos verificados, metodología de 7 filtros y 98% de retención.",
+    "url": "https://humanis.com.mx/nosotros",
     "mainEntity": {
       "@type": "Organization",
       "name": "Humanis México",
@@ -202,12 +193,30 @@ export default function PorQueNosotrosPage() {
           "jobTitle": "CEO & Fundadora",
         },
       ],
-      "sameAs": ["https://linkedin.com/company/humanis-mexico"],
+      "sameAs": [
+        "https://linkedin.com/company/humanis-mexico",
+        "https://twitter.com/humanismx",
+      ],
       "aggregateRating": {
         "@type": "AggregateRating",
         "ratingValue": "4.9",
         "reviewCount": "523",
         "bestRating": "5",
+      },
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+52-55-4416-7974",
+        "contactType": "Customer Service",
+        "email": "contacto@humanis.com.mx",
+        "areaServed": "MX",
+        "availableLanguage": ["Spanish"],
+      },
+      "address": {
+        "@type": "PostalAddress",
+        "addressCountry": "MX",
+        "addressLocality": "Ciudad de México",
+        "postalCode": "11560",
+        "streetAddress": "Av. Presidente Masaryk 61, Polanco",
       },
     },
   };
@@ -219,29 +228,42 @@ export default function PorQueNosotrosPage() {
         <title>¿Por Qué Humanis? | Líder en Executive Search México</title>
         <meta
           name="description"
-          content="Humanis: +1,000 ejecutivos verificados, 98% tasa de retención, 9 días promedio de colocación. Descubre por qué somos la firma #1 de executive search en México."
+          content="Humanis: Líder en executive search en México con +1,000 ejecutivos verificados, 98% de retención y 9 días promedio de colocación. Descubre nuestra metodología única."
         />
         <meta
           name="keywords"
-          content="por que humanis, humanis mexico, executive search mexico, ventajas humanis, consultoria talento mexico, headhunting mexico, reclutamiento ejecutivo"
+          content="executive search México, reclutamiento ejecutivo, headhunting México, consultoría de talento, Humanis México, contratación ejecutiva, talento ejecutivo"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
         <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
         <meta name="author" content="Humanis México" />
-        <link rel="canonical" href="https://humanis.com.mx/por-que-nosotros" />
-        <link rel="alternate" hrefLang="es-MX" href="https://humanis.com.mx/por-que-nosotros" />
+        <link rel="canonical" href="https://humanis.com.mx/nosotros" />
+        <link rel="alternate" hrefLang="es-MX" href="https://humanis.com.mx/nosotros" />
 
         {/* Open Graph */}
         <meta property="og:type" content="website" />
-        <meta property="og:title" content="¿Por Qué Humanis? | Executive Search Premium" />
-        <meta property="og:description" content="Descubre las ventajas competitivas que hacen de Humanis la firma líder en executive search en México." />
+        <meta property="og:title" content="¿Por Qué Humanis? | Executive Search Premium México" />
+        <meta
+          property="og:description"
+          content="Líderes en executive search en México. Con +1,000 ejecutivos verificados y una metodología de 7 filtros, garantizamos talento excepcional en tiempo récord."
+        />
         <meta property="og:image" content="https://humanis.com.mx/og-por-que.jpg" />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
-        <meta property="og:image:alt" content="Humanis México - Por Qué Nosotros" />
-        <meta property="og:url" content="https://humanis.com.mx/por-que-nosotros" />
+        <meta property="og:image:alt" content="Humanis México - Líder en Executive Search" />
+        <meta property="og:url" content="https://humanis.com.mx/nosotros" />
         <meta property="og:site_name" content="Humanis México" />
         <meta property="og:locale" content="es_MX" />
+
+        {/* Twitter Cards */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="¿Por Qué Humanis? | Executive Search México" />
+        <meta
+          name="twitter:description"
+          content="Descubre por qué Humanis es la firma líder en executive search en México con una red exclusiva de +1,000 profesionales."
+        />
+        <meta name="twitter:image" content="https://humanis.com.mx/og-por-que.jpg" />
+        <meta name="twitter:site" content="@humanismx" />
 
         {/* Icons */}
         <link rel="icon" href="/favicon.ico" sizes="any" />
@@ -916,6 +938,7 @@ export default function PorQueNosotrosPage() {
           grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
           gap: 2rem;
           min-height: 400px;
+          align-items: stretch;
         }
 
         .diff-card {
@@ -927,6 +950,8 @@ export default function PorQueNosotrosPage() {
           position: relative;
           cursor: pointer;
           border: 1px solid #e5e7eb;
+          display: flex;
+          flex-direction: column;
         }
 
         .diff-card::before {
@@ -952,7 +977,10 @@ export default function PorQueNosotrosPage() {
 
         .diff-content {
           padding: 2rem;
-          min-height: 300px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
         }
 
         .diff-icon {
@@ -965,6 +993,12 @@ export default function PorQueNosotrosPage() {
           margin-bottom: 1.5rem;
           box-shadow: 0 8px 30px rgba(59, 130, 246, 0.2);
           background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
+        }
+
+        .diff-icon svg {
+          stroke: white;
+          fill: none;
+          stroke-width: 2;
         }
 
         .diff-title {
@@ -987,10 +1021,12 @@ export default function PorQueNosotrosPage() {
           gap: 0.5rem;
           font-size: 3rem;
           font-weight: 900;
-          background: linear-gradient(135deg, var(--gradient-start), var(--gradient-end));
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: var(--gradient-start);
+          transition: transform 0.3s ease;
+        }
+
+        .diff-stats:hover {
+          transform: scale(1.05);
         }
 
         .diff-unit {
@@ -1019,10 +1055,27 @@ export default function PorQueNosotrosPage() {
 
         .method-steps {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+          grid-template-columns: repeat(5, 1fr);
           gap: 2rem;
           position: relative;
           padding: 2rem 0;
+          align-items: stretch;
+        }
+
+        @media (max-width: 1200px) {
+          .method-steps {
+            grid-template-columns: repeat(3, 1fr);
+          }
+        }
+
+        @media (max-width: 768px) {
+          .method-steps {
+            grid-template-columns: 1fr;
+          }
+          
+          .method-line {
+            display: none;
+          }
         }
 
         .method-step {
@@ -1030,6 +1083,9 @@ export default function PorQueNosotrosPage() {
           position: relative;
           z-index: 1;
           min-height: 400px;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
         }
 
         .method-image {
@@ -1101,6 +1157,7 @@ export default function PorQueNosotrosPage() {
           gap: 2rem;
           min-height: 300px;
           padding: 2rem;
+          align-items: stretch;
         }
 
         .achievement-card {
@@ -1113,6 +1170,9 @@ export default function PorQueNosotrosPage() {
           border: 1px solid #e5e7eb;
           min-height: 150px;
           opacity: 1 !important;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
         }
 
         .achievement-card:hover {
@@ -1123,11 +1183,13 @@ export default function PorQueNosotrosPage() {
         .achievement-metric {
           font-size: 2.5rem;
           font-weight: 900;
-          background: linear-gradient(135deg, #3b82f6, #1e40af);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
+          color: #1e40af;
           margin-bottom: 0.5rem;
+          transition: transform 0.3s ease;
+        }
+
+        .achievement-card:hover .achievement-metric {
+          transform: scale(1.05);
         }
 
         .achievement-label {
@@ -1463,14 +1525,6 @@ export default function PorQueNosotrosPage() {
             grid-template-columns: 1fr;
           }
 
-          .method-steps {
-            grid-template-columns: 1fr;
-          }
-
-          .method-line {
-            display: none;
-          }
-
           .achievements-grid {
             grid-template-columns: repeat(2, 1fr);
           }
@@ -1510,7 +1564,7 @@ export default function PorQueNosotrosPage() {
               <Link href="/" className="nav-link">Inicio</Link>
               <Link href="/#servicios" className="nav-link">Servicios</Link>
               <Link href="/#proceso" className="nav-link">Proceso</Link>
-              <Link href="/por-que-nosotros" className="nav-link active">¿Por qué nosotros?</Link>
+              <Link href="/nosotros" className="nav-link active">¿Por qué nosotros?</Link>
               <Link href="/consulta" className="nav-link">Contactar</Link>
             </nav>
 
@@ -1543,7 +1597,7 @@ export default function PorQueNosotrosPage() {
             <Link href="/#proceso" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
               Proceso
             </Link>
-            <Link href="/por-que-nosotros" className="nav-link active" onClick={() => setMobileMenuOpen(false)}>
+            <Link href="/nosotros" className="nav-link active" onClick={() => setMobileMenuOpen(false)}>
               ¿Por qué nosotros?
             </Link>
             <Link href="/consulta" className="nav-link" onClick={() => setMobileMenuOpen(false)}>
@@ -1598,11 +1652,11 @@ export default function PorQueNosotrosPage() {
                   width: `${Math.random() * 4 + 2}px`,
                   height: `${Math.random() * 4 + 2}px`,
                   background: 'rgba(255, 255, 255, 0.5)',
-                  borderRadius: '50%', // Fixed: Changed from border-radius to borderRadius
+                  borderRadius: '50%',
                   left: `${Math.random() * 100}%`,
                   top: `${Math.random() * 100}%`,
                   animation: `float ${Math.random() * 10 + 10}s ${Math.random() * 5}s infinite ease-in-out`,
-                  boxShadow: '0 0 10px rgba(255, 255, 255, 0.3)', // Fixed: Changed from box-shadow to boxShadow
+                  boxShadow: '0 0 10px rgba(255, 255, 255, 0.3)',
                 }}
               />
             ))}
@@ -1685,10 +1739,10 @@ export default function PorQueNosotrosPage() {
               {differentiators.map((diff, index) => (
                 <div
                   key={index}
-                  className="diff-card in-view"
+                  className="diff-card"
                   data-animate
                   id={`diff-${index}`}
-                  style={{ '--gradient-start': diff.gradient.split(' ')[1], '--gradient-end': diff.gradient.split(' ')[3] }}
+                  style={{ '--gradient-start': '#3b82f6', '--gradient-end': '#1e40af' }}
                 >
                   <div className="diff-content">
                     <div className="diff-icon">
@@ -1704,9 +1758,7 @@ export default function PorQueNosotrosPage() {
                           </>
                         )}
                         {diff.icon === 'filter' && (
-                          <>
-                            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
-                          </>
+                          <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3" />
                         )}
                         {diff.icon === 'shield' && (
                           <>
@@ -1714,19 +1766,13 @@ export default function PorQueNosotrosPage() {
                             <polyline points="9 12 12 15 16 10" />
                           </>
                         )}
-                        {diff.icon === 'clock' && (
-                          <>
-                            <circle cx="12" cy="12" r="10" />
-                            <polyline points="12 6 12 12 16 14" />
-                          </>
-                        )}
                       </svg>
                     </div>
                     <h3 className="diff-title">{diff.title}</h3>
                     <p className="diff-description">{diff.description}</p>
-                    <div className="diff-stats">
+                    <div className="diff-stats" style={{ color: '#3b82f6' }}>
                       <span>{diff.stats}</span>
-                      <span className="diff-unit">{diff.unit}</span>
+                      <span className="diff-unit" style={{ color: '#3b82f6' }}>{diff.unit}</span>
                     </div>
                   </div>
                 </div>
@@ -1750,9 +1796,9 @@ export default function PorQueNosotrosPage() {
               <div className="method-line"></div>
               <div className="method-steps">
                 {methodology.map((step, index) => (
-                  <div key={index} className="method-step in-view" data-animate id={`method-${index}`}>
+                  <div key={index} className="method-step" data-animate id={`method-${index}`}>
                     <div className="method-image">
-                      <Image src={step.image} alt={step.title} fill style={{ objectFit: 'cover' }} />
+                      <Image src={step.image} alt={`Paso ${step.title} - Humanis México`} fill style={{ objectFit: 'cover' }} />
                       <div className="method-number">{step.step}</div>
                     </div>
                     <h3 className="method-title">{step.title}</h3>
@@ -1779,7 +1825,7 @@ export default function PorQueNosotrosPage() {
               {achievements.map((achievement, index) => (
                 <div
                   key={index}
-                  className={`achievement-card ${countingStarted ? 'in-view' : ''}`}
+                  className="achievement-card"
                   data-animate
                   id={`achievement-${index}`}
                 >
@@ -1899,7 +1945,7 @@ export default function PorQueNosotrosPage() {
           </div>
         </section>
       </main>
-      
+
       <footer className="footer">
         <div className="container">
           <div className="footer-grid">
@@ -1930,17 +1976,6 @@ export default function PorQueNosotrosPage() {
                     <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
                   </svg>
                 </a>
-                <a
-                  href="https://twitter.com/humanismx"
-                  className="social-link"
-                  aria-label="Twitter"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z" />
-                  </svg>
-                </a>
               </div>
             </div>
 
@@ -1963,7 +1998,7 @@ export default function PorQueNosotrosPage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/por-que-nosotros" className="footer-link">
+                  <Link href="/nosotros" className="footer-link">
                     ¿Por qué Humanis?
                   </Link>
                 </li>
@@ -1979,7 +2014,7 @@ export default function PorQueNosotrosPage() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/por-que-nosotros" className="footer-link">
+                  <Link href="/nosotros" className="footer-link">
                     ¿Por qué nosotros?
                   </Link>
                 </li>
