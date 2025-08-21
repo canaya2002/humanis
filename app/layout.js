@@ -1,5 +1,5 @@
 import { Geist, Geist_Mono } from "next/font/google";
-import { GoogleAnalytics } from "@next/third-parties/google"; // Importar el componente
+import { GoogleAnalytics } from "@next/third-parties/google";
 import "./globals.css";
 import Script from "next/script";
 
@@ -16,7 +16,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata = {
-  title: "Humanis México | Executive Search y Headhunting Líder",
+  title: {
+    default: "Humanis México | Executive Search y Headhunting Líder",
+    template: "%s | Humanis México"
+  },
   description:
     "Firma #1 executive search México. Especialistas headhunting C-Level con 98% retención, 9 días promedio. 300+ ejecutivos colocados. Consulta gratuita.",
   keywords:
@@ -27,6 +30,7 @@ export const metadata = {
   publisher: "Humanis México",
   category: "Business Services",
   classification: "Executive Search",
+  metadataBase: new URL('https://humanis.com.mx'), // IMPORTANTE: Agregar esto
   alternates: {
     canonical: "https://humanis.com.mx",
     languages: {
@@ -41,14 +45,14 @@ export const metadata = {
       "Firma #1 executive search México. 300+ ejecutivos colocados, 98% retención, 9 días promedio. Transformamos empresas con talento C-Level.",
     images: [
       {
-        url: "https://humanis.com.mx/images/og-image.jpg",
+        url: "/images/og-image.jpg", // Cambié la URL relativa
         width: 1200,
         height: 630,
         alt: "Humanis México - Executive Search Premium",
         type: "image/jpeg",
       },
       {
-        url: "https://humanis.com.mx/images/og-image-square.jpg",
+        url: "/images/og-image-square.jpg", // Cambié la URL relativa
         width: 1080,
         height: 1080,
         alt: "Humanis México Logo",
@@ -64,7 +68,7 @@ export const metadata = {
     title: "Humanis México | Executive Search y Headhunting Líder",
     description:
       "Firma #1 executive search México. 300+ ejecutivos colocados, 98% retención, 9 días promedio.",
-    images: ["https://humanis.com.mx/images/twitter-image.jpg"],
+    images: ["/images/twitter-image.jpg"], // Cambié la URL relativa
     creator: "@humanismx",
     site: "@humanismx",
   },
@@ -92,9 +96,7 @@ export const metadata = {
     userScalable: true,
   },
   verification: {
-    google: "verification_code_here",
-    // yandex: "verification_code_here",
-    // bing: "verification_code_here",
+    google: "tu-codigo-google-real-aqui", // CAMBIAR por tu código real
   },
   other: {
     "msapplication-TileColor": "#1e40af",
@@ -115,7 +117,7 @@ export const metadata = {
   },
 };
 
-// Schema.org estructurado más completo
+// Schema.org actualizado con URLs correctas
 const organizationSchema = {
   "@context": "https://schema.org",
   "@type": "Organization",
@@ -280,7 +282,6 @@ const breadcrumbSchema = {
   ],
 };
 
-// Combinación de todos los schemas
 const combinedSchema = {
   "@context": "https://schema.org",
   "@graph": [
@@ -292,9 +293,15 @@ const combinedSchema = {
 };
 
 export default function RootLayout({ children }) {
+  const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
+  const GTM_ID = process.env.NEXT_PUBLIC_GTM_ID || 'GTM-XXXXXXX'; // Usar variable de entorno
+
   return (
     <html lang="es-MX">
       <head>
+        {/* Title explícito como fallback */}
+        <title>Humanis México | Executive Search y Headhunting Líder</title>
+        
         {/* Preconnect para optimización de rendimiento */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
@@ -315,6 +322,12 @@ export default function RootLayout({ children }) {
         <link rel="alternate" hrefLang="es-mx" href="https://humanis.com.mx" />
         <link rel="alternate" hrefLang="es" href="https://humanis.com.mx" />
         <link rel="alternate" hrefLang="x-default" href="https://humanis.com.mx" />
+
+        {/* Favicon explícitos como fallback */}
+        <link rel="icon" href="/favicon.ico" sizes="any" />
+        <link rel="icon" href="/favicon-16x16.png" type="image/png" sizes="16x16" />
+        <link rel="icon" href="/favicon-32x32.png" type="image/png" sizes="32x32" />
+        <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         {/* Schema.org estructurado */}
@@ -326,24 +339,24 @@ export default function RootLayout({ children }) {
         />
 
         {/* Google Analytics con @next/third-parties */}
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-        )}
+        {GA_ID && <GoogleAnalytics gaId={GA_ID} />}
 
-        {/* Google Tag Manager (manteniendo tu configuración existente) */}
-        <Script
-          id="gtm"
-          strategy="afterInteractive"
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-              new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-              j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-              'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-              })(window,document,'script','dataLayer','GTM-XXXXXXX');
-            `,
-          }}
-        />
+        {/* Google Tag Manager solo si está configurado */}
+        {GTM_ID && GTM_ID !== 'GTM-XXXXXXX' && (
+          <Script
+            id="gtm"
+            strategy="afterInteractive"
+            dangerouslySetInnerHTML={{
+              __html: `
+                (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+                new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+                j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+                'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+                })(window,document,'script','dataLayer','${GTM_ID}');
+              `,
+            }}
+          />
+        )}
 
         {/* Performance optimization */}
         <Script
@@ -351,11 +364,11 @@ export default function RootLayout({ children }) {
           strategy="afterInteractive"
           dangerouslySetInnerHTML={{
             __html: `
-              if ('PerformanceObserver' in window) {
+              if ('PerformanceObserver' in window && typeof gtag !== 'undefined') {
                 const observer = new PerformanceObserver((list) => {
                   for (const entry of list.getEntries()) {
                     if (entry.entryType === 'largest-contentful-paint') {
-                      gtag && gtag('event', 'web_vitals', {
+                      gtag('event', 'web_vitals', {
                         name: 'LCP',
                         value: Math.round(entry.startTime),
                         event_category: 'Web Vitals',
@@ -371,15 +384,17 @@ export default function RootLayout({ children }) {
 
         {children}
 
-        {/* GTM NoScript fallback */}
-        <noscript>
-          <iframe
-            src="https://www.googletagmanager.com/ns.html?id=GTM-XXXXXXX"
-            height="0"
-            width="0"
-            style={{ display: "none", visibility: "hidden" }}
-          />
-        </noscript>
+        {/* GTM NoScript fallback solo si está configurado */}
+        {GTM_ID && GTM_ID !== 'GTM-XXXXXXX' && (
+          <noscript>
+            <iframe
+              src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+              height="0"
+              width="0"
+              style={{ display: "none", visibility: "hidden" }}
+            />
+          </noscript>
+        )}
       </body>
     </html>
   );

@@ -613,8 +613,10 @@ export default function HomePage() {
 
         @media (max-width: 768px) {
           .hero {
-            padding: 5rem 0 3rem;
-            min-height: 90vh;
+            padding: 12rem 0 4rem;
+            min-height: 100vh;
+            justify-content: center;
+            text-align: center;
           }
         }
 
@@ -737,6 +739,7 @@ export default function HomePage() {
           .hero-wrapper {
             grid-template-columns: 1fr;
             gap: 3rem;
+            text-align: center;
           }
         }
 
@@ -1977,6 +1980,9 @@ export default function HomePage() {
             </nav>
 
             <div className="nav-cta">
+              <Link href="/login" className="btn btn-secondary">
+                Ingresar
+              </Link>
               <Link href="/nosotros" className="btn btn-secondary">
                 ¿Por qué Humanis?
               </Link>
@@ -2006,6 +2012,7 @@ export default function HomePage() {
             <a href="#nosotros" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Nosotros</a>
             <a href="#clientes" className="nav-link" onClick={() => setMobileMenuOpen(false)}>Clientes</a>
             <div style={{ marginTop: '1rem', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <Link href="/login" className="btn btn-secondary">Ingresar</Link>
               <Link href="/nosotros" className="btn btn-secondary">¿Por qué Humanis?</Link>
               <Link href="/consulta" className="btn btn-primary">Contactar</Link>
             </div>
