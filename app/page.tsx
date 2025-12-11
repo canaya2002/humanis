@@ -7,56 +7,147 @@ import {
   Zap, Award, BarChart3, Users,
   Code, Terminal, Database, Server, Cpu, Cloud, Globe
 } from 'lucide-react';
-import Header from './components/Header';
-import Footer from './components/Footer';
-import GlobalStyles from './components/GlobalStyles';
-import ContactIntro from './components/ContactIntro';
-import ScrollPathSection from './components/ScrollPathSection';
-import ParticleMorphCanvas from './components/ParticleMorphCanvas';
 
-// Particle Ring Component
+import Header from '../app/components/Header';
+import Footer from '../app/components/Footer';
+import GlobalStyles from '../app/components/GlobalStyles';
+import ContactIntro from '../app/components/ContactIntro';
+import ScrollPathSection from '../app/components/ScrollPathSection';
+import ParticleMorphCanvas from '../app/components/ParticleMorphCanvas';
+
 const ParticleRing = () => {
-  const canvasRef = useRef<HTMLDivElement>(null);
-  const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const mouseRef = useRef({ x: 0, y: 0 });
+  const centerRef = useRef({ x: 0, y: 0 });
   
   useEffect(() => {
+    if (typeof window !== 'undefined') {
+        mouseRef.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+        centerRef.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+    }
+
     const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth) * 100;
-      const y = (e.clientY / window.innerHeight) * 100;
-      setMousePos({ x, y });
+      mouseRef.current = { x: e.clientX, y: e.clientY };
     };
     
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
-  
-  useEffect(() => {
-    if (!canvasRef.current) return;
     
-    const container = canvasRef.current;
-    const particleCount = 60;
-    const radius = 200;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
     
-    // Clear existing particles
-    container.innerHTML = '';
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    let width = window.innerWidth;
+    let height = window.innerHeight;
     
-    for (let i = 0; i < particleCount; i++) {
-      const particle = document.createElement('div');
-      particle.className = 'particle';
-      
-      const angle = (i / particleCount) * Math.PI * 2;
-      const x = Math.cos(angle) * radius;
-      const y = Math.sin(angle) * radius;
-      
-      particle.style.left = `calc(${mousePos.x}% + ${x}px)`;
-      particle.style.top = `calc(${mousePos.y}% + ${y}px)`;
-      particle.style.animationDelay = `${i * 0.05}s`;
-      
-      container.appendChild(particle);
+    const dpr = window.devicePixelRatio || 1;
+    canvas.width = width * dpr;
+    canvas.height = height * dpr;
+    canvas.style.width = `${width}px`;
+    canvas.style.height = `${height}px`;
+    ctx.scale(dpr, dpr);
+
+    // --- AJUSTES VISUALES ---
+    const PARTICLE_COUNT = 1000; // Reducido para limpieza visual
+    const HOLE_RADIUS = 220;     // Agujero mucho más grande y evidente
+    const MAX_RADIUS = 1600;     // Se extiende más allá de la pantalla
+    const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5)); 
+    
+    const particles: any[] = [];
+
+    for (let i = 0; i < PARTICLE_COUNT; i++) {
+        const t = i / PARTICLE_COUNT;
+        const angle = i * GOLDEN_ANGLE;
+        
+        // Distribución exponencial suave para que no se vea amontonado en el borde del agujero
+        const dist = HOLE_RADIUS + (MAX_RADIUS - HOLE_RADIUS) * Math.pow(t, 0.65);
+        
+        particles.push({
+            angle: angle,
+            dist: dist,
+            // Tamaño ligeramente más grande para compensar que hay menos puntos
+            size: 1.5 + Math.random() * 1.5, 
+            // Velocidad muy sutil
+            speed: 0.00005 + (1 - t) * 0.0002, 
+            // Alpha calculado para un degradado perfecto desde el centro
+            alpha: Math.max(0, 0.6 * (1 - Math.pow(t, 0.4))),
+            // Variación sutil de color (0 = Slate, 1 = Indigo muy oscuro)
+            variant: Math.random() > 0.8 
+        });
     }
-  }, [mousePos]);
-  
-  return <div ref={canvasRef} className="particle-ring" />;
+
+    let animationId: number;
+
+    const render = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      const screenCenterX = width / 2;
+      const screenCenterY = height / 2;
+
+      // Movimiento limitado y lento
+      const offsetX = mouseRef.current.x - screenCenterX;
+      const offsetY = mouseRef.current.y - screenCenterY;
+      const targetX = screenCenterX + offsetX * 0.12; // Se mueve aún menos (12%)
+      const targetY = screenCenterY + offsetY * 0.12;
+
+      // Inercia extrema (0.002)
+      const ease = 0.002; 
+      centerRef.current.x += (targetX - centerRef.current.x) * ease;
+      centerRef.current.y += (targetY - centerRef.current.y) * ease;
+
+      const cx = centerRef.current.x;
+      const cy = centerRef.current.y;
+
+      particles.forEach(p => {
+        p.angle += p.speed;
+
+        const x = cx + Math.cos(p.angle) * p.dist;
+        const y = cy + Math.sin(p.angle) * p.dist;
+
+        ctx.beginPath();
+        ctx.arc(x, y, p.size, 0, Math.PI * 2);
+        
+        // Color base slate-900 (15, 23, 42) con toques sutiles de índigo profundo
+        if (p.variant) {
+            ctx.fillStyle = `rgba(30, 27, 75, ${p.alpha})`; // Indigo-950 sutil
+        } else {
+            ctx.fillStyle = `rgba(15, 23, 42, ${p.alpha})`; // Slate-900
+        }
+        
+        ctx.fill();
+      });
+
+      animationId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    const handleResize = () => {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width * dpr;
+      canvas.height = height * dpr;
+      canvas.style.width = `${width}px`;
+      canvas.style.height = `${height}px`;
+      ctx.scale(dpr, dpr);
+    };
+
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('mousemove', handleMouseMove);
+      window.removeEventListener('resize', handleResize);
+      cancelAnimationFrame(animationId);
+    };
+  }, []);
+
+  return (
+    <canvas 
+      ref={canvasRef} 
+      className="particle-ring absolute inset-0 pointer-events-none z-0" 
+    />
+  );
 };
 
 // --- COMPONENTES AUXILIARES ---
@@ -116,8 +207,8 @@ const ServicesSection = () => (
                     { icon: <FileText size={28} />, title: "Nómina", desc: "Cálculo preciso." }, 
                     { icon: <ShieldCheck size={28} />, title: "Compliance", desc: "Blindaje legal." }
                 ].map((item, idx) => (
-                    <div key={idx} className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl border border-slate-100 shadow-lg hover:-translate-y-2 transition-all">
-                        <div className="text-indigo-600 mb-4">{item.icon}</div>
+                    <div key={idx} className="bg-white/80 backdrop-blur-xl p-8 rounded-3xl border border-slate-100 shadow-lg hover:-translate-y-2 transition-all cursor-default">
+                        <div className="text-indigo-600 mb-4 transition-transform duration-300 group-hover:scale-110">{item.icon}</div>
                         <h3 className="font-bold text-lg mb-2">{item.title}</h3>
                         <p className="text-sm text-slate-500">{item.desc}</p>
                     </div>
@@ -159,7 +250,7 @@ const ForCompaniesSection = ({ navigateTo }: any) => (
         </div>
 
         <div className="flex flex-col gap-10">
-          <div className="p-0 overflow-hidden bg-gradient-to-br from-white to-indigo-50/30 shadow-2xl border border-indigo-100 rounded-3xl">
+          <div className="p-0 overflow-hidden bg-gradient-to-br from-white to-indigo-50/30 shadow-2xl border border-indigo-100 rounded-3xl transform transition-transform hover:scale-[1.01] duration-500">
              <div className="p-10 border-b border-indigo-100 bg-gradient-to-r from-indigo-50/50 to-transparent">
                <h3 className="text-3xl font-bold text-slate-900">Metodología 360°</h3>
                <p className="text-slate-600 text-base mt-3">Ciclo continuo de calidad y cumplimiento normativo.</p>
@@ -177,7 +268,7 @@ const ForCompaniesSection = ({ navigateTo }: any) => (
                     <div className="orbit-node" style={{ '--circle-x': '50%', '--circle-y': '80%' } as React.CSSProperties}><Briefcase size={24} /></div>
                     <div className="orbit-node" style={{ '--circle-x': '15%', '--circle-y': '70%' } as React.CSSProperties}><TrendingUp size={24} /></div>
                     
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center bg-gradient-to-br from-white to-indigo-50 p-8 rounded-full shadow-2xl border-2 border-indigo-200 z-20 w-40 h-40 flex flex-col justify-center">
+                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center bg-gradient-to-br from-white to-indigo-50 p-8 rounded-full shadow-2xl border-2 border-indigo-200 z-20 w-40 h-40 flex flex-col justify-center backdrop-blur-sm">
                       <div className="text-xs font-bold uppercase tracking-widest text-indigo-400">Eficacia</div>
                       <div className="text-2xl font-black text-slate-900 mt-1">TOTAL</div>
                     </div>
@@ -197,9 +288,13 @@ export default function HumanisApp() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [showContact, setShowContact] = useState(false);
   const [showHeader, setShowHeader] = useState(true);
+  const [isLoaded, setIsLoaded] = useState(false); // Para animación de entrada
   const lastScrollY = useRef(0);
 
   useEffect(() => {
+    // Activar animación de entrada al montar
+    setIsLoaded(true);
+
     const handleScroll = () => {
         if (window.scrollY > lastScrollY.current && window.scrollY > 80) {
             setShowHeader(false);
@@ -243,14 +338,21 @@ export default function HumanisApp() {
             {(currentPage === 'inicio' || currentPage === 'home') && (
             <section className="relative min-h-[90vh] flex items-center overflow-hidden bg-white">
                 <ParticleRing />
-                <div className="container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center">
-                    <div className="relative order-2 lg:order-1 animate-fade-in-up">
-                        <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
-                            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1632&q=80" alt="Corporate" className="w-full h-auto" />
+                
+                {/* Contenedor principal con efecto de entrada suave */}
+                <div 
+                    className={`container mx-auto px-6 grid lg:grid-cols-2 gap-16 items-center transition-all duration-1000 ease-out transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
+                >
+                    <div className="relative order-2 lg:order-1">
+                        <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white transform transition-transform hover:scale-[1.02] duration-700">
+                            <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1632&q=80" alt="Corporate" className="w-full h-auto object-cover" />
                         </div>
                     </div>
                     <div className="relative z-10 order-1 lg:order-2">
-                        <h1 className="text-6xl md:text-7xl font-black text-slate-900 mb-6 leading-[1.2] tracking-tighter">
+                        <div className="inline-block px-4 py-1.5 rounded-full bg-indigo-50 text-indigo-600 text-[11px] font-bold uppercase tracking-widest mb-6 border border-indigo-100">
+                            Líderes en Capital Humano
+                        </div>
+                        <h1 className="text-6xl md:text-7xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tighter">
                             Talento <br/>
                             <span className="text-rotator typewriter-effect">
                                 <span className="text-rotator__word">ESTRATÉGICO</span>
@@ -259,10 +361,17 @@ export default function HumanisApp() {
                                 <span className="text-rotator__word">TRANSFORMADOR</span>
                             </span>
                         </h1>
-                        <p className="text-slate-500 text-xl max-w-lg mb-10 font-medium leading-relaxed">Ingeniería de personal y blindaje jurídico de clase mundial.</p>
-                        <div className="flex gap-4">
-                            <button onClick={() => navigateTo('empresas')} className="antigravity-btn">Soy Empresa</button>
-                            <button onClick={() => navigateTo('candidatos')} className="antigravity-btn secondary">Soy Candidato</button>
+                        <p className="text-slate-500 text-xl max-w-lg mb-10 font-medium leading-relaxed">
+                            Ingeniería de personal y blindaje jurídico de clase mundial para empresas que exigen excelencia.
+                        </p>
+                        <div className="flex flex-wrap gap-4">
+                            <button onClick={() => navigateTo('empresas')} className="antigravity-btn group">
+                                Soy Empresa 
+                                <span className="group-hover:translate-x-1 transition-transform">→</span>
+                            </button>
+                            <button onClick={() => navigateTo('candidatos')} className="antigravity-btn secondary group">
+                                Soy Candidato
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -287,7 +396,7 @@ export default function HumanisApp() {
 
             <div className="py-24 bg-white text-center">
                 <h2 className="text-5xl font-bold mb-8">¿Listo para comenzar?</h2>
-                <button onClick={() => setShowContact(true)} className="antigravity-btn shadow-xl">Contactar Ahora</button>
+                <button onClick={() => setShowContact(true)} className="antigravity-btn shadow-xl text-lg px-8 py-4">Contactar Ahora</button>
             </div>
 
         </main>
