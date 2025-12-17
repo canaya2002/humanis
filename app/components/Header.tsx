@@ -1,10 +1,11 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { Menu, X, ChevronDown, MessageCircle, Phone } from 'lucide-react';
+import { Menu, X, ChevronDown, ArrowUpRight } from 'lucide-react';
 
 interface HeaderProps {
   showHeader: boolean;
+  setShowContact?: (show: boolean) => void;
 }
 
 const navItems = [
@@ -30,141 +31,199 @@ const navItems = [
     ]
   },
   { label: 'Nosotros', href: '/nosotros' },
-  { label: 'Contacto', href: '/contacto' },
 ];
 
-export default function Header({ showHeader }: HeaderProps) {
+export default function Header({ showHeader, setShowContact }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [openSubmenu, setOpenSubmenu] = useState<string | null>(null);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 20);
+    };
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  // CONSTANTES DE ALINEACIÓN
+  const ALIGNMENT_CLASSES = scrolled ? 'mt-4' : 'mt-8';
+  const ELEMENT_PADDING = 'py-3';
 
   return (
     <>
-      {/* Top Bar */}
-      <div className={`fixed top-0 w-full z-[60] transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'}`}>
-        <div className="bg-slate-900 text-white py-2">
-          <div className="container mx-auto px-6 flex justify-between items-center text-xs">
-            <div className="flex items-center gap-6">
-              <span className="text-slate-400">Atención Nacional | Respuesta en 24–48h</span>
-            </div>
-            <div className="hidden md:flex items-center gap-6">
-              <a href="tel:+525512345678" className="flex items-center gap-2 hover:text-indigo-400 transition-colors">
-                <Phone size={14} />
-                <span>+52 55 1234 5678</span>
-              </a>
-              <a href="https://wa.me/525512345678" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors">
-                <MessageCircle size={14} />
-                <span>WhatsApp</span>
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+      <header 
+        className={`
+          fixed top-0 left-0 right-0 z-50 
+          transition-all duration-500 ease-in-out
+          ${scrolled ? 'bg-white/5 backdrop-blur-sm' : 'bg-transparent'}
+          pt-0
+        `}
+      >
+        <div className="container mx-auto px-6">
+          <div className="flex items-start justify-between relative">
+            
+            {/* 1. LOGO GIGANTE */}
+            <Link href="/" className="relative z-50 flex-shrink-0 group block mt-0 pt-0">
+               <img 
+                 src="/humanislogo.png" 
+                 alt="Humanis Logo" 
+                 className={`
+                   w-auto object-contain object-left-top drop-shadow-2xl transition-all duration-500
+                   ${scrolled 
+                      ? 'h-20 md:h-28 lg:h-36 -mt-2' 
+                      : 'h-28 md:h-36 lg:h-48 -mt-4 lg:-mt-6'} 
+                 `}
+               />
+            </Link>
 
-      {/* Main Nav */}
-      <nav className={`fixed top-8 w-full z-50 transition-transform duration-300 ${showHeader ? 'translate-y-0' : '-translate-y-full'}`} style={{ background: 'transparent' }}>
-        <div className="container mx-auto px-6 h-20 flex justify-between items-center">
-          <Link href="/" className="flex items-center gap-3 cursor-pointer group">
-            <div className="w-10 h-10 bg-gradient-to-br from-indigo-600 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
-              <span className="text-white text-xl font-bold">H</span>
-            </div>
-            <span className="text-slate-900 font-bold tracking-tight text-xl group-hover:text-indigo-600 transition-colors">HUMANIS</span>
-          </Link>
-          
-          {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center gap-3">
-            <div className="glass-nav flex items-center gap-1">
+            {/* 2. MENÚ CENTRAL - Centrado */}
+            <nav 
+              className={`
+                hidden lg:flex items-center gap-2 px-4 rounded-full transition-all duration-500 absolute left-1/2 -translate-x-1/2
+                ${ALIGNMENT_CLASSES} ${ELEMENT_PADDING}
+              `}
+              style={{
+                  background: 'rgba(255, 255, 255, 0.7)',
+                  backdropFilter: 'blur(30px)',
+                  WebkitBackdropFilter: 'blur(30px)',
+                  boxShadow: `
+                    0 20px 40px -10px rgba(0, 0, 0, 0.15),
+                    0 0 0 1px rgba(255, 255, 255, 0.6),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.9)
+                  `,
+              }}
+            >
               {navItems.map((item) => (
                 <div 
                   key={item.href} 
-                  className="relative"
+                  className="relative group/menuitem"
                   onMouseEnter={() => item.submenu && setOpenSubmenu(item.label)}
                   onMouseLeave={() => setOpenSubmenu(null)}
                 >
                   <Link 
                     href={item.href}
-                    className="text-sm font-medium px-4 py-2.5 rounded-full transition-all text-slate-700 hover:text-slate-900 hover:bg-white/20 flex items-center gap-1"
+                    className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold text-slate-800 transition-all duration-300 hover:bg-white hover:shadow-lg active:scale-95"
                   >
                     {item.label}
-                    {item.submenu && <ChevronDown size={14} className={`transition-transform ${openSubmenu === item.label ? 'rotate-180' : ''}`} />}
+                    {item.submenu && (
+                      <ChevronDown 
+                        size={14} 
+                        className={`transition-transform duration-300 stroke-[3] opacity-60 ${openSubmenu === item.label ? 'rotate-180' : ''}`} 
+                      />
+                    )}
                   </Link>
                   
-                  {/* Submenu */}
+                  {/* Submenú */}
                   {item.submenu && openSubmenu === item.label && (
-                    <div className="absolute top-full left-0 mt-2 w-56 bg-white/95 backdrop-blur-xl border border-slate-100 rounded-2xl shadow-2xl shadow-slate-200/50 py-2 animate-fadeIn">
-                      {item.submenu.map((subItem) => (
-                        <Link
-                          key={subItem.href}
-                          href={subItem.href}
-                          className="block px-4 py-2.5 text-sm text-slate-600 hover:text-indigo-600 hover:bg-indigo-50/50 transition-all"
-                        >
-                          {subItem.label}
-                        </Link>
-                      ))}
+                    <div className="absolute top-full left-1/2 -translate-x-1/2 pt-6 w-64 animate-in fade-in zoom-in-95 duration-200">
+                      <div 
+                          className="overflow-hidden rounded-2xl p-2 flex flex-col gap-1"
+                          style={{
+                              background: 'rgba(255, 255, 255, 0.95)',
+                              backdropFilter: 'blur(40px)',
+                              boxShadow: '0 40px 80px -20px rgba(0,0,0,0.3), inset 0 0 0 1px rgba(255,255,255,0.8)',
+                              border: '1px solid rgba(255,255,255,0.2)'
+                          }}
+                      >
+                        {item.submenu.map((subItem) => (
+                          <Link
+                            key={subItem.href}
+                            href={subItem.href}
+                            className="block px-5 py-3 text-sm font-bold text-slate-600 rounded-xl hover:text-slate-900 hover:bg-white hover:shadow-md transition-all flex items-center justify-between group/sub"
+                          >
+                            {subItem.label}
+                            <ArrowUpRight size={14} className="opacity-0 -translate-x-2 group-hover/sub:opacity-100 group-hover/sub:translate-x-0 transition-all text-cyan-600 stroke-[3]" />
+                          </Link>
+                        ))}
+                      </div>
                     </div>
                   )}
                 </div>
               ))}
-            </div>
+            </nav>
             
-            {/* CTA Buttons */}
-            <div className="flex items-center gap-3">
-              <Link href="/vacantes" className="glass-nav text-sm font-medium px-4 py-2.5 text-slate-700 hover:text-indigo-600 transition-colors">
-                Ver Vacantes
-              </Link>
-              <Link href="/contacto" className="bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-sm font-semibold px-6 py-2.5 rounded-full shadow-lg shadow-indigo-500/30 hover:shadow-indigo-500/50 hover:scale-105 transition-all">
-                Agendar Llamada
-              </Link>
-            </div>
-          </div>
-          
-          {/* Mobile Menu Button */}
-          <button className="lg:hidden text-slate-900 p-2 hover:bg-slate-100 rounded-xl transition-colors" onClick={() => setIsMenuOpen(!isMenuOpen)}>
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
+            {/* 3. BOTÓN CTA - Alineado perfectamente */}
+            <div className={`flex items-center gap-4 transition-all duration-500 ${ALIGNMENT_CLASSES}`}>
+              <button 
+                  onClick={() => setShowContact && setShowContact(true)}
+                  className={`
+                    hidden lg:flex items-center gap-3 px-8 rounded-full text-white text-sm font-black transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-95 group
+                    ${ELEMENT_PADDING}
+                  `}
+                  style={{
+                      background: 'linear-gradient(180deg, #1e293b 0%, #020617 100%)',
+                      boxShadow: '0 10px 30px -5px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.2)'
+                  }}
+              >
+                <span className="drop-shadow-md">Agendar Llamada</span>
+                <ArrowUpRight size={18} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1 stroke-[3]" />
+              </button>
 
-        {/* Mobile Menu */}
-        {isMenuOpen && (
-          <div className="lg:hidden absolute top-full left-0 right-0 bg-white/98 backdrop-blur-xl border-t border-slate-100 shadow-2xl animate-slideDown">
-            <div className="container mx-auto px-6 py-6">
-              {navItems.map((item) => (
-                <div key={item.href} className="border-b border-slate-100 last:border-0">
-                  <Link 
-                    href={item.href}
-                    className="block py-4 text-lg font-medium text-slate-900 hover:text-indigo-600 transition-colors"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                  {item.submenu && (
-                    <div className="pl-4 pb-4 space-y-2">
-                      {item.submenu.map((subItem) => (
-                        <Link
-                          key={subItem.href}
-                          href={subItem.href}
-                          className="block py-2 text-slate-600 hover:text-indigo-600 transition-colors"
-                          onClick={() => setIsMenuOpen(false)}
-                        >
-                          {subItem.label}
-                        </Link>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
-              
-              <div className="mt-6 space-y-3">
-                <Link href="/vacantes" className="block w-full text-center py-3 border-2 border-slate-200 rounded-xl text-slate-700 font-medium hover:border-indigo-600 hover:text-indigo-600 transition-all" onClick={() => setIsMenuOpen(false)}>
-                  Ver Vacantes
-                </Link>
-                <Link href="/contacto" className="block w-full text-center py-3 bg-gradient-to-r from-indigo-600 to-violet-600 text-white rounded-xl font-semibold shadow-lg" onClick={() => setIsMenuOpen(false)}>
-                  Agendar Llamada
-                </Link>
-              </div>
+              {/* Menú Móvil */}
+              <button 
+                  className="lg:hidden flex items-center justify-center w-12 h-12 rounded-full text-slate-900 transition-all active:scale-90 shadow-lg bg-white/80 backdrop-blur-md border border-white"
+                  onClick={() => setIsMenuOpen(!isMenuOpen)}
+              >
+                {isMenuOpen ? <X size={26} className="stroke-[3]" /> : <Menu size={26} className="stroke-[3]" />}
+              </button>
             </div>
+
           </div>
-        )}
-      </nav>
+        </div>
+      </header>
+
+      {/* OVERLAY MÓVIL */}
+      {isMenuOpen && (
+        <div className="fixed inset-0 z-[100] lg:hidden">
+            <div className="absolute inset-0 bg-slate-900/60 backdrop-blur-md transition-opacity" onClick={() => setIsMenuOpen(false)} />
+            <div className="absolute top-0 right-0 w-full max-w-sm h-full bg-white/95 backdrop-blur-[50px] shadow-2xl p-8 pt-32 overflow-y-auto animate-in slide-in-from-right duration-300 border-l border-white/50">
+                <div className="flex flex-col gap-6">
+                    {navItems.map((item) => (
+                        <div key={item.href} className="border-b border-slate-200/60 pb-4 mb-2 last:border-0">
+                            {item.submenu ? (
+                                <div className="space-y-3">
+                                    <div className="text-xl font-black text-slate-900 px-2">{item.label}</div>
+                                    <div className="pl-6 space-y-3 border-l-2 border-slate-200 ml-1">
+                                        {item.submenu.map((subItem) => (
+                                            <Link 
+                                                key={subItem.href}
+                                                href={subItem.href}
+                                                className="block py-1 text-lg font-bold text-slate-600 hover:text-cyan-700"
+                                                onClick={() => setIsMenuOpen(false)}
+                                            >
+                                                {subItem.label}
+                                            </Link>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : (
+                                <Link 
+                                    href={item.href}
+                                    className="block p-2 text-2xl font-black text-slate-900 rounded-xl hover:bg-slate-50 transition-all"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    {item.label}
+                                </Link>
+                            )}
+                        </div>
+                    ))}
+                </div>
+                <div className="mt-10">
+                    <button 
+                        onClick={() => {
+                            if(setShowContact) setShowContact(true);
+                            setIsMenuOpen(false);
+                        }}
+                        className="w-full py-5 rounded-2xl bg-slate-900 text-white font-black text-xl shadow-xl active:scale-95 transition-all flex justify-center gap-2"
+                    >
+                        Agendar Llamada
+                        <ArrowUpRight />
+                    </button>
+                </div>
+            </div>
+        </div>
+      )}
     </>
   );
 }

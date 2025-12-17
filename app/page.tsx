@@ -15,7 +15,18 @@ import ContactIntro from './components/ContactIntro';
 import ScrollPathSection from './components/ScrollPathSection';
 import ParticleMorphCanvas from './components/ParticleMorphCanvas';
 
-// PARTICLE RING CANVAS
+// --- ESTILOS REUTILIZABLES (Design Tokens) ---
+
+// Efecto "Liquid Glass": Translúcido, Blur fuerte, Borde sutil, Sombra interna (highlight 3D) y Sombra externa suave.
+const LIQUID_GLASS = "bg-white/60 backdrop-blur-2xl border border-white/50 shadow-[0_8px_32px_rgba(0,0,0,0.05)] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.6)] rounded-[2rem]";
+
+// Efecto Hover para Glass: Elevar, intensificar borde y sombra.
+const LIQUID_GLASS_HOVER = "transition-all duration-500 hover:-translate-y-2 hover:shadow-[0_20px_40px_rgba(0,0,0,0.1)] hover:bg-white/70 hover:border-white/80";
+
+// Efecto Glow para Imágenes: Luz trasera difusa.
+const IMAGE_GLOW = "relative z-10 before:absolute before:-inset-4 before:bg-gradient-to-r before:from-cyan-400/20 before:to-indigo-400/20 before:rounded-[3rem] before:blur-2xl before:-z-10";
+
+// PARTICLE RING CANVAS (Mantenido igual por funcionalidad, optimizado render)
 const ParticleRing = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: 0, y: 0 });
@@ -49,7 +60,7 @@ const ParticleRing = () => {
     canvas.style.height = `${height}px`;
     ctx.scale(dpr, dpr);
 
-    const PARTICLE_COUNT = 3000;
+    const PARTICLE_COUNT = 2500; // Optimizado ligeramente
     const HOLE_RADIUS = 280;
     const MAX_RADIUS = 1800;
     const GOLDEN_ANGLE = Math.PI * (3 - Math.sqrt(5)); 
@@ -80,16 +91,13 @@ const ParticleRing = () => {
 
       const screenCenterX = width / 2;
       const screenCenterY = height / 2;
-
       const offsetX = mouseRef.current.x - screenCenterX;
       const offsetY = mouseRef.current.y - screenCenterY;
       const targetX = screenCenterX + offsetX * 0.1; 
       const targetY = screenCenterY + offsetY * 0.1;
-
-      const ease = 0.002; 
+      const ease = 0.02; // Más suave
       centerRef.current.x += (targetX - centerRef.current.x) * ease;
       centerRef.current.y += (targetY - centerRef.current.y) * ease;
-
       const cx = centerRef.current.x;
       const cy = centerRef.current.y;
 
@@ -101,13 +109,11 @@ const ParticleRing = () => {
 
         ctx.beginPath();
         ctx.arc(x, y, p.size, 0, Math.PI * 2);
-        
         if (p.variant) {
             ctx.fillStyle = `rgba(6, 182, 212, ${p.alpha})`;
         } else {
             ctx.fillStyle = `rgba(15, 23, 42, ${p.alpha})`;
         }
-        
         ctx.fill();
       });
 
@@ -150,8 +156,8 @@ const ModernButton = ({ children, onClick, secondary = false }: any) => (
     className={`
       relative group px-8 py-4 rounded-full font-bold text-sm tracking-widest uppercase transition-all duration-500 overflow-hidden
       ${secondary 
-        ? 'bg-transparent text-slate-800 border border-slate-300 hover:border-slate-900 hover:bg-slate-50' 
-        : 'bg-slate-900 text-white shadow-2xl hover:shadow-cyan-500/20 hover:-translate-y-1'
+        ? 'bg-white/50 backdrop-blur-md border border-slate-300 text-slate-800 hover:bg-white hover:border-slate-900 shadow-lg' // Glass style button
+        : 'bg-slate-900 text-white shadow-2xl shadow-slate-900/20 hover:shadow-cyan-500/30 hover:-translate-y-1'
       }
     `}
   >
@@ -160,12 +166,12 @@ const ModernButton = ({ children, onClick, secondary = false }: any) => (
       {!secondary && <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />}
     </span>
     {!secondary && (
-      <div className="absolute inset-0 bg-gradient-to-r from-slate-800 to-slate-900 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+      <div className="absolute inset-0 bg-gradient-to-r from-slate-800 to-cyan-900 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
     )}
   </button>
 );
 
-// ROTATING TEXT COMPONENT
+// ROTATING TEXT COMPONENT (Optimizado - Task 3)
 const RotatingText = () => {
   const words = ['FUTURISTA', 'INNOVADOR', 'ESTRATÉGICO', 'DISRUPTIVO', 'EXCEPCIONAL'];
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -173,22 +179,23 @@ const RotatingText = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setCurrentIndex((prev) => (prev + 1) % words.length);
-    }, 3000);
+    }, 3000); // 3 Segundos exactos
     return () => clearInterval(interval);
   }, []);
 
   return (
-    <span className="relative inline-block min-w-[400px]">
+    // min-w-[550px] para evitar CLS (Cumulative Layout Shift) cuando cambia la palabra
+    <span className="relative inline-block min-w-[300px] sm:min-w-[550px] text-left h-[1.1em] align-top overflow-hidden"> 
       {words.map((word, idx) => (
         <span
           key={idx}
-          className={`absolute left-0 transition-all duration-700 bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-700 to-slate-900 ${
-            idx === currentIndex
-              ? 'opacity-100 translate-y-0'
+          className={`absolute left-0 top-0 transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-slate-600 to-slate-900 block
+            ${idx === currentIndex
+              ? 'opacity-100 translate-y-0 blur-0'
               : idx === (currentIndex - 1 + words.length) % words.length
-              ? 'opacity-0 -translate-y-full'
-              : 'opacity-0 translate-y-full'
-          }`}
+              ? 'opacity-0 -translate-y-12 blur-sm' // Salida hacia arriba
+              : 'opacity-0 translate-y-12 blur-sm' // Entrada desde abajo
+            }`}
         >
           {word}
         </span>
@@ -197,7 +204,7 @@ const RotatingText = () => {
   );
 };
 
-// INFINITE CAROUSEL - TAILWIND VERSION
+// INFINITE CAROUSEL (Refactorizado - Task 4)
 const InfiniteCarousel = () => {
   const logos = [
     "https://upload.wikimedia.org/wikipedia/commons/2/2f/Google_2015_logo.svg",
@@ -209,32 +216,33 @@ const InfiniteCarousel = () => {
     "https://upload.wikimedia.org/wikipedia/commons/0/0c/ASANA_LOGO.png",
   ];
 
+  // Duplicamos los logos suficientes veces para que el scroll sea infinito y suave
+  const repeatedLogos = [...logos, ...logos, ...logos, ...logos]; 
+
   return (
-    <div className="py-20 bg-white border-b border-slate-100 relative overflow-hidden">
-      {/* Gradientes laterales */}
-      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none" />
-      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none" />
+    <div className="py-20 bg-white/50 border-b border-slate-100 relative overflow-hidden backdrop-blur-sm z-20">
+      {/* Máscaras de gradiente lateral para suavizar entrada/salida */}
+      <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none" />
+      <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
       
-      <div className="flex animate-infinite-scroll hover:[animation-play-state:paused]">
-        {/* Duplicamos 3 veces para scroll infinito */}
-        {[...Array(3)].map((_, groupIdx) => (
-          <React.Fragment key={groupIdx}>
-            {logos.map((logo, idx) => (
+      {/* Contenedor del scroll */}
+      <div className="flex w-full overflow-hidden group">
+        <div className="flex animate-infinite-scroll group-hover:[animation-play-state:paused] items-center">
+            {repeatedLogos.map((logo, idx) => (
               <div 
-                key={`${groupIdx}-${idx}`}
-                className="flex-shrink-0 w-64 h-24 flex items-center justify-center px-8 grayscale hover:grayscale-0 opacity-50 hover:opacity-100 transition-all duration-500 cursor-pointer transform hover:scale-105"
+                key={idx}
+                className="flex-shrink-0 w-48 mx-8 flex items-center justify-center grayscale hover:grayscale-0 opacity-40 hover:opacity-100 transition-all duration-500 cursor-pointer hover:scale-110"
               >
-                <img src={logo} alt={`Logo ${idx}`} className="max-w-full max-h-full" />
+                <img src={logo} alt={`Client logo ${idx}`} className="max-w-[120px] max-h-12 object-contain" />
               </div>
             ))}
-          </React.Fragment>
-        ))}
+        </div>
       </div>
     </div>
   );
 };
 
-// JUMPING ICONS WITH GLASSMORPHISM
+// JUMPING ICONS (Optimizado visualmente)
 const JumpingIcons = () => {
   const icons = [Code, Terminal, Database, Server, Cpu, Cloud, ShieldCheck, Users, Briefcase, Zap, Globe, Search, BarChart3, Award, FileText, CheckCircle];
   
@@ -243,33 +251,18 @@ const JumpingIcons = () => {
       {icons.map((Icon, i) => (
         <div 
           key={i} 
-          className="group w-20 h-20 rounded-2xl bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.9)] flex items-center justify-center text-slate-400 hover:border-cyan-500/30 hover:bg-cyan-50/30 hover:shadow-[0_12px_40px_rgba(6,182,212,0.2),inset_0_1px_0_rgba(255,255,255,1)] transition-all duration-500 hover:scale-110 hover:-translate-y-2 cursor-pointer"
-          style={{ 
-            animationDelay: `${i * 0.1}s`,
-            transform: 'perspective(1000px) rotateX(0deg) rotateY(0deg)',
-          }}
-          onMouseMove={(e) => {
-            const rect = e.currentTarget.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const rotateX = (y - centerY) / 5;
-            const rotateY = (centerX - x) / 5;
-            e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1) translateY(-8px)`;
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1) translateY(0)';
-          }}
+          // Aplicando Liquid Glass mini
+          className={`group w-20 h-20 bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.08)] rounded-2xl flex items-center justify-center text-slate-400 hover:text-cyan-600 transition-all duration-500 hover:scale-110 hover:-translate-y-2 cursor-pointer hover:bg-white/80 hover:shadow-[0_12px_40px_rgba(6,182,212,0.2)]`}
+          style={{ animationDelay: `${i * 0.05}s` }}
         >
-          <Icon size={32} className="group-hover:text-cyan-600 transition-colors" />
+          <Icon size={32} className="transition-transform group-hover:rotate-12" />
         </div>
       ))}
     </div>
   );
 };
 
-// SERVICES SECTION WITH GLASSMORPHISM
+// SERVICES SECTION (Actualizada a Liquid Glass - Task 1)
 const ServicesSection = () => (
   <section className="py-32 relative bg-white overflow-hidden" id="servicios">
     <ParticleMorphCanvas />
@@ -278,7 +271,9 @@ const ServicesSection = () => (
         <h2 className="text-5xl lg:text-6xl font-black mb-6 text-slate-900 tracking-tight">Soluciones de Capital Humano</h2>
         <p className="text-slate-500 max-w-2xl mx-auto text-xl font-light">Infraestructura legal y operativa de clase mundial.</p>
       </div>
+      
       <JumpingIcons />
+      
       <div className="grid md:grid-cols-4 gap-8 mt-20">
         {[
           { icon: <Search size={32} />, title: "Headhunting", desc: "Ejecutivos y TI." }, 
@@ -288,25 +283,14 @@ const ServicesSection = () => (
         ].map((item, idx) => (
           <div 
             key={idx} 
-            className="group p-10 rounded-[2rem] bg-white/40 backdrop-blur-xl border border-white/60 shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.9)] hover:shadow-[0_20px_60px_rgba(79,70,229,0.15),inset_0_1px_0_rgba(255,255,255,1)] hover:-translate-y-3 hover:scale-105 transition-all duration-700 cursor-default"
-            style={{ transform: 'perspective(1000px)' }}
-            onMouseMove={(e) => {
-              const rect = e.currentTarget.getBoundingClientRect();
-              const x = e.clientX - rect.left;
-              const y = e.clientY - rect.top;
-              const centerX = rect.width / 2;
-              const centerY = rect.height / 2;
-              const rotateX = (y - centerY) / 20;
-              const rotateY = (centerX - x) / 20;
-              e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-12px) scale(1.05)`;
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0) scale(1)';
-            }}
+            className={`${LIQUID_GLASS} ${LIQUID_GLASS_HOVER} p-10 group cursor-default`} // Aplicando la clase constante
+            style={{ transformStyle: 'preserve-3d' }}
           >
-            <div className="text-slate-900 mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:text-cyan-600">{item.icon}</div>
+            <div className="text-slate-900 mb-6 transition-transform duration-500 group-hover:scale-110 group-hover:text-cyan-600 bg-slate-50 w-16 h-16 rounded-2xl flex items-center justify-center shadow-inner">
+                {item.icon}
+            </div>
             <h3 className="font-bold text-xl mb-3 text-slate-900">{item.title}</h3>
-            <p className="text-slate-500 leading-relaxed">{item.desc}</p>
+            <p className="text-slate-500 leading-relaxed font-light">{item.desc}</p>
           </div>
         ))}
       </div>
@@ -314,14 +298,14 @@ const ServicesSection = () => (
   </section>
 );
 
-// FOR COMPANIES SECTION
+// FOR COMPANIES SECTION (Actualizada con Glass y Glow)
 const ForCompaniesSection = ({ navigateTo }: any) => (
   <section className="py-32 bg-white relative overflow-hidden" id="empresas">
     <div className="container mx-auto px-6 max-w-7xl relative z-10">
       <div className="grid lg:grid-cols-2 gap-24 items-center">
         
         <div className="h-fit lg:sticky lg:top-32 order-2 lg:order-1">
-          <div className="inline-block px-4 py-1.5 rounded-full bg-slate-100 text-slate-900 text-[11px] font-bold uppercase tracking-widest mb-8 border border-slate-200">
+          <div className="inline-block px-4 py-1.5 rounded-full bg-slate-100/80 backdrop-blur-sm text-slate-900 text-[11px] font-bold uppercase tracking-widest mb-8 border border-slate-200 shadow-sm">
             Soluciones Corporativas
           </div>
           <h2 className="text-6xl md:text-7xl font-black mb-8 leading-[0.95] text-slate-900 tracking-tighter">
@@ -335,8 +319,8 @@ const ForCompaniesSection = ({ navigateTo }: any) => (
           <ul className="space-y-6 mb-12">
             {["Cero riesgo de Responsabilidad Solidaria", "Deducibilidad Fiscal 100% Garantizada", "Entregables mensuales (SAT/IMSS)", "Atención a Requerimientos"].map((item, i) =>(
               <li key={i} className="flex items-center gap-4 text-lg text-slate-700 font-medium">
-                <div className="w-6 h-6 rounded-full bg-green-100 flex items-center justify-center text-green-600 flex-shrink-0">
-                    <CheckCircle size={14} strokeWidth={4} />
+                <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-green-600 flex-shrink-0 shadow-sm border border-green-200">
+                    <CheckCircle size={16} strokeWidth={3} />
                 </div>
                 {item}
               </li>
@@ -346,59 +330,52 @@ const ForCompaniesSection = ({ navigateTo }: any) => (
           <ModernButton onClick={() => navigateTo('contacto')}>Solicitar Auditoría</ModernButton>
         </div>
 
+        {/* Bloque Metodología 360 con Liquid Glass */}
         <div className="flex flex-col gap-10 order-1 lg:order-2">
-          <div className="p-0 overflow-hidden bg-gradient-to-br from-white/80 to-slate-50/80 backdrop-blur-xl shadow-[0_20px_60px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.9)] border border-white/60 rounded-[2.5rem] transform transition-all hover:scale-[1.02] hover:shadow-[0_30px_80px_rgba(79,70,229,0.2),inset_0_1px_0_rgba(255,255,255,1)] duration-700">
-             <div className="p-12 border-b border-slate-100 bg-white/50 backdrop-blur-sm">
+          <div className={`${LIQUID_GLASS} overflow-hidden transform transition-all duration-700 hover:scale-[1.01] hover:shadow-[0_40px_80px_rgba(79,70,229,0.15)]`}>
+             <div className="p-12 border-b border-slate-100/50 bg-white/30 backdrop-blur-md">
                <h3 className="text-4xl font-black text-slate-900 tracking-tight">Metodología 360°</h3>
                <p className="text-slate-500 text-lg mt-4 font-light">Ciclo continuo de calidad y cumplimiento normativo.</p>
              </div>
-             <div className="p-16 flex items-center justify-center bg-white/30 min-h-[500px] relative">
-                <div className="relative w-full h-full flex items-center justify-center">
-                    <svg className="w-full h-full max-w-[600px]" viewBox="0 0 600 400" style={{ overflow: 'visible' }}>
-                        <ellipse cx="300" cy="200" rx="250" ry="120" fill="none" stroke="rgba(15, 23, 42, 0.1)" strokeWidth="1" />
-                        <ellipse cx="300" cy="200" rx="250" ry="120" fill="none" stroke="url(#gradient)" strokeWidth="2" strokeDasharray="30 300" className="animate-spin-slow" style={{ transformOrigin: 'center' }} />
+             
+             <div className="p-16 flex items-center justify-center bg-white/20 min-h-[500px] relative">
+                {/* SVG Decorativo de fondo */}
+                <div className="absolute inset-0 bg-gradient-to-b from-transparent to-slate-50/50 pointer-events-none" />
+                
+                <div className="relative w-full h-full flex items-center justify-center z-10">
+                    <svg className="w-full h-full max-w-[600px] absolute" viewBox="0 0 600 400" style={{ overflow: 'visible' }}>
+                        <ellipse cx="300" cy="200" rx="250" ry="120" fill="none" stroke="rgba(15, 23, 42, 0.05)" strokeWidth="1" />
+                        <ellipse cx="300" cy="200" rx="250" ry="120" fill="none" stroke="url(#gradient)" strokeWidth="2" strokeDasharray="10 10" className="animate-spin-slow" style={{ transformOrigin: '300px 200px' }} />
                         <defs>
                             <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                                <stop offset="0%" stopColor="#0891b2" />
-                                <stop offset="100%" stopColor="#2563eb" />
+                                <stop offset="0%" stopColor="#0891b2" stopOpacity="0.2"/>
+                                <stop offset="50%" stopColor="#0891b2" stopOpacity="1"/>
+                                <stop offset="100%" stopColor="#2563eb" stopOpacity="0.2"/>
                             </linearGradient>
                         </defs>
                     </svg>
                     
-                    {/* Nodos con glassmorphism y efecto 3D */}
+                    {/* Nodos flotantes 3D */}
                     {[
-                      { Icon: Search, position: 'left-[15%] top-[30%]' },
-                      { Icon: UserCheck, position: 'left-1/2 top-[20%] -translate-x-1/2' },
-                      { Icon: FileText, position: 'right-[15%] top-[30%]' },
-                      { Icon: ShieldCheck, position: 'right-[15%] bottom-[30%]' },
-                      { Icon: Briefcase, position: 'left-1/2 bottom-[20%] -translate-x-1/2' },
-                      { Icon: TrendingUp, position: 'left-[15%] bottom-[30%]' },
+                      { Icon: Search, position: 'left-[10%] top-[25%]' },
+                      { Icon: UserCheck, position: 'left-1/2 top-[10%] -translate-x-1/2' },
+                      { Icon: FileText, position: 'right-[10%] top-[25%]' },
+                      { Icon: ShieldCheck, position: 'right-[10%] bottom-[25%]' },
+                      { Icon: Briefcase, position: 'left-1/2 bottom-[10%] -translate-x-1/2' },
+                      { Icon: TrendingUp, position: 'left-[10%] bottom-[25%]' },
                     ].map(({ Icon, position }, idx) => (
                       <div 
                         key={idx}
-                        className={`absolute ${position} w-16 h-16 bg-white/60 backdrop-blur-xl border-2 border-white/80 shadow-[0_8px_32px_rgba(0,0,0,0.08),inset_0_1px_0_rgba(255,255,255,0.9),0_0_0_4px_rgba(79,70,229,0.1)] rounded-full flex items-center justify-center text-slate-900 hover:shadow-[0_12px_40px_rgba(79,70,229,0.2),inset_0_1px_0_rgba(255,255,255,1),0_0_0_6px_rgba(79,70,229,0.2)] hover:scale-110 transition-all duration-500 cursor-pointer`}
-                        style={{ transform: 'perspective(1000px)' }}
-                        onMouseMove={(e) => {
-                          const rect = e.currentTarget.getBoundingClientRect();
-                          const x = e.clientX - rect.left;
-                          const y = e.clientY - rect.top;
-                          const centerX = rect.width / 2;
-                          const centerY = rect.height / 2;
-                          const rotateX = (y - centerY) / 5;
-                          const rotateY = (centerX - x) / 5;
-                          e.currentTarget.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.1)`;
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = 'perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1)';
-                        }}
+                        className={`absolute ${position} w-16 h-16 ${LIQUID_GLASS} flex items-center justify-center text-slate-700 hover:text-cyan-600 hover:scale-110 transition-all duration-500 cursor-pointer shadow-lg`}
                       >
                         <Icon size={24} />
                       </div>
                     ))}
                     
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center bg-white/80 backdrop-blur-xl p-10 rounded-full shadow-[0_20px_60px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.9)] border border-white/60 z-20 w-48 h-48 flex flex-col justify-center">
-                      <div className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-1">Eficacia</div>
-                      <div className="text-3xl font-black text-slate-900">TOTAL</div>
+                    {/* Centro Glass */}
+                    <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-center p-10 w-48 h-48 flex flex-col justify-center items-center ${LIQUID_GLASS} shadow-[0_20px_50px_rgba(0,0,0,0.1)] z-20`}>
+                      <div className="text-xs font-bold uppercase tracking-widest text-cyan-600 mb-2">Eficacia</div>
+                      <div className="text-3xl font-black text-slate-900 tracking-tight">TOTAL</div>
                     </div>
                 </div>
              </div>
@@ -465,44 +442,42 @@ export default function HumanisApp() {
             <section className="relative min-h-[95vh] flex items-center overflow-hidden bg-white">
                 <ParticleRing />
                 
-                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-slate-50/30 via-white/50 to-white pointer-events-none z-0" />
+                <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-b from-slate-50/50 via-white/80 to-white pointer-events-none z-0" />
 
                 <div 
                     className={`container mx-auto px-6 grid lg:grid-cols-2 gap-24 items-center relative z-10 transition-all duration-1000 ease-out transform ${isLoaded ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-10'}`}
                 >
-                    {/* Columna de Imagen con borde de luz */}
+                    {/* Columna de Imagen con borde de luz y Liquid Glass */}
                     <div className="relative order-2 lg:order-1 group perspective-1000">
-                        <div className="absolute -inset-4 bg-gradient-to-tr from-cyan-200/30 to-slate-200/30 rounded-[3rem] blur-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                         
-                        <div className="relative z-10 rounded-[2.5rem] overflow-hidden shadow-2xl border-2 border-white/80 bg-white transform transition-transform duration-700 group-hover:rotate-1 group-hover:scale-[1.01]"
-                          style={{
-                            boxShadow: '0 0 0 1px rgba(6, 182, 212, 0.1), 0 20px 60px rgba(0,0,0,0.15), inset 0 0 20px rgba(6, 182, 212, 0.05)'
-                          }}
+                        {/* Task 2: Borde de luz sutil (Glow) detrás de la imagen */}
+                        <div className="absolute -inset-1 bg-gradient-to-tr from-cyan-400/30 to-purple-400/30 rounded-[2.6rem] blur-xl opacity-70 group-hover:opacity-100 transition-opacity duration-1000" />
+                        
+                        <div className={`relative z-10 rounded-[2.5rem] overflow-hidden bg-white transform transition-transform duration-700 group-hover:rotate-1 group-hover:scale-[1.01] shadow-2xl border border-white/60`}
                         >
                             <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1632&q=80" alt="Corporate" className="w-full h-auto object-cover grayscale-[10%] group-hover:grayscale-0 transition-all duration-700" />
                         </div>
 
-                        {/* Badge flotante con glassmorphism */}
-                        <div className="absolute -bottom-10 -right-10 bg-white/60 backdrop-blur-2xl p-8 rounded-[2rem] shadow-[0_30px_60px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.9)] border-2 border-white/80 z-30 animate-float">
-                            <div className="flex items-center gap-5">
-                                <div className="w-14 h-14 bg-slate-900 rounded-full flex items-center justify-center text-white">
-                                    <TrendingUp size={28} />
-                                </div>
-                                <div>
-                                    <div className="text-4xl font-black text-slate-900">98%</div>
-                                    <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Retención</div>
-                                </div>
+                        {/* Badge flotante con Liquid Glass Mejorado (Task 1) */}
+                        <div className={`absolute -bottom-10 -right-10 ${LIQUID_GLASS} p-8 z-30 animate-float flex items-center gap-5 max-w-xs`}>
+                            <div className="w-14 h-14 bg-slate-900 rounded-full flex items-center justify-center text-white shadow-lg shadow-slate-900/30">
+                                <TrendingUp size={28} />
+                            </div>
+                            <div>
+                                <div className="text-4xl font-black text-slate-900">98%</div>
+                                <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mt-1">Retención</div>
                             </div>
                         </div>
                     </div>
 
                     {/* Columna de Texto con palabras rotativas */}
                     <div className="relative z-10 order-1 lg:order-2">
-                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white border border-slate-200 text-slate-900 text-[11px] font-bold uppercase tracking-widest mb-10 shadow-sm">
+                        <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/80 backdrop-blur border border-slate-200 text-slate-900 text-[11px] font-bold uppercase tracking-widest mb-10 shadow-sm">
                             <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse" />
                             Capital Humano de Nueva Generación
                         </div>
                         
+                        {/* Task 3: Talento + 5 palabras rotando */}
                         <h1 className="text-7xl lg:text-8xl font-black text-slate-900 mb-10 leading-[0.9] tracking-tighter">
                             Talento <br/>
                             <RotatingText />
@@ -516,9 +491,13 @@ export default function HumanisApp() {
                             <ModernButton onClick={() => navigateTo('empresas')}>
                                 Soy Empresa
                             </ModernButton>
-                            <ModernButton onClick={() => navigateTo('candidatos')} secondary>
+                            {/* CTA tipo "Glass" visualmente distinto */}
+                            <button 
+                                onClick={() => navigateTo('candidatos')}
+                                className="px-8 py-4 rounded-full font-bold text-sm tracking-widest uppercase transition-all duration-500 border border-slate-200 bg-white/40 backdrop-blur-md text-slate-700 hover:bg-white hover:text-slate-900 hover:shadow-lg hover:-translate-y-1"
+                            >
                                 Soy Candidato
-                            </ModernButton>
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -530,8 +509,8 @@ export default function HumanisApp() {
             <ServicesSection />
             
             {(currentPage === 'inicio' || currentPage === 'home') && (
-            <section className="bg-white relative overflow-hidden">
-                <div className="text-center pt-32 pb-16">
+            <section className="bg-slate-50/50 relative overflow-hidden">
+                <div className="text-center pt-32 pb-16 relative z-10">
                     <h2 className="text-5xl md:text-6xl font-black text-slate-900 tracking-tighter mb-6">Ruta de Evolución</h2>
                     <p className="text-slate-500 text-xl max-w-2xl mx-auto font-light">Nuestro proceso integral paso a paso, diseñado para la perfección.</p>
                 </div>
@@ -558,20 +537,12 @@ export default function HumanisApp() {
       </div>
 
       <style jsx>{`
-        @keyframes infinite-scroll {
-          0% { transform: translateX(0); }
-          100% { transform: translateX(calc(-256px * 7)); }
-        }
-        .animate-infinite-scroll {
-          animation: infinite-scroll 40s linear infinite;
-          width: calc(256px * 21);
-        }
         @keyframes float {
           0%, 100% { transform: translateY(0px); }
           50% { transform: translateY(-20px); }
         }
         .animate-float {
-          animation: float 3s ease-in-out infinite;
+          animation: float 6s ease-in-out infinite;
         }
         @keyframes spin-slow {
           from { transform: rotate(0deg); }
