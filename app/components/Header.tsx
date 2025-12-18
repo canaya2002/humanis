@@ -40,6 +40,7 @@ export default function Header({ showHeader, setShowContact }: HeaderProps) {
 
   useEffect(() => {
     const handleScroll = () => {
+      // Mantenemos esta variable solo para redimensionar el LOGO, no el fondo
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
@@ -56,14 +57,14 @@ export default function Header({ showHeader, setShowContact }: HeaderProps) {
         className={`
           fixed top-0 left-0 right-0 z-50 
           transition-all duration-500 ease-in-out
-          ${scrolled ? 'bg-white/5 backdrop-blur-sm' : 'bg-transparent'}
-          pt-0
+          translate-y-0 opacity-100
+          bg-transparent 
         `}
       >
         <div className="container mx-auto px-6">
           <div className="flex items-start justify-between relative">
             
-            {/* 1. LOGO GIGANTE */}
+            {/* 1. LOGO - Se redimensiona, pero el fondo sigue transparente */}
             <Link href="/" className="relative z-50 flex-shrink-0 group block mt-0 pt-0">
                <img 
                  src="/humanislogo.png" 
@@ -71,27 +72,28 @@ export default function Header({ showHeader, setShowContact }: HeaderProps) {
                  className={`
                    w-auto object-contain object-left-top drop-shadow-2xl transition-all duration-500
                    ${scrolled 
-                      ? 'h-20 md:h-28 lg:h-36 -mt-2' 
-                      : 'h-28 md:h-36 lg:h-48 -mt-4 lg:-mt-6'} 
+                     ? 'h-16 md:h-20 -mt-1' 
+                     : 'h-24 md:h-32 lg:h-40 -mt-2 lg:-mt-4'} 
                  `}
                />
             </Link>
 
-            {/* 2. MENÚ CENTRAL - Centrado */}
+            {/* 2. MENÚ CENTRAL - Este mantiene su "cápsula" visual para que se lea */}
             <nav 
               className={`
                 hidden lg:flex items-center gap-2 px-4 rounded-full transition-all duration-500 absolute left-1/2 -translate-x-1/2
                 ${ALIGNMENT_CLASSES} ${ELEMENT_PADDING}
               `}
               style={{
-                  background: 'rgba(255, 255, 255, 0.7)',
-                  backdropFilter: 'blur(30px)',
-                  WebkitBackdropFilter: 'blur(30px)',
-                  boxShadow: `
-                    0 20px 40px -10px rgba(0, 0, 0, 0.15),
-                    0 0 0 1px rgba(255, 255, 255, 0.6),
-                    inset 0 1px 0 rgba(255, 255, 255, 0.9)
-                  `,
+                // Fondo de la cápsula del menú: Sutil blanco transparente
+                background: scrolled ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)', 
+                backdropFilter: 'blur(30px)',
+                WebkitBackdropFilter: 'blur(30px)',
+                boxShadow: `
+                  0 20px 40px -10px rgba(0, 0, 0, 0.05),
+                  0 0 0 1px rgba(255, 255, 255, 0.3),
+                  inset 0 1px 0 rgba(255, 255, 255, 0.5)
+                `,
               }}
             >
               {navItems.map((item) => (
@@ -103,7 +105,7 @@ export default function Header({ showHeader, setShowContact }: HeaderProps) {
                 >
                   <Link 
                     href={item.href}
-                    className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold text-slate-800 transition-all duration-300 hover:bg-white hover:shadow-lg active:scale-95"
+                    className="flex items-center gap-1.5 px-5 py-2 rounded-full text-sm font-bold text-slate-800 transition-all duration-300 hover:bg-white/80 hover:shadow-lg active:scale-95"
                   >
                     {item.label}
                     {item.submenu && (
@@ -143,7 +145,7 @@ export default function Header({ showHeader, setShowContact }: HeaderProps) {
               ))}
             </nav>
             
-            {/* 3. BOTÓN CTA - Alineado perfectamente */}
+            {/* 3. BOTÓN CTA */}
             <div className={`flex items-center gap-4 transition-all duration-500 ${ALIGNMENT_CLASSES}`}>
               <button 
                   onClick={() => setShowContact && setShowContact(true)}
