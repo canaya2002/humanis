@@ -34,13 +34,9 @@ export default function Footer() {
   };
 
   return (
+    // Fondo bg-white puro, sin decoraciones extrañas
     <footer className="relative bg-white border-t border-slate-100 overflow-hidden font-sans pt-24 pb-12">
       
-      {/* --- FONDO ATMOSFÉRICO --- */}
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-white to-white pointer-events-none z-0" />
-      {/* Luz cenital decorativa */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-64 bg-cyan-100/30 blur-[120px] pointer-events-none rounded-full" />
-
       <div className="container mx-auto px-6 relative z-10 flex flex-col items-center">
         
         {/* 1. LOGO MASIVO */}
@@ -50,8 +46,8 @@ export default function Footer() {
           viewport={{ once: true }}
           className="mb-12 group relative"
         >
-            {/* Glow detrás del logo */}
-            <div className="absolute -inset-10 bg-gradient-to-tr from-cyan-200/20 to-blue-200/20 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+            {/* Glow sutil SOLO al hacer hover en el logo */}
+            <div className="absolute -inset-10 bg-gradient-to-tr from-cyan-100/50 to-blue-100/50 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
             
             <Link href="/">
               <img 
