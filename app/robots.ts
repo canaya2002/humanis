@@ -5,7 +5,7 @@ export default function robots(): MetadataRoute.Robots {
     rules: {
       userAgent: '*',
       allow: '/',
-      disallow: ['/private/', '/admin/'], // Bloquea lo que no quieras que Google vea
+      disallow: ['/private/', '/admin/', '/api/'], // Buenas prácticas de seguridad SEO
     },
     sitemap: 'https://www.humanis.com.mx/sitemap.xml',
   };

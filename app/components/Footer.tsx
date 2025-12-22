@@ -4,9 +4,42 @@ import React from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { 
-  Facebook, Twitter, Instagram, Linkedin, 
+  Facebook, Instagram, Linkedin, 
   ArrowUp, MapPin, Mail, Phone 
 } from 'lucide-react';
+// Importamos un ícono SVG personalizado para TikTok ya que Lucide a veces no lo incluye por defecto o puedes usar el de Lucide si está disponible en tu versión. 
+// Si no tienes el icono de Tiktok en tu versión de Lucide, aquí uso un SVG simple inline o el de la librería si existe.
+// Para asegurar compatibilidad, usaré un SVG inline para TikTok si es necesario, pero aquí asumo que puedes usar un componente o texto.
+// Nota: Lucide React v0.4+ suele tener 'Twitter' o 'X', pero TikTok no siempre. 
+// Usaré un icono genérico de video o texto si no está, pero asumo que tienes la librería actualizada.
+// Si prefieres usar FontAwesome u otra, avísame. Aquí usaré el texto "TikTok" o un placeholder si falla el import, 
+// pero para mantener el estilo consistente, aquí está el array con tus links reales.
+
+// 1. TUS REDES SOCIALES REALES
+const socialLinks = [
+  { 
+    name: 'Facebook', 
+    href: 'https://www.facebook.com/people/Humanis/61576232000413/', 
+    icon: Facebook 
+  },
+  { 
+    name: 'Instagram', 
+    href: 'https://www.instagram.com/humanis.oficial/', 
+    icon: Instagram 
+  },
+  { 
+    name: 'LinkedIn', 
+    href: 'https://www.linkedin.com/company/humanismx/?viewAsMember=true', 
+    icon: Linkedin 
+  },
+  { 
+    name: 'TikTok', 
+    href: 'https://www.tiktok.com/@humanis_mx', 
+    // Si tu versión de Lucide no tiene TikTok, puedes importar otro ícono o crear uno custom.
+    // Aquí uso un SVG inline dentro del map para asegurar que se vea bien el logo de TikTok.
+    icon: null // Lo manejaremos en el render
+  },
+];
 
 // Enlaces principales (Navegación limpia y horizontal)
 const mainLinks = [
@@ -16,13 +49,6 @@ const mainLinks = [
   { name: 'Vacantes', href: '/vacantes' },
   { name: 'Casos de Éxito', href: '/casos-de-exito' },
   { name: 'Nosotros', href: '/nosotros' },
-];
-
-const socialLinks = [
-  { name: 'Facebook', href: '#', icon: Facebook },
-  { name: 'Instagram', href: '#', icon: Instagram },
-  { name: 'LinkedIn', href: '#', icon: Linkedin },
-  { name: 'Twitter', href: '#', icon: Twitter },
 ];
 
 export default function Footer() {
@@ -58,7 +84,7 @@ export default function Footer() {
             </Link>
         </motion.div>
 
-        {/* 2. REDES SOCIALES (FLOTANTES) */}
+        {/* 2. REDES SOCIALES (FLOTANTES CON TUS LINKS) */}
         <motion.div 
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -66,17 +92,40 @@ export default function Footer() {
           transition={{ delay: 0.1 }}
           className="flex gap-6 mb-16"
         >
-            {socialLinks.map((social, i) => {
+            {socialLinks.map((social) => {
+                // Renderizado condicional para el icono de TikTok si no viene de Lucide
+                const isTikTok = social.name === 'TikTok';
                 const Icon = social.icon;
+
                 return (
                     <motion.a
                         key={social.name}
                         href={social.href}
+                        target="_blank" // Abrir en nueva pestaña
+                        rel="noopener noreferrer" // Seguridad y SEO
                         whileHover={{ y: -5, scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         className="w-12 h-12 rounded-full bg-white border border-slate-200 text-slate-400 flex items-center justify-center hover:border-cyan-400 hover:text-cyan-600 hover:shadow-[0_10px_25px_-5px_rgba(6,182,212,0.3)] transition-all duration-300"
+                        aria-label={`Visitar Humanis en ${social.name}`} // Mejora de accesibilidad/SEO
                     >
-                        <Icon size={20} />
+                        {isTikTok ? (
+                            // Icono SVG Manual de TikTok para asegurar que se vea perfecto
+                            <svg 
+                                xmlns="http://www.w3.org/2000/svg" 
+                                width="20" 
+                                height="20" 
+                                viewBox="0 0 24 24" 
+                                fill="none" 
+                                stroke="currentColor" 
+                                strokeWidth="2" 
+                                strokeLinecap="round" 
+                                strokeLinejoin="round"
+                            >
+                                <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                            </svg>
+                        ) : (
+                            Icon && <Icon size={20} />
+                        )}
                     </motion.a>
                 )
             })}
@@ -107,14 +156,14 @@ export default function Footer() {
 
         {/* 4. INFORMACIÓN DE CONTACTO RÁPIDA */}
         <div className="flex flex-wrap justify-center gap-8 mb-10 text-slate-400 text-sm font-light">
-            <a href="tel:+525512345678" className="flex items-center gap-2 hover:text-cyan-600 transition-colors">
+            <a href="tel:+525544167974" className="flex items-center gap-2 hover:text-cyan-600 transition-colors">
                 <Phone size={14} />
-                <span>+52 55 1234 5678</span>
+                <span>+52 55 4416 7974</span>
             </a>
             <span className="hidden sm:block text-slate-200">|</span>
-            <a href="mailto:contacto@humanis.mx" className="flex items-center gap-2 hover:text-cyan-600 transition-colors">
+            <a href="mailto:contacto@humanis.com.mx" className="flex items-center gap-2 hover:text-cyan-600 transition-colors">
                 <Mail size={14} />
-                <span>contacto@humanis.mx</span>
+                <span>contacto@humanis.com.mx</span>
             </a>
             <span className="hidden sm:block text-slate-200">|</span>
             <div className="flex items-center gap-2">
@@ -133,7 +182,7 @@ export default function Footer() {
         >
             {/* Enlaces Legales */}
             <div className="flex gap-6">
-                <Link href="/legal" className="hover:text-slate-800 hover:underline decoration-cyan-400 underline-offset-4 transition-all">
+                <Link href="/privacidad" className="hover:text-slate-800 hover:underline decoration-cyan-400 underline-offset-4 transition-all">
                     Aviso de Privacidad
                 </Link>
                 <Link href="/legal" className="hover:text-slate-800 hover:underline decoration-cyan-400 underline-offset-4 transition-all">
