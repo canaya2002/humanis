@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
+import Link from 'next/link'; // <--- ESTO FALTABA
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronDown, Search, HelpCircle, FileText, Shield, 
@@ -10,7 +11,7 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import ContactIntro from '../components/ContactIntro';
 
-// --- 1. FONDO DE RED NEURONAL (Slate/Black - Consistente) ---
+// --- 1. FONDO DE RED NEURONAL ---
 const OrganicNetworkBackground = () => {
   const [nodes, setNodes] = useState<Array<{
     id: number;
@@ -127,7 +128,7 @@ const RotatingText = () => {
   );
 };
 
-// --- ANIMACIÓN DE FONDO N (SUTIL) ---
+// --- ANIMACIÓN DE N DESPLAZÁNDOSE (OPCIONAL) ---
 const SlidingNBackground = ({ inverted = false }: { inverted?: boolean }) => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-[0.02] mix-blend-multiply">
@@ -146,7 +147,7 @@ const SlidingNBackground = ({ inverted = false }: { inverted?: boolean }) => {
   );
 };
 
-// --- ACORDEÓN PREMIUM (MEJORADO) ---
+// --- ACORDEÓN PREMIUM ---
 interface FAQItemProps {
   question: string;
   answer: string;
@@ -160,14 +161,13 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
       initial={{ opacity: 0, y: 10 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
-      // Borde y sombra dinámicos para dar profundidad
       className={`bg-white rounded-2xl overflow-hidden transition-all duration-300 relative group ${
         isOpen 
           ? 'shadow-[0_15px_40px_-10px_rgba(0,0,0,0.1)] border-2 border-transparent bg-clip-padding' 
           : 'border-2 border-slate-100 hover:border-slate-200 hover:shadow-md'
       }`}
       style={isOpen ? {
-        backgroundImage: 'linear-gradient(white, white), linear-gradient(to right, #0891b2, #2563eb)', // Cyan to Blue gradient border
+        backgroundImage: 'linear-gradient(white, white), linear-gradient(to right, #0891b2, #2563eb)',
         backgroundOrigin: 'border-box',
         backgroundClip: 'content-box, border-box'
       } : {}}
@@ -210,7 +210,7 @@ const FAQItem = ({ question, answer, isOpen, onClick }: FAQItemProps) => {
   );
 };
 
-// --- DATOS FAQ EMPRESAS (COMPLETO) ---
+// --- DATOS FAQ ---
 const faqCategories = [
   {
     id: 1,
@@ -374,14 +374,13 @@ export default function FAQEmpresasPage() {
       <main className="relative">
         
         {/* --- HERO SECTION --- */}
-        {/* Fondo con degradado sutil para profundidad */}
         <section className="relative pt-40 pb-28 overflow-hidden bg-gradient-to-b from-white via-slate-50/30 to-white">
           <OrganicNetworkBackground />
           
           <div className="container mx-auto px-4 sm:px-6 max-w-7xl relative z-10">
             <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
               
-              {/* IMAGEN IZQUIERDA (LOCAL) con Glow */}
+              {/* IMAGEN IZQUIERDA (LOCAL) */}
               <motion.div 
                 initial={{ opacity: 0, x: -50, scale: 0.95 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -389,7 +388,6 @@ export default function FAQEmpresasPage() {
                 className="w-full lg:w-1/2 order-2 lg:order-1 relative"
               >
                 <div className="relative z-10">
-                  {/* Aura Glow */}
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[110%] h-[110%] bg-gradient-to-r from-cyan-400/30 to-blue-400/30 blur-[120px] rounded-full opacity-70 -z-10 mix-blend-multiply" />
                   <Image 
                     src="/faq/faq-empresas.png" // RUTA LOCAL
@@ -429,7 +427,6 @@ export default function FAQEmpresasPage() {
                   Navega por nuestras preguntas frecuentes o utiliza el buscador inteligente para encontrar lo que necesitas.
                 </p>
                 
-                {/* BUSCADOR MEJORADO */}
                 <div className="relative max-w-lg mx-auto lg:mx-0 group">
                   <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
                   <div className="relative bg-white rounded-2xl shadow-lg flex items-center p-2 border border-slate-100">
@@ -449,19 +446,16 @@ export default function FAQEmpresasPage() {
           </div>
         </section>
 
-        {/* --- CATEGORÍAS DE FAQ (CON FONDOS ALTERNOS) --- */}
+        {/* --- CATEGORÍAS (FONDO ALTERNO) --- */}
         {(searchQuery ? filteredCategories : faqCategories).map((category, categoryIndex) => {
-          // Alternar fondos para romper la monotonía
           const sectionBg = categoryIndex % 2 === 0 ? 'bg-white' : 'bg-slate-50/50';
-          const showSlidingN = categoryIndex % 2 !== 0; // Mostrar N en los fondos grises
+          const showSlidingN = categoryIndex % 2 !== 0;
           
           return (
             <section key={category.id} className={`relative py-24 sm:py-32 ${sectionBg} overflow-hidden border-t border-slate-100`}>
               {showSlidingN && <SlidingNBackground inverted={categoryIndex % 4 === 3} />}
               
               <div className="container mx-auto px-4 sm:px-6 max-w-5xl relative z-10">
-                
-                {/* TÍTULO DE CATEGORÍA */}
                 <motion.div 
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -481,7 +475,6 @@ export default function FAQEmpresasPage() {
                   </div>
                 </motion.div>
 
-                {/* PREGUNTAS (GRID) */}
                 <div className="grid grid-cols-1 gap-6">
                   {category.questions.map((question, questionIndex) => (
                     <FAQItem
