@@ -92,6 +92,12 @@ const RotatingText = () => {
 
 const InfiniteCarousel = () => {
   const logos = Array.from({ length: 8 }, (_, i) => `/socios/Partners_${i + 1}.png`);
+  // SEO: Nombres descriptivos para los logos de socios (simulados para el ejemplo)
+  const partnerAlts = [
+    "Empresa líder en Tecnología", "Corporativo Financiero", "Industria Automotriz", "Sector Retail",
+    "Logística y Transporte", "Servicios de Salud", "Consultoría Global", "Manufactura Avanzada"
+  ];
+
   return (
     <div className="relative pt-48 pb-32 bg-transparent overflow-hidden z-30 flex flex-col items-center gap-24">
       <div className="relative z-30 px-6 text-center">
@@ -105,11 +111,22 @@ const InfiniteCarousel = () => {
         <div className="absolute right-0 top-0 bottom-0 w-40 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none" />
         <div className="flex w-full overflow-hidden group">
             <div className="flex animate-infinite-scroll group-hover:[animation-play-state:paused] items-center [animation-duration:120s]">
-                {[...logos, ...logos, ...logos].map((logo, idx) => (
-                <div key={idx} className="flex-shrink-0 w-72 mx-8 flex items-center justify-center transition-all duration-500 hover:scale-105">
-                      <Image src={logo} alt={`Partner logo ${idx}`} width={220} height={112} className="max-w-[220px] max-h-28 object-contain opacity-100 drop-shadow-md" unoptimized />
-                </div>
-                ))}
+                {[...logos, ...logos, ...logos].map((logo, idx) => {
+                    // Calculamos el índice real para el texto alternativo
+                    const realIdx = idx % logos.length;
+                    return (
+                        <div key={idx} className="flex-shrink-0 w-72 mx-8 flex items-center justify-center transition-all duration-500 hover:scale-105">
+                            <Image 
+                                src={logo} 
+                                alt={`Cliente Humanis: ${partnerAlts[realIdx] || 'Socio Estratégico'}`} 
+                                width={220} 
+                                height={112} 
+                                className="max-w-[220px] max-h-28 object-contain opacity-100 drop-shadow-md" 
+                                unoptimized 
+                            />
+                        </div>
+                    );
+                })}
             </div>
         </div>
       </div>
@@ -304,15 +321,21 @@ const ServicesScrollSection = () => {
                 <div className="w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-6 lg:gap-20 h-full lg:h-auto">
                     <div className="service-img w-full lg:w-1/2 flex justify-center items-center order-1 lg:order-1 h-[30vh] md:h-[40vh] lg:h-auto relative">
                         <div className="absolute inset-0 bg-slate-200/50 blur-[80px] rounded-full scale-75 animate-pulse z-0" />
-                        <Image src={item.img} alt={item.title} width={600} height={600} className="relative z-10 object-contain w-auto h-full max-h-[250px] md:max-h-[350px] lg:max-h-[500px] drop-shadow-2xl hover:scale-105 transition-transform duration-700" />
+                        <Image 
+                            src={item.img} 
+                            alt={`Servicio Humanis: ${item.title} - ${item.desc}`} // SEO: ALT descriptivo
+                            width={600} 
+                            height={600} 
+                            className="relative z-10 object-contain w-auto h-full max-h-[250px] md:max-h-[350px] lg:max-h-[500px] drop-shadow-2xl hover:scale-105 transition-transform duration-700" 
+                        />
                     </div>
                     <div className="service-card w-full lg:w-1/2 order-2 lg:order-2 flex justify-center">
                         <div className="bg-white border border-slate-200 shadow-[0_30px_60px_-15px_rgba(0,0,0,0.1)] rounded-[2rem] p-6 md:p-10 lg:p-12 w-full relative">
                             <div className="flex items-center gap-3 mb-4">
                                 <span className="w-8 h-[2px] bg-slate-900 rounded-full"></span>
-                                <p className="text-slate-500 font-bold uppercase text-[10px] tracking-[0.3em]">{item.subtitle}</p>
+                                <h3 className="text-slate-500 font-bold uppercase text-[10px] tracking-[0.3em]">{item.subtitle}</h3>
                             </div>
-                            <h3 className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tighter leading-none">{item.title}</h3>
+                            <div className="text-3xl md:text-5xl font-black text-slate-900 mb-4 tracking-tighter leading-none">{item.title}</div>
                             <div className="mb-6 p-3 rounded-xl bg-slate-50 border border-slate-100 flex items-center gap-4">
                                 <div className="text-center px-2">
                                     <div className="text-2xl font-black text-slate-900">{item.statValue}</div>
@@ -343,9 +366,43 @@ export default function HumanisApp() {
   useEffect(() => { const timer = setTimeout(() => setIsLoaded(true), 10); return () => clearTimeout(timer); }, []);
   const navigateTo = (page: string) => { if (page === 'contacto') setShowContact(true); else if (page === 'empresas') router.push('/para-empresas'); else if (page === 'candidatos') router.push('/talento'); else router.push(`/${page}`); };
 
+  // --- SEO MASTERCLASS: SERVICE SCHEMA ---
+  // Definimos tus servicios principales para Google en formato JSON-LD
+  const serviceSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "itemListElement": SOLUTIONS_DATA.map((service, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "Service",
+        "name": service.title,
+        "description": service.desc,
+        "provider": {
+          "@type": "Organization",
+          "name": "Humanis",
+          "url": "https://www.humanis.com.mx"
+        },
+        "serviceType": service.subtitle,
+        "areaServed": "MX",
+        "offers": {
+          "@type": "Offer",
+          "description": service.features.join(", ")
+        }
+      }
+    }))
+  };
+
   return (
     <>
       <GlobalStyles />
+      
+      {/* INYECCIÓN DE SCHEMA: SERVICIOS */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(serviceSchema) }}
+      />
+
       <ContactIntro isOpen={showContact} onClose={() => setShowContact(false)} />
       <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-cyan-100 selection:text-cyan-900 overflow-x-hidden">
         <Header showHeader={true} setShowContact={setShowContact} />
@@ -361,7 +418,7 @@ export default function HumanisApp() {
                                  {/* Aura Glow */}
                                  <Image 
                                     src="/humanishero.png" 
-                                    alt="Humanis Hero" 
+                                    alt="Humanis - Plataforma de Gestión de Talento y Headhunting en México" 
                                     width={700} 
                                     height={700} 
                                     priority 

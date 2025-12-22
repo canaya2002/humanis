@@ -2,13 +2,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { 
   ShieldCheck, Heart, Target, Users, Zap, 
-  Briefcase, Scale, ArrowRight, Building2, 
-  Award, Globe2, CheckCircle2 
+  Briefcase, Scale, ArrowRight // <--- AQUÍ FALTABA ESTA IMPORTACIÓN
 } from 'lucide-react';
 
 import Header from '../components/Header';
@@ -19,7 +17,7 @@ if (typeof window !== 'undefined') {
   gsap.registerPlugin(ScrollTrigger);
 }
 
-// --- 1. FONDO DE RED NEURONAL (Slate/Black) ---
+// --- 1. FONDO DE RED NEURONAL (Consistencia de Marca) ---
 const OrganicNetworkBackground = () => {
   const [nodes, setNodes] = useState<Array<{
     id: number;
@@ -113,7 +111,7 @@ const ModernButton = ({ children, onClick, secondary = false, href, className = 
   const classes = `relative group overflow-hidden font-bold text-sm tracking-widest uppercase transition-all duration-400 ${secondary ? 'px-8 py-3 rounded-full' : 'px-8 py-3 rounded-full'} inline-flex items-center justify-center ${className}`;
   const styles = { boxShadow: '0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)' };
 
-  if (href) return <a href={href} className={classes} style={styles}>{content}</a>;
+  if (href) return <button onClick={() => window.location.href=href || '#'} className={classes} style={styles}>{content}</button>;
   return <button onClick={onClick} className={classes} style={styles}>{content}</button>;
 };
 
@@ -151,7 +149,6 @@ const stats = [
   { num: "32", label: "Estados Cubiertos" },
 ];
 
-// --- SECCIÓN: NUESTRAS LÍNEAS DE NEGOCIO ---
 const businessLines = [
     {
         title: "Agencia de Colocación",
@@ -185,8 +182,30 @@ export default function NosotrosPage() {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // --- SEO MASTERCLASS: ABOUT PAGE SCHEMA ---
+  const aboutSchema = {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "mainEntity": {
+      "@type": "Organization",
+      "name": "Humanis",
+      "legalName": "Humanis Capital Humano S.A.S. de C.V.", // Ejemplo
+      "description": "Somos ingenieros de capital humano. Transformamos la incertidumbre de la contratación en una ciencia precisa, legal y humana.",
+      "url": "https://www.humanis.com.mx",
+      "areaServed": "MX",
+      "knowsAbout": ["Headhunting", "Staffing", "Recursos Humanos", "Maquila de Nómina", "REPSE"]
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-cyan-100 selection:text-cyan-900">
+      
+      {/* INYECCIÓN DE SCHEMA: ABOUT PAGE */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(aboutSchema) }}
+      />
+
       <Header showHeader={showHeader} setShowContact={setShowContact} />
       <ContactIntro isOpen={showContact} onClose={() => setShowContact(false)} />
 
@@ -211,11 +230,11 @@ export default function NosotrosPage() {
                 </p>
             </div>
 
-            {/* --- IMAGEN HERO (RUTA LOCAL ACTUALIZADA) --- */}
+            {/* --- IMAGEN HERO --- */}
             <div className="mt-12 relative w-full h-[40vh] md:h-[60vh] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white">
                 <Image 
                     src="/nosotros/hero-team.png" // RUTA LOCAL
-                    alt="Equipo Humanis colaborando"
+                    alt="Equipo Humanis colaborando en oficinas"
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-1000"
                     priority
@@ -229,7 +248,7 @@ export default function NosotrosPage() {
           </div>
         </section>
 
-        {/* --- BLINDAJE INSTITUCIONAL (CHECKLIST) --- */}
+        {/* --- BLINDAJE INSTITUCIONAL --- */}
         <section className="py-24 bg-white relative">
             <div className="container mx-auto px-6 max-w-7xl">
                 <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -260,7 +279,7 @@ export default function NosotrosPage() {
                     <div className="relative h-[600px] rounded-[3rem] overflow-hidden shadow-2xl border border-slate-100">
                          <Image 
                             src="/nosotros/compliance.png" // RUTA LOCAL
-                            alt="Legalidad y Confianza"
+                            alt="Certificación de cumplimiento legal Humanis"
                             fill
                             className="object-cover"
                          />
@@ -306,7 +325,7 @@ export default function NosotrosPage() {
             </div>
         </section>
 
-        {/* --- GALERÍA BENTO (MUCHO IMÁGENES - RUTAS LOCALES) --- */}
+        {/* --- GALERÍA BENTO --- */}
         <section className="py-24 bg-white">
             <div className="container mx-auto px-6 max-w-7xl">
                 <div className="text-center mb-16">
@@ -315,34 +334,21 @@ export default function NosotrosPage() {
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]">
-                    {/* Imagen Grande 1 */}
                     <div className="col-span-2 row-span-2 relative rounded-3xl overflow-hidden group">
-                        <Image src="/nosotros/culture-1.png" alt="Team" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <Image src="/nosotros/culture-1.png" alt="Cultura Humanis - Trabajo en equipo" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
                         <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/10 transition-colors" />
                     </div>
-                    {/* Imagen Pequeña 2 */}
                     <div className="col-span-1 row-span-1 relative rounded-3xl overflow-hidden group">
-                        <Image src="/nosotros/culture-2.png" alt="Office" fill className="object-cover object-top transition-transform duration-700 group-hover:scale-110" />
+                        <Image src="/nosotros/culture-2.png" alt="Oficinas Humanis" fill className="object-cover object-top transition-transform duration-700 group-hover:scale-110" />
                     </div>
-                    {/* Imagen Pequeña 3 */}
                     <div className="col-span-1 row-span-2 relative rounded-3xl overflow-hidden group">
-                        <Image src="/nosotros/culture-3.png" alt="Meeting" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <Image src="/nosotros/culture-3.png" alt="Reunión Estratégica" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
                     </div>
-                    {/* Imagen Pequeña 4 */}
                     <div className="col-span-1 row-span-1 relative rounded-3xl overflow-hidden group">
-                        <Image src="/nosotros/culture-4.png" alt="Detail" fill className="object-cover object-top transition-transform duration-700 group-hover:scale-110" />
+                        <Image src="/nosotros/culture-4.png" alt="Detalle Arquitectónico" fill className="object-cover object-top transition-transform duration-700 group-hover:scale-110" />
                     </div>
-                    {/* Imagen Ancha 5 */}
                     <div className="col-span-2 row-span-1 relative rounded-3xl overflow-hidden group">
-                        <Image src="/nosotros/culture-5.png" alt="Work" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
-                    </div>
-                    {/* Imagen Pequeña 6 (Reutilizando para grid completo) */}
-                    <div className="col-span-1 row-span-1 relative rounded-3xl overflow-hidden group">
-                        <Image src="/nosotros/hero-team.png" alt="Hero" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
-                    </div>
-                    {/* Imagen Pequeña 7 (Reutilizando) */}
-                    <div className="col-span-1 row-span-1 relative rounded-3xl overflow-hidden group">
-                        <Image src="/nosotros/compliance.png" alt="Tech" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <Image src="/nosotros/culture-5.png" alt="Espacios de Trabajo" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
                     </div>
                 </div>
             </div>

@@ -222,9 +222,63 @@ export default function VacantesPage() {
     return matchesSearch && matchesLocation && matchesArea && matchesType;
   });
 
+  // --- SEO MASTERCLASS: JOB POSTING SCHEMA ---
+  // Generamos un script de datos estructurados para cada vacante
+  const jobSchemaScript = vacancies.map(job => {
+    // Extracción de salario simple (limpieza de "$", comas y tomar el primer número)
+    const rawSalary = job.salary.replace(/[^0-9-]/g, '');
+    const salaryLow = rawSalary.split('-')[0] || "0";
+    const salaryHigh = rawSalary.split('-')[1] || salaryLow;
+
+    return {
+      "@context": "https://schema.org",
+      "@type": "JobPosting",
+      "title": job.title,
+      "description": `<p>${job.description}</p><p><strong>Requisitos:</strong> ${job.requirements.join(', ')}</p>`,
+      "identifier": {
+        "@type": "PropertyValue",
+        "name": "Humanis",
+        "value": `VAC-${job.id}`
+      },
+      "datePosted": new Date().toISOString().split('T')[0], // En producción, usa la fecha real de la DB
+      "validThrough": "2025-12-31",
+      "employmentType": job.schedule.includes("Tiempo completo") ? "FULL_TIME" : "PART_TIME",
+      "hiringOrganization": {
+        "@type": "Organization",
+        "name": job.company,
+        "sameAs": "https://www.humanis.com.mx"
+      },
+      "jobLocation": {
+        "@type": "Place",
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": job.location,
+          "addressCountry": "MX"
+        }
+      },
+      "baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "MXN",
+        "value": {
+          "@type": "QuantitativeValue",
+          "minValue": parseInt(salaryLow, 10),
+          "maxValue": parseInt(salaryHigh, 10),
+          "unitText": "MONTH"
+        }
+      }
+    };
+  });
+
   return (
     <>
       <GlobalStyles />
+      
+      {/* INYECCIÓN DE SCHEMA: GOOGLE FOR JOBS */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jobSchemaScript) }}
+      />
+
       <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-cyan-100 selection:text-cyan-900">
         <Header showHeader={showHeader} />
 

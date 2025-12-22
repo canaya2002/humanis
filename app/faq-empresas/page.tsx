@@ -1,7 +1,7 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
-import Link from 'next/link'; // <--- ESTO FALTABA
+import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   ChevronDown, Search, HelpCircle, FileText, Shield, 
@@ -366,8 +366,32 @@ export default function FAQEmpresasPage() {
     )
   })).filter(category => category.questions.length > 0);
 
+  // --- SEO MASTERCLASS: JSON-LD SCHEMA ---
+  // Transformamos tus preguntas en el formato que Google ama (Schema.org)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqCategories.flatMap(category => 
+      category.questions.map(q => ({
+        "@type": "Question",
+        "name": q.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": q.a.replace(/\n/g, "<br/>") // Respetamos los saltos de línea visualmente para Google
+        }
+      }))
+    )
+  };
+
   return (
     <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-cyan-100 selection:text-cyan-900">
+      
+      {/* INYECCIÓN DE DATOS ESTRUCTURADOS (INVISIBLE PARA EL USUARIO, ORO PARA GOOGLE) */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <Header showHeader={showHeader} setShowContact={setShowContact} />
       <ContactIntro isOpen={showContact} onClose={() => setShowContact(false)} />
 

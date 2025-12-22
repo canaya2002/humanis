@@ -115,9 +115,33 @@ export default function FAQTalentoPage() {
       )
     : null;
 
+  // --- SEO MASTERCLASS: JSON-LD SCHEMA ---
+  // Transformamos las preguntas en formato legible para Google
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqCategories.flatMap(cat =>
+      cat.questions.map(q => ({
+        "@type": "Question",
+        "name": q.q,
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": q.a
+        }
+      }))
+    )
+  };
+
   return (
     <>
       <GlobalStyles />
+      
+      {/* INYECCIÓN DE DATOS ESTRUCTURADOS */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+
       <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-cyan-100 selection:text-cyan-900">
         <Header showHeader={showHeader} />
 
