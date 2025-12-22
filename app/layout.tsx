@@ -32,8 +32,8 @@ export const metadata: Metadata = {
   description: "Expertos en Capital Humano 4.0. Headhunting de ejecutivos, Staffing REPSE, Maquila de Nómina y Blindaje Jurídico Laboral. Garantía de talento y cumplimiento legal.",
   keywords: ["Headhunting México", "Agencia de Reclutamiento", "Staffing IT", "Maquila de Nómina", "Empresas REPSE", "Consultoría de RH", "Humanis"],
   authors: [{ name: "Humanis Team" }],
-  creator: "Humanis",
-  publisher: "Humanis",
+  creator: "Humanis México",
+  publisher: "Humanis México",
   robots: {
     index: true,
     follow: true,
