@@ -1,4 +1,4 @@
-import type { Metadata, Viewport } from "next"; // Importar Viewport
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
-  // 3. OPEN GRAPH (Para que se vea increíble en Facebook/LinkedIn/WhatsApp)
+  // 3. OPEN GRAPH (Para compartir en Facebook/LinkedIn/WhatsApp)
   openGraph: {
     title: "Humanis | La Evolución del Capital Humano",
     description: "Ingeniería de personal y blindaje jurídico. Accede al top 1% del talento en México con nuestra metodología de inteligencia de mercado.",
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: '/humanishero.png', // Asegúrate de tener una imagen optimizada para compartir (1200x630px idealmente)
+        url: '/humanishero.png', // Asegúrate de que esta imagen sea de 1200x630px
         width: 1200,
         height: 630,
         alt: 'Humanis - Soluciones de Capital Humano',
@@ -67,17 +67,11 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: "Humanis | Headhunting & Staffing",
     description: "Transformamos tu estrategia de talento con tecnología y cumplimiento legal.",
-    images: ['/humanishero.png'], // Misma imagen u otra específica
+    images: ['/humanishero.png'],
   },
-  // 5. ICONOS Y MANIFEST
-  icons: {
-    icon: '/favicon.ico',
-    shortcut: '/favicon.ico',
-    apple: '/apple-icon.png', // Crea este icono para iPhones
-  },
-  verification: {
-    google: 'TU_CODIGO_DE_VERIFICACION_DE_GOOGLE_SEARCH_CONSOLE', // ¡Pídeme cómo obtenerlo si no lo tienes!
-  },
+  
+  // NOTA: Se eliminó la sección 'icons' manual. 
+  // Next.js ahora buscará automáticamente 'icon.png', 'apple-icon.png' y 'favicon.ico' en tu carpeta /app.
 };
 
 export default function RootLayout({
@@ -86,7 +80,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // CAMBIO CRÍTICO: lang="es-MX" para decirle a Google que es español de México
+    // IDIOMA: es-MX definido para SEO local
     <html lang="es-MX" className="scroll-smooth">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
@@ -104,12 +98,12 @@ export default function RootLayout({
               "url": "https://www.humanis.com.mx",
               "logo": "https://www.humanis.com.mx/humanislogo.png",
               "sameAs": [
-                "https://www.linkedin.com/company/humanis-mx", // Pon tus redes reales
+                "https://www.linkedin.com/company/humanis-mx", 
                 "https://www.facebook.com/humanis-mx"
               ],
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+52-55-0000-0000", // TU TELÉFONO REAL
+                "telephone": "+52-55-0000-0000", // RECUERDA: Cambiar por tu teléfono real
                 "contactType": "customer service",
                 "areaServed": "MX",
                 "availableLanguage": "Spanish"
