@@ -15,8 +15,6 @@ const navItems = [
     submenu: [
       { label: 'Servicios', href: '/servicios' },
       { label: 'Proceso', href: '/proceso' },
-      { label: 'Industrias', href: '/industrias' },
-      { label: 'Precios', href: '/precios' },
       { label: 'FAQ Empresas', href: '/faq-empresas' },
     ]
   },
@@ -26,7 +24,6 @@ const navItems = [
     href: '/talento',
     submenu: [
       { label: 'Vacantes', href: '/vacantes' },
-      { label: 'Registro', href: '/registro-talento' },
       { label: 'FAQ Talento', href: '/faq-talento' },
     ]
   },

@@ -1,22 +1,98 @@
 'use client';
-import React, { useRef } from 'react';
-import Image from 'next/image'; 
-import { Search, Users, ShieldCheck, Zap, FileText, Award, CheckCircle2 } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import Image from 'next/image';
+import { Search, Users, ShieldCheck, Zap, FileText, Award, CheckCircle2, TrendingUp } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { motion } from 'framer-motion';
 
 if (typeof window !== 'undefined') { gsap.registerPlugin(ScrollTrigger); }
 
-const GLASS_CARD = "bg-white/60 backdrop-blur-2xl border border-white/60 shadow-[0_20px_40px_-10px_rgba(0,0,0,0.1),inset_0_1px_0_rgba(255,255,255,0.9)] rounded-[2.5rem]";
+// --- 1. FONDO DE RED NEURONAL (Sutil y Tecnológico) ---
+const OrganicNetworkBackground = () => {
+  const [nodes, setNodes] = useState<Array<{
+    id: number;
+    x: number; y: number;
+    xMove: number; yMove: number;
+    duration: number;
+    size: number;
+  }>>([]);
+  
+  useEffect(() => { 
+      const newNodes = Array.from({ length: 15 }, (_, i) => ({ 
+          id: i, 
+          x: Math.random() * 100, 
+          y: Math.random() * 100,
+          xMove: (Math.random() - 0.5) * 15, 
+          yMove: (Math.random() - 0.5) * 15, 
+          duration: 15 + Math.random() * 15, 
+          size: 3 + Math.random() * 3
+      })); 
+      setNodes(newNodes); 
+  }, []);
 
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 bg-white">
+      <div className="absolute inset-0 bg-white z-0" />
+      <svg className="absolute inset-0 w-full h-full z-0 overflow-visible">
+        <defs>
+            <linearGradient id="netGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#94a3b8" stopOpacity="0"/> 
+                <stop offset="50%" stopColor="#0f172a" stopOpacity="0.2"/> 
+                <stop offset="100%" stopColor="#94a3b8" stopOpacity="0"/>
+            </linearGradient>
+        </defs>
+        {nodes.map((node, i) => {
+            const target = nodes[(i + 1) % nodes.length]; 
+            if (i % 2 !== 0) return null; 
+            return (
+            <g key={`net-group-${node.id}`}> 
+                <motion.line 
+                    x1={`${node.x}%`} y1={`${node.y}%`} 
+                    x2={`${target.x}%`} y2={`${target.y}%`} 
+                    stroke="url(#netGradient)" 
+                    strokeWidth="1" 
+                    strokeLinecap="round"
+                    animate={{ 
+                        x1: [`${node.x}%`, `${node.x + node.xMove}%`, `${node.x}%`],
+                        y1: [`${node.y}%`, `${node.y + node.yMove}%`, `${node.y}%`],
+                        x2: [`${target.x}%`, `${target.x + target.xMove}%`, `${target.x}%`],
+                        y2: [`${target.y}%`, `${target.y + target.yMove}%`, `${target.y}%`],
+                    }} 
+                    transition={{ duration: Math.max(node.duration, target.duration), repeat: Infinity, ease: "easeInOut" }} 
+                /> 
+            </g> 
+            )
+        })}
+        {nodes.map((node) => (
+            <motion.circle 
+                key={`node-${node.id}`}
+                cx={`${node.x}%`} cy={`${node.y}%`} 
+                r={node.size} 
+                fill="#1e293b" 
+                opacity={0.08} 
+                animate={{ 
+                    cx: [`${node.x}%`, `${node.x + node.xMove}%`, `${node.x}%`],
+                    cy: [`${node.y}%`, `${node.y + node.yMove}%`, `${node.y}%`],
+                    opacity: [0.08, 0.15, 0.08] 
+                }} 
+                transition={{ duration: node.duration, repeat: Infinity, ease: "easeInOut" }} 
+            /> 
+        ))}
+      </svg>
+    </div>
+  );
+};
+
+// --- DATOS UNIFICADOS (Todos en Slate/Negro) ---
 const slidesData = [
-  { id: 1, step: "01", title: "Diagnóstico Profundo", subtitle: "Inmersión & Análisis", desc: "No solo recibimos una vacante; entendemos tu cultura. Realizamos una radiografía completa de tus necesidades técnicas y soft-skills.", features: ["Evaluación de Cultura", "Definición de Perfil Ideal", "Benchmark Salarial"], img: "/scrolls/Scroll_1.png", icon: <Search className="w-6 h-6 text-white" />, color: "cyan" },
-  { id: 2, step: "02", title: "Talent Mapping AI", subtitle: "Búsqueda Inteligente", desc: "Nuestra tecnología rastrea candidatos pasivos y activos en tiempo real, filtrando el top 1% que encaja con tu stack tecnológico.", features: ["Filtrado por IA", "Headhunting Directo", "Validación Técnica"], img: "/scrolls/Scroll_2.png", icon: <Users className="w-6 h-6 text-white" />, color: "blue" },
-  { id: 3, step: "03", title: "Blindaje Legal", subtitle: "Compliance REPSE", desc: "Cero riesgos. Estructuramos la contratación cumpliendo rigurosamente con la normativa laboral y fiscal vigente en México.", features: ["Auditoría Preventiva", "Contratos Blindados", "Deducibilidad 100%"], img: "/scrolls/Scroll_3.png", icon: <ShieldCheck className="w-6 h-6 text-white" />, color: "indigo" },
-  { id: 4, step: "04", title: "Onboarding Ágil", subtitle: "Integración Efectiva", desc: "Aceleramos la curva de aprendizaje. Facilitamos la integración del talento a tus flujos de trabajo desde el día uno.", features: ["Kit de Bienvenida", "Setup de Accesos", "Seguimiento Semanal"], img: "/scrolls/Scroll_4.png", icon: <Zap className="w-6 h-6 text-white" />, color: "violet" },
-  { id: 5, step: "05", title: "Gestión de Nómina", subtitle: "Precisión Financiera", desc: "Nos encargamos de la carga administrativa. Dispersión, cálculo de impuestos y prestaciones sin errores y a tiempo.", features: ["Timbrado CFDI", "Cálculo IMSS/INFONAVIT", "Reportes en Tiempo Real"], img: "/scrolls/Scroll_5.png", icon: <FileText className="w-6 h-6 text-white" />, color: "fuchsia" },
-  { id: 6, step: "06", title: "Evolución Continua", subtitle: "Optimización & ROI", desc: "No termina en la contratación. Monitoreamos el desempeño y la satisfacción para garantizar relaciones a largo plazo.", features: ["Evaluación de Desempeño", "Feedback 360°", "Plan de Carrera"], img: "/scrolls/Scroll_6.png", icon: <Award className="w-6 h-6 text-white" />, color: "rose" }
+  { id: 1, step: "01", title: "Diagnóstico", subtitle: "Inmersión & Cultura", desc: "No solo llenamos una vacante. Realizamos una inmersión profunda para entender el ADN exacto de tu equipo.", features: ["Cultura Fit", "Perfil Ideal", "Benchmark"], kpi: "Precisión", kpiValue: "99%", img: "/scrolls/Scroll_1.png", icon: <Search className="w-8 h-8" />, color: "slate" },
+  { id: 2, step: "02", title: "Talent AI", subtitle: "Búsqueda Activa", desc: "Algoritmos propios que rastrean y encuentran al 1% del talento pasivo que no busca trabajo.", features: ["IA Hunter", "Filtro Tech", "Validación"], kpi: "Candidatos", kpiValue: "Top 3", img: "/scrolls/Scroll_2.png", icon: <Users className="w-8 h-8" />, color: "slate" },
+  { id: 3, step: "03", title: "Blindaje", subtitle: "Legal & Compliance", desc: "Cero riesgos. Estructuramos cada contratación cumpliendo rigurosamente la normativa REPSE.", features: ["Contratos", "Auditoría", "Fiscal"], kpi: "Riesgo", kpiValue: "0%", img: "/scrolls/Scroll_3.png", icon: <ShieldCheck className="w-8 h-8" />, color: "slate" },
+  { id: 4, step: "04", title: "Onboarding", subtitle: "Integración Ágil", desc: "Gestionamos accesos y equipo desde el día uno para acelerar drásticamente la curva de productividad.", features: ["Bienvenida", "Accesos", "Equipo"], kpi: "Rapidez", kpiValue: "24h", img: "/scrolls/Scroll_4.png", icon: <Zap className="w-8 h-8" />, color: "slate" },
+  { id: 5, step: "05", title: "Nómina", subtitle: "Gestión Total", desc: "Precisión financiera absoluta. Cálculo de impuestos, dispersión y prestaciones sin un solo error.", features: ["Timbrado", "IMSS", "Pagos"], kpi: "Errores", kpiValue: "0%", img: "/scrolls/Scroll_5.png", icon: <FileText className="w-8 h-8" />, color: "slate" },
+  { id: 6, step: "06", title: "Evolución", subtitle: "Customer Success", desc: "Monitoreamos el desempeño y satisfacción mensualmente para garantizar relaciones a largo plazo.", features: ["Feedback", "Retención", "Growth"], kpi: "Retención", kpiValue: "+95%", img: "/scrolls/Scroll_6.png", icon: <Award className="w-8 h-8" />, color: "slate" }
 ];
 
 export default function ScrollPathSection() {
@@ -25,77 +101,133 @@ export default function ScrollPathSection() {
 
   useGSAP(() => {
     const slides = gsap.utils.toArray<HTMLElement>('.slide-panel', containerRef.current);
+    
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: triggerRef.current, start: "top top", end: `+=${slides.length * 100}%`, scrub: 1, pin: true, anticipatePin: 1, refreshPriority: 0, invalidateOnRefresh: true }
+      scrollTrigger: { 
+        trigger: triggerRef.current, 
+        start: "top top", 
+        // CAMBIO: 200% (antes 250%) para que sea un poco más rápido el cambio
+        end: `+=${slides.length * 200}%`, 
+        // CAMBIO: scrub 0.6 (antes 1) para que la animación siga más rápido al mouse
+        scrub: 0.6, 
+        pin: true, 
+        anticipatePin: 1,
+        invalidateOnRefresh: true 
+      }
     });
 
     slides.forEach((slide, i) => {
-      const content = slide.querySelector('.slide-content');
-      const imageWrapper = slide.querySelector('.slide-image-wrapper');
       if (i === 0) return;
-      tl.fromTo(slide, { yPercent: 100, opacity: 0 }, { yPercent: 0, opacity: 1, duration: 1, ease: "power1.inOut" });
-      if(content && imageWrapper) { tl.from([content, imageWrapper], { y: 50, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" }, "<0.3"); }
-      if (i > 0) { tl.to(slides[i-1], { scale: 0.9, opacity: 0, filter: "blur(15px)", yPercent: -10, duration: 1 }, "<"); }
+      
+      const card = slide.querySelector('.slide-card');
+      const elements = slide.querySelectorAll('.animate-item');
+      const img = slide.querySelector('.slide-img-container');
+
+      // Animaciones internas ligeramente aceleradas (duration 0.8 en lugar de 1)
+      tl.fromTo(slide, { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.8 }); 
+      
+      if(card && img) {
+         tl.from(card, { x: -50, opacity: 0, duration: 1, ease: "power3.out" }, "<");
+         tl.from(img, { x: 50, opacity: 0, scale: 0.9, duration: 1, ease: "power3.out" }, "<0.1");
+      }
+
+      if(elements.length > 0) {
+        tl.from(elements, { y: 20, opacity: 0, duration: 0.8, stagger: 0.1, ease: "back.out(1.7)" }, "<0.2");
+      }
+
+      if (i > 0) { 
+        tl.to(slides[i-1], { autoAlpha: 0, scale: 0.95, duration: 0.6 }, "<"); 
+      }
     });
   }, { scope: triggerRef });
 
   return (
-    <div ref={triggerRef} className="relative w-full h-screen bg-white overflow-hidden z-20">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-slate-50 via-white to-white pointer-events-none" />
-      <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] pointer-events-none" />
+    <div ref={triggerRef} className="relative w-full h-screen bg-white overflow-hidden z-20 font-sans">
       
-      {/* Indicadores */}
-      <div className="absolute right-8 top-1/2 -translate-y-1/2 z-50 hidden md:flex flex-col gap-6">
-        {slidesData.map((slide, i) => (
-          <div key={i} className="group flex items-center gap-4 cursor-default">
-             <span className="opacity-0 group-hover:opacity-100 transition-opacity text-[10px] font-bold uppercase tracking-widest text-slate-400 text-right w-24">{slide.title}</span>
-             <div className={`w-1.5 h-1.5 rounded-full transition-all duration-300 bg-slate-300 group-hover:bg-slate-900 group-hover:scale-150`} />
-          </div>
-        ))}
-      </div>
+      <OrganicNetworkBackground />
 
       <div ref={containerRef} className="relative w-full h-full">
-        {slidesData.map((slide, index) => (
-          <div key={slide.id} className="slide-panel absolute inset-0 w-full h-full flex items-center justify-center p-6 lg:p-12" style={{ zIndex: index + 1 }}>
-            <div className="w-full max-w-7xl mx-auto h-full flex flex-col lg:flex-row items-center justify-center gap-10 lg:gap-20">
-              
-              <div className="slide-content w-full lg:w-5/12 relative z-20 order-2 lg:order-1">
-                <div className={`${GLASS_CARD} p-8 md:p-12 relative overflow-hidden group hover:shadow-2xl transition-shadow duration-500`}>
-                    <div className="absolute inset-0 bg-gradient-to-tr from-white/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
-                    <div className="flex items-center justify-between mb-8">
-                        <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br from-${slide.color}-500 to-${slide.color}-600 flex items-center justify-center text-white shadow-lg shadow-${slide.color}-500/30`}>{slide.icon}</div>
-                        <span className="text-6xl font-black text-slate-200/50 select-none font-sans">{slide.step}</span>
-                    </div>
-                    <div className="relative z-10">
-                        <h4 className={`text-${slide.color}-600 font-bold uppercase text-xs tracking-[0.2em] mb-3`}>{slide.subtitle}</h4>
-                        <h2 className="text-3xl md:text-4xl font-black text-slate-900 mb-6 leading-[1.1] tracking-tight">{slide.title}</h2>
-                        <p className="text-slate-600 text-base md:text-lg leading-relaxed font-light mb-8">{slide.desc}</p>
-                        <ul className="space-y-3 pt-6 border-t border-slate-200/50">
-                            {slide.features.map((feat, i) => ( <li key={i} className="flex items-center gap-3 text-slate-700 text-sm font-semibold"><CheckCircle2 size={16} className={`text-${slide.color}-500`} />{feat}</li> ))}
-                        </ul>
-                    </div>
-                </div>
-              </div>
+        {slidesData.map((slide, index) => {
+          const isEven = index % 2 === 0;
+          
+          return (
+            <div key={slide.id} className="slide-panel absolute inset-0 w-full h-full flex items-center justify-center invisible">
+              <div className="w-full h-full pt-24 pb-8 px-4 md:px-8 lg:px-12 flex flex-col justify-center relative z-10">
+                 
+                 <div className={`w-full max-w-7xl mx-auto flex flex-col lg:flex-row items-center justify-center gap-8 lg:gap-24 h-full lg:h-auto ${!isEven ? 'lg:flex-row-reverse' : ''}`}>
+                    
+                    {/* --- TARJETA DE TEXTO --- */}
+                    <div className="w-full lg:w-1/2 flex justify-center order-2 lg:order-none">
+                        <div className={`slide-card bg-white border border-slate-200 rounded-[2.5rem] p-6 md:p-10 lg:p-12 w-full relative overflow-hidden group shadow-[0_40px_100px_-20px_rgba(0,0,0,0.2)] hover:shadow-[0_50px_110px_-15px_rgba(0,0,0,0.25)] transition-shadow duration-500`}>
+                            
+                            {/* Header */}
+                            <div className="flex items-start justify-between mb-6 lg:mb-8 animate-item">
+                                <div>
+                                    <span className={`inline-block px-3 py-1.5 rounded-full bg-slate-100 text-slate-800 text-xs font-black uppercase tracking-widest border border-slate-200 mb-3`}>
+                                        Paso {slide.step}
+                                    </span>
+                                    <h4 className="text-slate-400 font-bold text-sm tracking-widest uppercase">{slide.subtitle}</h4>
+                                </div>
+                                <div className={`w-14 h-14 lg:w-16 lg:h-16 rounded-2xl bg-gradient-to-br from-slate-50 to-slate-100 border border-slate-200 shadow-lg flex items-center justify-center text-slate-900`}>
+                                   {slide.icon}
+                                </div>
+                            </div>
 
-              <div className="slide-image-wrapper w-full lg:w-7/12 h-[40vh] lg:h-[70vh] relative flex items-center justify-center order-1 lg:order-2">
-                <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-${slide.color}-500/20 blur-[100px] rounded-full opacity-60 animate-pulse`} />
-                <div className="relative w-full h-full z-10 transition-transform duration-[3s] hover:scale-105">
-                     <Image 
-                        src={slide.img} 
-                        alt={slide.title}
-                        fill
-                        className="object-contain drop-shadow-[0_30px_60px_rgba(0,0,0,0.3)]"
-                        sizes="(max-width: 768px) 100vw, 60vw"
-                        quality={100} // CALIDAD MÁXIMA
-                        unoptimized // EVITAR COMPRESIÓN AGRESIVA SI ES PNG/TRANSPARENTE
-                        priority={index === 0}
-                     />
-                </div>
-              </div>
+                            {/* Título y Texto */}
+                            <h2 className={`animate-item text-4xl md:text-5xl lg:text-7xl font-black text-slate-900 mb-5 tracking-tighter leading-none`}>
+                                {slide.title}
+                            </h2>
 
+                            <p className="animate-item text-slate-600 text-lg lg:text-xl leading-relaxed mb-8 font-medium">
+                                {slide.desc}
+                            </p>
+
+                            {/* Features + KPI */}
+                            <div className="animate-item grid grid-cols-1 md:grid-cols-5 gap-4 pt-6 border-t border-slate-100">
+                                <div className="md:col-span-3 space-y-3">
+                                    <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block mb-1">Incluye:</span>
+                                    {slide.features.map((feat, f) => (
+                                        <div key={f} className="flex items-center gap-2.5 text-sm lg:text-base font-bold text-slate-700">
+                                            <CheckCircle2 size={18} className={`text-slate-900 flex-shrink-0`} />
+                                            {feat}
+                                        </div>
+                                    ))}
+                                </div>
+                                
+                                <div className={`md:col-span-2 bg-slate-50 rounded-2xl p-4 border border-slate-200 flex flex-col justify-center`}>
+                                    <span className={`text-[10px] font-black uppercase text-slate-500 mb-1 flex items-center gap-1`}>
+                                        <TrendingUp size={12} /> {slide.kpi}
+                                    </span>
+                                    <span className="text-4xl lg:text-5xl font-black text-slate-900 tracking-tight">{slide.kpiValue}</span>
+                                    <div className="w-full h-1.5 bg-slate-200 rounded-full mt-2 overflow-hidden">
+                                        <div className={`h-full bg-slate-800 w-[95%] rounded-full`} />
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    {/* --- IMAGEN --- */}
+                    <div className="slide-img-container w-full lg:w-1/2 flex items-center justify-center relative order-1 lg:order-none h-[30vh] lg:h-auto">
+                        <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[300px] h-[300px] lg:w-[550px] lg:h-[550px] bg-slate-200/50 blur-[90px] rounded-full animate-pulse`} />
+                        <div className="relative z-10 w-full flex justify-center perspective-1000">
+                           <Image 
+                              src={slide.img} 
+                              alt={slide.title}
+                              width={600} 
+                              height={600}
+                              className="object-contain w-auto h-auto max-h-[260px] md:max-h-[350px] lg:max-h-[550px] drop-shadow-2xl hover:scale-105 transition-transform duration-700"
+                              priority={index === 0}
+                           />
+                        </div>
+                    </div>
+
+                 </div>
+              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );

@@ -16,7 +16,6 @@ const mainLinks = [
   { name: 'Vacantes', href: '/vacantes' },
   { name: 'Casos de Éxito', href: '/casos-de-exito' },
   { name: 'Nosotros', href: '/nosotros' },
-  { name: 'Contacto', href: '/contacto' },
 ];
 
 const socialLinks = [

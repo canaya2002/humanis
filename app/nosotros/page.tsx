@@ -1,52 +1,184 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { 
-  Target, Heart, Shield, Users, Award, TrendingUp,
-  CheckCircle, ArrowRight, Calendar, MapPin, Building2
+  ShieldCheck, Heart, Target, Users, Zap, 
+  Briefcase, Scale, ArrowRight, Building2, 
+  Award, Globe2, CheckCircle2 
 } from 'lucide-react';
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import GlobalStyles from '../components/GlobalStyles';
+import ContactIntro from '../components/ContactIntro';
 
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+// --- 1. FONDO DE RED NEURONAL (Slate/Black) ---
+const OrganicNetworkBackground = () => {
+  const [nodes, setNodes] = useState<Array<{
+    id: number;
+    x: number; y: number;
+    xMove: number; yMove: number;
+    duration: number;
+    size: number;
+  }>>([]);
+  
+  useEffect(() => { 
+      const newNodes = Array.from({ length: 20 }, (_, i) => ({ 
+          id: i, 
+          x: Math.random() * 100, 
+          y: Math.random() * 100,
+          xMove: (Math.random() - 0.5) * 15, 
+          yMove: (Math.random() - 0.5) * 15, 
+          duration: 15 + Math.random() * 15, 
+          size: 2 + Math.random() * 3
+      })); 
+      setNodes(newNodes); 
+  }, []);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 bg-white">
+      <div className="absolute inset-0 bg-white z-0" />
+      <svg className="absolute inset-0 w-full h-full z-0 overflow-visible opacity-30">
+        <defs>
+            <linearGradient id="netGradientUs" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#94a3b8" stopOpacity="0"/> 
+                <stop offset="50%" stopColor="#0f172a" stopOpacity="0.2"/> 
+                <stop offset="100%" stopColor="#94a3b8" stopOpacity="0"/>
+            </linearGradient>
+        </defs>
+        {nodes.map((node, i) => {
+            const target = nodes[(i + 1) % nodes.length]; 
+            if (i % 2 !== 0) return null; 
+            return (
+            <g key={`net-group-us-${node.id}`}> 
+                <motion.line 
+                    x1={`${node.x}%`} y1={`${node.y}%`} 
+                    x2={`${target.x}%`} y2={`${target.y}%`} 
+                    stroke="url(#netGradientUs)" 
+                    strokeWidth="1" 
+                    strokeLinecap="round"
+                    animate={{ 
+                        x1: [`${node.x}%`, `${node.x + node.xMove}%`, `${node.x}%`],
+                        y1: [`${node.y}%`, `${node.y + node.yMove}%`, `${node.y}%`],
+                        x2: [`${target.x}%`, `${target.x + target.xMove}%`, `${target.x}%`],
+                        y2: [`${target.y}%`, `${target.y + target.yMove}%`, `${target.y}%`],
+                    }} 
+                    transition={{ duration: Math.max(node.duration, target.duration), repeat: Infinity, ease: "easeInOut" }} 
+                /> 
+            </g> 
+            )
+        })}
+        {nodes.map((node) => (
+            <motion.circle 
+                key={`node-us-${node.id}`}
+                cx={`${node.x}%`} cy={`${node.y}%`} 
+                r={node.size} 
+                fill="#1e293b" 
+                opacity={0.08} 
+                animate={{ 
+                    cx: [`${node.x}%`, `${node.x + node.xMove}%`, `${node.x}%`],
+                    cy: [`${node.y}%`, `${node.y + node.yMove}%`, `${node.y}%`],
+                    opacity: [0.08, 0.15, 0.08] 
+                }} 
+                transition={{ duration: node.duration, repeat: Infinity, ease: "easeInOut" }} 
+            /> 
+        ))}
+      </svg>
+    </div>
+  );
+};
+
+// --- COMPONENTES UI ---
+interface ModernButtonProps { children: React.ReactNode; onClick?: () => void; secondary?: boolean; href?: string; className?: string }
+const ModernButton = ({ children, onClick, secondary = false, href, className = "" }: ModernButtonProps) => {
+  const content = (
+    <>
+        <div className="absolute inset-0 z-0 backdrop-blur-[3px] overflow-hidden rounded-full" style={{ filter: 'blur(0.5px)', isolation: 'isolate' }} />
+        <div className={`absolute inset-0 z-[1] rounded-full ${secondary ? 'bg-white/40' : 'bg-gradient-to-br from-slate-800/60 via-slate-900/70 to-slate-950/60'}`}></div>
+        <div className="absolute inset-0 z-[2] overflow-hidden rounded-full" style={{ boxShadow: 'inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5)' }}></div>
+        <span className={`relative z-[3] flex items-center gap-3 ${secondary ? 'text-slate-900' : 'text-white'}`}>
+        {children}
+        {!secondary && <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform stroke-[3]" />}
+        </span>
+    </>
+  );
+
+  const classes = `relative group overflow-hidden font-bold text-sm tracking-widest uppercase transition-all duration-400 ${secondary ? 'px-8 py-3 rounded-full' : 'px-8 py-3 rounded-full'} inline-flex items-center justify-center ${className}`;
+  const styles = { boxShadow: '0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)' };
+
+  if (href) return <a href={href} className={classes} style={styles}>{content}</a>;
+  return <button onClick={onClick} className={classes} style={styles}>{content}</button>;
+};
+
+// --- TEXTO ROTATIVO ---
+const RotatingText = () => {
+  const words = ['INTEGRIDAD', 'TRANSPARENCIA', 'VELOCIDAD', 'EXCELENCIA', 'COMPROMISO'];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setCurrentIndex((prev) => (prev + 1) % words.length), 3000);
+    return () => clearInterval(interval);
+  }, [words.length]);
+  return (
+    <span className="relative inline-block min-w-[280px] md:min-w-[500px] text-left h-[1.2em] align-top overflow-visible -mb-2"> 
+      {words.map((word, idx) => (
+        <motion.span
+          key={idx} initial={false} animate={{ opacity: idx === currentIndex ? 1 : 0, y: idx === currentIndex ? 0 : idx === (currentIndex - 1 + words.length) % words.length ? -50 : 50, filter: idx === currentIndex ? 'blur(0px)' : 'blur(4px)' }} transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }} className="absolute left-0 top-0 w-full bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-cyan-600 to-slate-900 block px-1"
+        > {word} </motion.span>
+      ))}
+    </span>
+  );
+};
+
+// --- DATA ---
 const values = [
-  { icon: <Shield size={28} />, title: "Integridad", desc: "Operamos con transparencia y honestidad. Nunca cobramos a candidatos y siempre cumplimos lo que prometemos." },
-  { icon: <Heart size={28} />, title: "Compromiso", desc: "Nos involucramos profundamente en cada proceso. Tu éxito es nuestro éxito." },
-  { icon: <Target size={28} />, title: "Excelencia", desc: "Buscamos la mejora continua en cada servicio. No nos conformamos con lo bueno, buscamos lo mejor." },
-  { icon: <Users size={28} />, title: "Colaboración", desc: "Trabajamos como extensión de tu equipo. Somos partners, no proveedores." },
-];
-
-const differentiators = [
-  { title: "Proceso Transparente", desc: "Sabes exactamente qué esperar en cada etapa. Sin sorpresas, sin costos ocultos." },
-  { title: "Cobertura Nacional", desc: "Operamos en los 32 estados de México con presencia fuerte en las principales ciudades." },
-  { title: "Garantía Real", desc: "90 días de garantía de reemplazo. Si no funciona, lo resolvemos sin costo." },
-  { title: "Velocidad + Calidad", desc: "Primera terna en 5-10 días sin sacrificar el rigor de nuestro filtro." },
+  { icon: <ShieldCheck size={28} />, title: "Integridad Total", desc: "Transparencia absoluta. Nunca cobramos a candidatos y operamos bajo estricto cumplimiento legal." },
+  { icon: <Heart size={28} />, title: "Compromiso Real", desc: "No somos proveedores, somos partners. Nos involucramos en tu cultura como si fuera nuestra." },
+  { icon: <Target size={28} />, title: "Resultados", desc: "No vendemos promesas, vendemos contrataciones exitosas. Garantía de reemplazo de 90 días." },
+  { icon: <Users size={28} />, title: "Colaboración", desc: "Trabajamos como extensión de tu equipo de RH, alineados a tus objetivos de negocio." },
 ];
 
 const stats = [
-  { num: "2,500+", label: "Candidatos colocados" },
-  { num: "150+", label: "Empresas atendidas" },
-  { num: "95%", label: "Retención a 6 meses" },
-  { num: "32", label: "Estados con cobertura" },
+  { num: "2,500+", label: "Candidatos Colocados" },
+  { num: "150+", label: "Empresas Aliadas" },
+  { num: "96%", label: "Tasa de Éxito" },
+  { num: "32", label: "Estados Cubiertos" },
 ];
 
-const team = [
-  { name: "Director General", role: "Fundador", desc: "15+ años en RH y reclutamiento ejecutivo." },
-  { name: "Directora de Operaciones", role: "Co-fundadora", desc: "Especialista en procesos y cumplimiento." },
-  { name: "Líder de Reclutamiento", role: "Head of Talent", desc: "10+ años en headhunting de TI." },
+// --- SECCIÓN: NUESTRAS LÍNEAS DE NEGOCIO ---
+const businessLines = [
+    {
+        title: "Agencia de Colocación",
+        subtitle: "Talento Operativo & Staffing",
+        desc: "Especializados en la cobertura masiva y rápida para sectores de alta rotación como Restaurantes, Retail y Servicios. Nos encargamos del reclutamiento, tú contratas directo.",
+        features: ["Reclutamiento Express (72h)", "Garantía de Reemplazo", "Validación de Referencias"],
+        icon: <Zap className="text-white" size={32} />,
+        gradient: "from-slate-900 to-slate-800"
+    },
+    {
+        title: "Proyectos Especializados",
+        subtitle: "Consultoría & Freelance",
+        desc: "Acceso a expertos por proyecto sin aumentar tu carga patronal fija. Ideal para Marketing, TI, Diseño y Consultoría Estratégica bajo esquema de entregables.",
+        features: ["Contratos por Proyecto", "Sin Carga Social", "Talento Senior Verificado"],
+        icon: <Briefcase className="text-white" size={32} />,
+        gradient: "from-cyan-600 to-blue-600"
+    }
 ];
 
 export default function NosotrosPage() {
   const [showHeader, setShowHeader] = useState(true);
+  const [showContact, setShowContact] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY.current && window.scrollY > 80) {
-        setShowHeader(false);
-      } else {
-        setShowHeader(true);
-      }
+      if (window.scrollY > lastScrollY.current && window.scrollY > 80) { setShowHeader(false); } else { setShowHeader(true); }
       lastScrollY.current = window.scrollY;
     };
     window.addEventListener('scroll', handleScroll);
@@ -54,199 +186,213 @@ export default function NosotrosPage() {
   }, []);
 
   return (
-    <>
-      <GlobalStyles />
-      <div className="min-h-screen bg-white text-slate-900">
-        <Header showHeader={showHeader} />
+    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-cyan-100 selection:text-cyan-900">
+      <Header showHeader={showHeader} setShowContact={setShowContact} />
+      <ContactIntro isOpen={showContact} onClose={() => setShowContact(false)} />
 
-        <main className="pt-28">
-          <section className="relative pt-20 pb-24 bg-gradient-to-br from-slate-50 to-white overflow-hidden">
-            <div className="container mx-auto px-6 max-w-7xl">
-              <div className="grid lg:grid-cols-2 gap-16 items-center">
-                <div className="opacity-0 animate-fadeInUp">
-                  <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-6 border border-indigo-200">Sobre Humanis</span>
-                  <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight">
-                    Conectamos <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Talento</span> con <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">Oportunidad</span>
-                  </h1>
-                  <p className="text-xl text-slate-600 mb-8 leading-relaxed">
-                    Somos una firma de reclutamiento mexicana enfocada en resolver el problema de cobertura de vacantes con velocidad, calidad y cumplimiento total.
-                  </p>
-                  <Link href="/contacto" className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
-                    <Calendar size={20} />
-                    Conócenos
-                  </Link>
+      <main className="relative pt-0">
+        
+        {/* --- HERO SECTION --- */}
+        <section className="relative min-h-[90vh] flex flex-col justify-center overflow-hidden">
+          <OrganicNetworkBackground />
+          
+          <div className="container mx-auto px-6 lg:px-12 relative z-10 pt-32 pb-20">
+            <div className="max-w-4xl mx-auto text-center">
+                <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-800 text-[11px] font-bold uppercase tracking-widest mb-8 shadow-sm">
+                    Sobre Humanis
                 </div>
-                <div className="relative opacity-0 animate-fadeInRight">
-                  <img 
-                    src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
-                    alt="Equipo Humanis"
-                    className="rounded-3xl w-full h-[450px] object-cover shadow-2xl"
-                  />
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <section className="py-24 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-            <div className="container mx-auto px-6 max-w-7xl">
-              <div className="max-w-4xl mx-auto text-center">
-                <h2 className="text-4xl font-bold mb-8">Nuestra Misión</h2>
-                <p className="text-2xl text-slate-300 leading-relaxed mb-12">
-                  Transformar la forma en que las empresas mexicanas encuentran talento, eliminando la fricción y los riesgos del proceso de reclutamiento.
+                
+                <h1 className="text-5xl md:text-7xl font-black mb-8 leading-[0.95] tracking-tighter text-slate-900">
+                  Impulsados por <br/> <RotatingText />
+                </h1>
+                
+                <p className="text-lg md:text-2xl text-slate-600 mb-10 leading-relaxed font-light max-w-2xl mx-auto">
+                  Somos ingenieros de capital humano. Transformamos la incertidumbre de la contratación en una ciencia precisa, legal y humana.
                 </p>
-                <div className="grid md:grid-cols-4 gap-8">
-                  {stats.map((stat, idx) => (
-                    <div key={idx} className="text-center opacity-0 animate-fadeInUp" style={{ animationDelay: `${idx * 0.1}s` }}>
-                      <p className="text-4xl font-bold text-white mb-2">{stat.num}</p>
-                      <p className="text-slate-400">{stat.label}</p>
-                    </div>
-                  ))}
+            </div>
+
+            {/* --- IMAGEN HERO (RUTA LOCAL ACTUALIZADA) --- */}
+            <div className="mt-12 relative w-full h-[40vh] md:h-[60vh] rounded-[3rem] overflow-hidden shadow-2xl border-4 border-white">
+                <Image 
+                    src="/nosotros/hero-team.png" // RUTA LOCAL
+                    alt="Equipo Humanis colaborando"
+                    fill
+                    className="object-cover hover:scale-105 transition-transform duration-1000"
+                    priority
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-900/60 to-transparent" />
+                <div className="absolute bottom-0 left-0 p-8 md:p-12 text-white">
+                    <h3 className="text-2xl font-bold mb-2">Pasión por el Talento</h3>
+                    <p className="text-slate-200">Más que reclutadores, somos estrategas de crecimiento.</p>
                 </div>
-              </div>
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section className="py-24 bg-white">
+        {/* --- BLINDAJE INSTITUCIONAL (CHECKLIST) --- */}
+        <section className="py-24 bg-white relative">
             <div className="container mx-auto px-6 max-w-7xl">
-              <div className="text-center mb-16">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-4 border border-indigo-200">Principios</span>
-                <h2 className="text-4xl font-bold mb-4">Nuestros Valores</h2>
-                <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-                  Lo que guía cada decisión y acción en Humanis.
-                </p>
-              </div>
-
-              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-                {values.map((value, idx) => (
-                  <div key={idx} className="p-6 text-center bg-white/60 backdrop-blur-xl rounded-2xl border border-slate-100 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 opacity-0 animate-fadeInUp" style={{ animationDelay: `${idx * 0.1}s` }}>
-                    <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center text-indigo-600">{value.icon}</div>
-                    <h3 className="font-bold text-lg mb-2">{value.title}</h3>
-                    <p className="text-slate-600 text-sm">{value.desc}</p>
-                  </div>
-                ))}
-              </div>
+                <div className="grid lg:grid-cols-2 gap-16 items-center">
+                    <div>
+                        <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tight">Blindaje Institucional</h2>
+                        <div className="w-24 h-1.5 bg-gradient-to-r from-slate-900 to-slate-600 rounded-full mb-8" />
+                        <p className="text-lg text-slate-600 mb-8 leading-relaxed font-medium">
+                            En un mercado lleno de informalidad, Humanis se destaca por su riguroso cumplimiento normativo. Operamos con total transparencia para proteger a nuestros clientes y candidatos.
+                        </p>
+                        
+                        <div className="space-y-4">
+                            {[
+                                "Registro STPS Vigente (Agencia de Colocación)",
+                                "Constitución Legal SAS y Cumplimiento Societario",
+                                "Estructura Fiscal Transparente (SAT)",
+                                "Apego Total a la LFT y Normativa de Subcontratación"
+                            ].map((item, idx) => (
+                                <div key={idx} className="flex items-center gap-4 p-4 rounded-xl bg-slate-50 border border-slate-100 hover:border-slate-300 transition-colors">
+                                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center shrink-0">
+                                        <Scale size={16} className="text-green-600" />
+                                    </div>
+                                    <span className="font-bold text-slate-700">{item}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    {/* IMAGEN LOCAL */}
+                    <div className="relative h-[600px] rounded-[3rem] overflow-hidden shadow-2xl border border-slate-100">
+                         <Image 
+                            src="/nosotros/compliance.png" // RUTA LOCAL
+                            alt="Legalidad y Confianza"
+                            fill
+                            className="object-cover"
+                         />
+                         <div className="absolute inset-0 bg-slate-900/20" />
+                    </div>
+                </div>
             </div>
-          </section>
+        </section>
 
-          <section className="py-24 bg-slate-50">
-            <div className="container mx-auto px-6 max-w-7xl">
-              <div className="grid lg:grid-cols-2 gap-16 items-center">
-                <div>
-                  <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-6 border border-indigo-200">El Problema</span>
-                  <h2 className="text-4xl font-bold mb-6">¿Por qué Existimos?</h2>
-                  <p className="text-xl text-slate-600 mb-8 leading-relaxed">
-                    Las empresas mexicanas enfrentan un problema común: vacantes abiertas que afectan la operación, procesos de reclutamiento lentos y costosos, y riesgo constante de malas contrataciones.
-                  </p>
-                  <p className="text-xl text-slate-600 mb-8 leading-relaxed">
-                    Humanis nació para resolver esto. Combinamos metodología rigurosa con velocidad de ejecución para entregar resultados medibles y garantizados.
-                  </p>
+        {/* --- NUESTRAS LÍNEAS DE NEGOCIO --- */}
+        <section className="py-32 bg-slate-50 relative overflow-hidden">
+            <div className="absolute inset-0 opacity-[0.03] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
+            <div className="container mx-auto px-6 max-w-7xl relative z-10">
+                <div className="text-center mb-20">
+                    <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter mb-6">Modelo Dual</h2>
+                    <p className="text-slate-500 text-xl font-light max-w-2xl mx-auto">Soluciones diseñadas para cada necesidad operativa.</p>
                 </div>
 
-                <div className="space-y-4">
-                  {differentiators.map((diff, idx) => (
-                    <div key={idx} className="p-6 flex items-start gap-4 bg-white rounded-2xl border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 opacity-0 animate-fadeInRight" style={{ animationDelay: `${idx * 0.1}s` }}>
-                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0">
-                        <CheckCircle size={20} className="text-green-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-bold mb-1">{diff.title}</h4>
-                        <p className="text-sm text-slate-600">{diff.desc}</p>
-                      </div>
-                    </div>
-                  ))}
+                <div className="grid md:grid-cols-2 gap-8 lg:gap-16">
+                    {businessLines.map((line, idx) => (
+                        <div key={idx} className="group relative bg-white rounded-[3rem] border border-slate-200 shadow-xl overflow-hidden hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                            <div className={`h-32 bg-gradient-to-r ${line.gradient} relative flex items-center justify-center`}>
+                                <div className="w-20 h-20 bg-white/10 backdrop-blur-md rounded-2xl flex items-center justify-center shadow-lg border border-white/20">
+                                    {line.icon}
+                                </div>
+                            </div>
+                            <div className="p-10">
+                                <h3 className="text-3xl font-black text-slate-900 mb-2">{line.title}</h3>
+                                <p className="text-sm font-bold text-cyan-600 uppercase tracking-widest mb-6">{line.subtitle}</p>
+                                <p className="text-slate-600 text-lg leading-relaxed mb-8 font-medium">{line.desc}</p>
+                                <ul className="space-y-3">
+                                    {line.features.map((feat, f) => (
+                                        <li key={f} className="flex items-center gap-3 font-bold text-slate-700">
+                                            <div className={`w-2 h-2 rounded-full bg-gradient-to-r ${line.gradient}`} />
+                                            {feat}
+                                        </li>
+                                    ))}
+                                </ul>
+                            </div>
+                        </div>
+                    ))}
                 </div>
-              </div>
             </div>
-          </section>
+        </section>
 
-          <section className="py-24 bg-white">
+        {/* --- GALERÍA BENTO (MUCHO IMÁGENES - RUTAS LOCALES) --- */}
+        <section className="py-24 bg-white">
             <div className="container mx-auto px-6 max-w-7xl">
-              <div className="text-center mb-16">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-4 border border-indigo-200">El Equipo</span>
-                <h2 className="text-4xl font-bold mb-4">Quiénes Somos</h2>
-                <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-                  Un equipo de profesionales apasionados por conectar talento con oportunidad.
-                </p>
-              </div>
+                <div className="text-center mb-16">
+                    <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter mb-4">Nuestro ADN</h2>
+                    <p className="text-slate-500 text-xl font-light">La gente detrás de la tecnología.</p>
+                </div>
 
-              <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-                {team.map((member, idx) => (
-                  <div key={idx} className="text-center opacity-0 animate-fadeInUp" style={{ animationDelay: `${idx * 0.15}s` }}>
-                    <div className="w-32 h-32 mx-auto mb-4 rounded-full bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center">
-                      <Users size={48} className="text-indigo-600" />
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-4 auto-rows-[200px]">
+                    {/* Imagen Grande 1 */}
+                    <div className="col-span-2 row-span-2 relative rounded-3xl overflow-hidden group">
+                        <Image src="/nosotros/culture-1.png" alt="Team" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                        <div className="absolute inset-0 bg-slate-900/20 group-hover:bg-slate-900/10 transition-colors" />
                     </div>
-                    <h3 className="font-bold text-lg">{member.name}</h3>
-                    <p className="text-indigo-600 font-medium text-sm mb-2">{member.role}</p>
-                    <p className="text-slate-600 text-sm">{member.desc}</p>
-                  </div>
-                ))}
-              </div>
+                    {/* Imagen Pequeña 2 */}
+                    <div className="col-span-1 row-span-1 relative rounded-3xl overflow-hidden group">
+                        <Image src="/nosotros/culture-2.png" alt="Office" fill className="object-cover object-top transition-transform duration-700 group-hover:scale-110" />
+                    </div>
+                    {/* Imagen Pequeña 3 */}
+                    <div className="col-span-1 row-span-2 relative rounded-3xl overflow-hidden group">
+                        <Image src="/nosotros/culture-3.png" alt="Meeting" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                    </div>
+                    {/* Imagen Pequeña 4 */}
+                    <div className="col-span-1 row-span-1 relative rounded-3xl overflow-hidden group">
+                        <Image src="/nosotros/culture-4.png" alt="Detail" fill className="object-cover object-top transition-transform duration-700 group-hover:scale-110" />
+                    </div>
+                    {/* Imagen Ancha 5 */}
+                    <div className="col-span-2 row-span-1 relative rounded-3xl overflow-hidden group">
+                        <Image src="/nosotros/culture-5.png" alt="Work" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                    </div>
+                    {/* Imagen Pequeña 6 (Reutilizando para grid completo) */}
+                    <div className="col-span-1 row-span-1 relative rounded-3xl overflow-hidden group">
+                        <Image src="/nosotros/hero-team.png" alt="Hero" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                    </div>
+                    {/* Imagen Pequeña 7 (Reutilizando) */}
+                    <div className="col-span-1 row-span-1 relative rounded-3xl overflow-hidden group">
+                        <Image src="/nosotros/compliance.png" alt="Tech" fill className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                    </div>
+                </div>
             </div>
-          </section>
+        </section>
 
-          <section className="py-24 bg-slate-50">
+        {/* --- VALORES --- */}
+        <section className="py-24 bg-white border-t border-slate-100">
             <div className="container mx-auto px-6 max-w-7xl">
-              <div className="text-center mb-16">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-4 border border-indigo-200">Presencia</span>
-                <h2 className="text-4xl font-bold mb-4">Cobertura Nacional</h2>
-              </div>
-
-              <div className="grid md:grid-cols-4 gap-6 max-w-4xl mx-auto">
-                {[
-                  { city: "CDMX", desc: "Oficina central" },
-                  { city: "Guadalajara", desc: "Occidente" },
-                  { city: "Monterrey", desc: "Norte" },
-                  { city: "+ 29 estados", desc: "Cobertura remota" },
-                ].map((loc, idx) => (
-                  <div key={idx} className="text-center p-6 bg-white rounded-2xl border border-slate-200 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 opacity-0 animate-fadeInUp" style={{ animationDelay: `${idx * 0.1}s` }}>
-                    <MapPin size={32} className="mx-auto text-indigo-600 mb-3" />
-                    <h4 className="font-bold">{loc.city}</h4>
-                    <p className="text-sm text-slate-500">{loc.desc}</p>
-                  </div>
-                ))}
-              </div>
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    {values.map((val, idx) => (
+                        <div key={idx} className="p-8 rounded-[2rem] bg-slate-50 border border-slate-100 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                            <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center text-slate-900 mb-6 shadow-sm">
+                                {val.icon}
+                            </div>
+                            <h3 className="text-xl font-black text-slate-900 mb-3">{val.title}</h3>
+                            <p className="text-slate-600 text-sm leading-relaxed">{val.desc}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
-          </section>
+        </section>
 
-          <section className="py-24 bg-gradient-to-br from-indigo-600 to-violet-600 text-white">
-            <div className="container mx-auto px-6 max-w-4xl text-center">
-              <h2 className="text-4xl font-bold mb-6">¿Listo para trabajar juntos?</h2>
-              <p className="text-xl text-indigo-100 mb-10">
-                Agenda una llamada y conoce cómo podemos ayudarte.
-              </p>
-              <div className="flex flex-wrap justify-center gap-4">
-                <Link href="/contacto" className="inline-flex items-center gap-2 bg-slate-900 text-white font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-2xl hover:bg-slate-800 transition-all">
-                  <Calendar size={20} />
-                  Agendar Llamada
-                </Link>
-                <Link href="/para-empresas" className="inline-flex items-center gap-2 bg-white/20 hover:bg-white/30 text-white border border-white/30 font-semibold py-3 px-8 rounded-xl transition-all">
-                  Para Empresas
-                  <ArrowRight size={18} />
-                </Link>
-              </div>
+        {/* --- ESTADÍSTICAS --- */}
+        <section className="py-24 bg-slate-900 text-white relative overflow-hidden">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.1]" />
+            <div className="container mx-auto px-6 max-w-7xl relative z-10">
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-12 text-center">
+                    {stats.map((stat, idx) => (
+                        <div key={idx} className="space-y-2">
+                            <p className="text-5xl lg:text-7xl font-black tracking-tighter text-transparent bg-clip-text bg-gradient-to-b from-white to-slate-500">
+                                {stat.num}
+                            </p>
+                            <p className="text-slate-400 font-bold uppercase tracking-widest text-sm">{stat.label}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
-          </section>
-        </main>
+        </section>
 
-        <Footer />
-      </div>
+        {/* --- CTA FINAL --- */}
+        <div className="py-40 bg-white text-center relative overflow-hidden z-10">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]" />
+            <div className="relative z-10">
+                <h2 className="text-6xl md:text-7xl font-black mb-12 text-slate-900 tracking-tighter">¿Listo para escalar?</h2>
+                <ModernButton onClick={() => setShowContact(true)}>Iniciar Transformación</ModernButton>
+            </div>
+        </div>
 
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeInUp {
-          animation: fadeInUp 0.8s ease-out forwards;
-        }
-        @keyframes fadeInRight {
-          from { opacity: 0; transform: translateX(30px); }
-          to { opacity: 1; transform: translateX(0); }
-        }
-        .animate-fadeInRight {
-          animation: fadeInRight 0.8s ease-out forwards;
-        }
-      `}</style>
-    </>
+      </main>
+      <Footer />
+    </div>
   );
 }

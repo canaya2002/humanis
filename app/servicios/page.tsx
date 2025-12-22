@@ -1,78 +1,232 @@
 'use client';
 import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
+import Image from 'next/image';
+import { motion } from 'framer-motion';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { 
-  Search, Users, FileText, ShieldCheck, Briefcase, 
-  CheckCircle, ArrowRight, Target, Zap, Clock,
-  UserCheck, BarChart3, Award, RefreshCw, Calendar
-} from 'lucide-react';
+  ArrowRight, CheckCircle2, Minus, 
+  Globe2, Zap, ShieldCheck, BarChart3 
+} from 'lucide-react'; 
+
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import GlobalStyles from '../components/GlobalStyles';
+import ContactIntro from '../components/ContactIntro';
 
+if (typeof window !== 'undefined') {
+  gsap.registerPlugin(ScrollTrigger);
+}
+
+// --- 1. FONDO DE RED NEURONAL ---
+const OrganicNetworkBackground = () => {
+  const [nodes, setNodes] = useState<Array<{
+    id: number;
+    x: number; y: number;
+    xMove: number; yMove: number;
+    duration: number;
+    size: number;
+  }>>([]);
+  
+  useEffect(() => { 
+      const newNodes = Array.from({ length: 20 }, (_, i) => ({ 
+          id: i, 
+          x: Math.random() * 100, 
+          y: Math.random() * 100,
+          xMove: (Math.random() - 0.5) * 15, 
+          yMove: (Math.random() - 0.5) * 15, 
+          duration: 15 + Math.random() * 15, 
+          size: 2 + Math.random() * 3
+      })); 
+      setNodes(newNodes); 
+  }, []);
+
+  return (
+    <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 bg-white">
+      <div className="absolute inset-0 bg-white z-0" />
+      <svg className="absolute inset-0 w-full h-full z-0 overflow-visible opacity-40">
+        <defs>
+            <linearGradient id="netGradientServ" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#94a3b8" stopOpacity="0"/> 
+                <stop offset="50%" stopColor="#0f172a" stopOpacity="0.2"/> 
+                <stop offset="100%" stopColor="#94a3b8" stopOpacity="0"/>
+            </linearGradient>
+        </defs>
+        {nodes.map((node, i) => {
+            const target = nodes[(i + 1) % nodes.length]; 
+            if (i % 2 !== 0) return null; 
+            return (
+            <g key={`net-group-serv-${node.id}`}> 
+                <motion.line 
+                    x1={`${node.x}%`} y1={`${node.y}%`} 
+                    x2={`${target.x}%`} y2={`${target.y}%`} 
+                    stroke="url(#netGradientServ)" 
+                    strokeWidth="1" 
+                    strokeLinecap="round"
+                    animate={{ 
+                        x1: [`${node.x}%`, `${node.x + node.xMove}%`, `${node.x}%`],
+                        y1: [`${node.y}%`, `${node.y + node.yMove}%`, `${node.y}%`],
+                        x2: [`${target.x}%`, `${target.x + target.xMove}%`, `${target.x}%`],
+                        y2: [`${target.y}%`, `${target.y + target.yMove}%`, `${target.y}%`],
+                    }} 
+                    transition={{ duration: Math.max(node.duration, target.duration), repeat: Infinity, ease: "easeInOut" }} 
+                /> 
+            </g> 
+            )
+        })}
+        {nodes.map((node) => (
+            <motion.circle 
+                key={`node-serv-${node.id}`}
+                cx={`${node.x}%`} cy={`${node.y}%`} 
+                r={node.size} 
+                fill="#1e293b" 
+                opacity={0.08} 
+                animate={{ 
+                    cx: [`${node.x}%`, `${node.x + node.xMove}%`, `${node.x}%`],
+                    cy: [`${node.y}%`, `${node.y + node.yMove}%`, `${node.y}%`],
+                    opacity: [0.08, 0.15, 0.08] 
+                }} 
+                transition={{ duration: node.duration, repeat: Infinity, ease: "easeInOut" }} 
+            /> 
+        ))}
+      </svg>
+    </div>
+  );
+};
+
+// --- COMPONENTES UI ---
+interface ModernButtonProps { children: React.ReactNode; onClick?: () => void; secondary?: boolean; }
+const ModernButton = ({ children, onClick, secondary = false }: ModernButtonProps) => (
+  <button onClick={onClick} className={`relative group overflow-hidden font-bold text-sm tracking-widest uppercase transition-all duration-400 ${secondary ? 'px-10 py-4 rounded-full' : 'px-10 py-4 rounded-full'}`} style={{ boxShadow: '0 6px 6px rgba(0, 0, 0, 0.2), 0 0 20px rgba(0, 0, 0, 0.1)' }}>
+    <div className="absolute inset-0 z-0 backdrop-blur-[3px] overflow-hidden rounded-full" style={{ filter: 'blur(0.5px)', isolation: 'isolate' }} />
+    <div className={`absolute inset-0 z-[1] rounded-full ${secondary ? 'bg-white/40' : 'bg-gradient-to-br from-slate-800/60 via-slate-900/70 to-slate-950/60'}`}></div>
+    <div className="absolute inset-0 z-[2] overflow-hidden rounded-full" style={{ boxShadow: 'inset 2px 2px 1px 0 rgba(255, 255, 255, 0.5), inset -1px -1px 1px 1px rgba(255, 255, 255, 0.5)' }}></div>
+    <span className={`relative z-[3] flex items-center gap-3 ${secondary ? 'text-slate-900' : 'text-white'}`}>
+      {children}
+      {!secondary && <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform stroke-[3]" />}
+    </span>
+  </button>
+);
+
+// --- NUEVO TEXTO ROTATIVO (ESPECÍFICO PARA SERVICIOS) ---
+const RotatingText = () => {
+  const words = ['PERSONALIZADO', 'ESCALABLE', 'CERTIFICADO', 'ESTRATÉGICO', 'GLOBAL'];
+  const [currentIndex, setCurrentIndex] = useState(0);
+  useEffect(() => {
+    const interval = setInterval(() => setCurrentIndex((prev) => (prev + 1) % words.length), 3000);
+    return () => clearInterval(interval);
+  }, [words.length]);
+  return (
+    <span className="relative inline-block min-w-[280px] md:min-w-[680px] text-left h-[1.2em] align-top overflow-visible -mb-2"> 
+      {words.map((word, idx) => (
+        <motion.span
+          key={idx} initial={false} animate={{ opacity: idx === currentIndex ? 1 : 0, y: idx === currentIndex ? 0 : idx === (currentIndex - 1 + words.length) % words.length ? -50 : 50, filter: idx === currentIndex ? 'blur(0px)' : 'blur(4px)' }} transition={{ duration: 0.8, ease: [0.25, 0.1, 0.25, 1] }} className="absolute left-0 top-0 w-full bg-clip-text text-transparent bg-gradient-to-r from-slate-900 via-cyan-600 to-slate-900 block px-1"
+        > {word} </motion.span>
+      ))}
+    </span>
+  );
+};
+
+// --- DATOS COMPLETOS DE SERVICIOS ---
 const mainServices = [
   {
-    icon: <Search size={32} />,
+    id: 1,
+    step: "01",
     title: "Reclutamiento por Comisión",
-    desc: "Cobertura de vacantes con pago por éxito. Sin costos fijos, pagas solo cuando encuentras al candidato ideal.",
+    subtitle: "Pago por Éxito",
+    longDesc: "Eliminamos el riesgo de inversión inicial. Solo pagas cuando encuentras al candidato ideal que se integra exitosamente. Realizamos una búsqueda exhaustiva combinando headhunting activo y mapeo de talento pasivo validado.",
     features: [
-      "Búsqueda activa y pasiva de candidatos",
-      "Filtros rigurosos y evaluaciones",
-      "Shortlist de 3-5 candidatos validados",
-      "Garantía de reemplazo incluida"
+        "Headhunting directo",
+        "Filtros técnicos avanzados",
+        "Evaluación cultural",
+        "Shortlist en 5 días",
+        "Garantía de 90 días",
+        "Referencias validadas"
     ],
-    highlight: "Más Popular"
+    image: "/servicios/reclutamiento-comision.png",
+    kpi: "Tasa de Éxito",
+    kpiValue: "96%",
   },
   {
-    icon: <Users size={32} />,
+    id: 2,
+    step: "02",
     title: "Programa Talento Joven",
-    desc: "Becarios y practicantes de las mejores universidades. Pipeline de talento fresco para tu organización.",
+    subtitle: "Pipeline de Futuro",
+    longDesc: "Conectamos a tu empresa con el talento emergente de las mejores universidades. Un programa estratégico que no solo cubre posiciones junior, sino que construye un semillero de futuros líderes formados en tu cultura.",
     features: [
-      "Alianzas con universidades top",
-      "Perfiles ya evaluados y disponibles",
-      "Acompañamiento en programa formativo",
-      "Opción de contratación directa"
+        "Alianzas universitarias",
+        "Promedio min. 8.5",
+        "Onboarding asistido",
+        "Evaluación mensual",
+        "Plan de carrera",
+        "Gestión de becas"
     ],
-    highlight: null
+    image: "/servicios/talento-joven.png",
+    kpi: "Retención",
+    kpiValue: "92%",
   },
   {
-    icon: <Briefcase size={32} />,
+    id: 3,
+    step: "03",
     title: "RPO Ligero",
-    desc: "Gestión continua de tus vacantes. Ideal para empresas con volumen constante de contratación.",
+    subtitle: "Gestión Continua",
+    longDesc: "Tu propio departamento de reclutamiento externo. Un equipo dedicado y tecnología propietaria para gestionar volúmenes constantes de contratación con costos fijos predecibles y reportes en tiempo real.",
     features: [
-      "Equipo dedicado a tu cuenta",
-      "Dashboard de seguimiento en tiempo real",
-      "Reportes mensuales de KPIs",
-      "Costo fijo predecible"
+        "Recruiter dedicado",
+        "Tecnología ATS incluida",
+        "Dashboard en vivo",
+        "Reportes de KPIs",
+        "Employer Branding",
+        "Costos fijos"
     ],
-    highlight: null
+    image: "/servicios/rpo-ligero.png",
+    kpi: "Eficiencia",
+    kpiValue: "94%",
   }
 ];
 
 const complementaryServices = [
-  { icon: <UserCheck size={24} />, title: "Entrevistas Estructuradas", desc: "Evaluaciones por competencias con metodología probada." },
-  { icon: <BarChart3 size={24} />, title: "Pruebas Psicométricas", desc: "Baterías de evaluación adaptadas al perfil." },
-  { icon: <ShieldCheck size={24} />, title: "Verificación de Referencias", desc: "Validación de historial laboral y referencias." },
-  { icon: <FileText size={24} />, title: "Estudios Socioeconómicos", desc: "Investigación de antecedentes cuando se requiera." },
+  { 
+    title: "Entrevistas Estructuradas", 
+    desc: "Evaluaciones por competencias (STAR) para validar hard y soft skills. Entregamos reportes detallados con semáforo de viabilidad." 
+  },
+  { 
+    title: "Pruebas Psicométricas", 
+    desc: "Baterías validadas de personalidad, inteligencia emocional y coeficiente intelectual para predecir el comportamiento laboral." 
+  },
+  { 
+    title: "Verificación de Referencias", 
+    desc: "Validación 360° de historial laboral, logros, motivos de salida y recontratabilidad directamente con ex-jefes." 
+  },
+  { 
+    title: "Estudios Socioeconómicos", 
+    desc: "Investigación de campo sobre antecedentes laborales, legales y entorno social con total confidencialidad y apego a la ley." 
+  },
 ];
 
 const guarantees = [
-  { icon: <RefreshCw size={24} />, title: "Garantía de Reemplazo", desc: "Si el candidato no funciona en los primeros 90 días, lo reemplazamos sin costo adicional." },
-  { icon: <Clock size={24} />, title: "Tiempo de Respuesta", desc: "Primera terna de candidatos en 5-10 días hábiles para perfiles estándar." },
-  { icon: <Target size={24} />, title: "Filtro Riguroso", desc: "Solo presentamos candidatos que cumplen al menos 80% del perfil solicitado." },
+  { 
+    title: "Garantía de Reemplazo", 
+    desc: "Si el candidato no cumple las expectativas en los primeros 90 días, lo reponemos sin costo adicional. Tu inversión está 100% blindada." 
+  },
+  { 
+    title: "Tiempo de Respuesta", 
+    desc: "Compromiso de presentar la primera terna calificada en 5-10 días hábiles para perfiles administrativos y operativos." 
+  },
+  { 
+    title: "Calidad de Filtro", 
+    desc: "Solo presentamos candidatos que cumplen mínimo el 80% del perfil ideal. No te hacemos perder tiempo con perfiles de relleno." 
+  },
 ];
 
 export default function ServiciosPage() {
   const [showHeader, setShowHeader] = useState(true);
+  const [showContact, setShowContact] = useState(false);
   const lastScrollY = useRef(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      if (window.scrollY > lastScrollY.current && window.scrollY > 80) {
-        setShowHeader(false);
-      } else {
-        setShowHeader(true);
-      }
+      if (window.scrollY > lastScrollY.current && window.scrollY > 80) { setShowHeader(false); } else { setShowHeader(true); }
       lastScrollY.current = window.scrollY;
     };
     window.addEventListener('scroll', handleScroll);
@@ -80,235 +234,218 @@ export default function ServiciosPage() {
   }, []);
 
   return (
-    <>
-      <GlobalStyles />
-      <div className="min-h-screen bg-white text-slate-900">
-        <Header showHeader={showHeader} />
+    <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-cyan-100 selection:text-cyan-900">
+      <Header showHeader={showHeader} setShowContact={setShowContact} />
+      <ContactIntro isOpen={showContact} onClose={() => setShowContact(false)} />
 
-        <main className="pt-28">
-          <section className="relative pt-20 pb-24 bg-gradient-to-br from-slate-50 to-white overflow-hidden">
-            <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-            <div className="container mx-auto px-6 max-w-7xl relative z-10">
-              <div className="max-w-4xl mx-auto text-center">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-6 border border-indigo-200 opacity-0 animate-fadeInDown">Servicios Humanis</span>
-                <h1 className="text-5xl lg:text-6xl font-bold mb-6 leading-tight tracking-tight opacity-0 animate-fadeInUp">
-                  Soluciones de Talento <br/>
-                  <span className="bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">a tu Medida</span>
-                </h1>
-                <p className="text-xl text-slate-600 mb-10 leading-relaxed opacity-0 animate-fadeInUp" style={{ animationDelay: '0.2s' }}>
-                  Desde reclutamiento puntual hasta gestión continua de vacantes. 
-                  Elige el modelo que mejor se adapte a tus necesidades.
-                </p>
-                <div className="flex flex-wrap justify-center gap-4 opacity-0 animate-fadeInUp" style={{ animationDelay: '0.3s' }}>
-                  <Link href="/contacto" className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all">
-                    <Calendar size={20} />
-                    Solicitar Propuesta
-                  </Link>
-                  <Link href="/precios" className="inline-flex items-center gap-2 bg-white text-slate-900 font-semibold py-3 px-8 rounded-xl border-2 border-slate-200 hover:border-indigo-600 hover:text-indigo-600 transition-all">
-                    Ver Precios
-                    <ArrowRight size={20} />
-                  </Link>
-                </div>
-              </div>
-            </div>
-          </section>
+      <main className="relative pt-0">
+        
+        {/* --- HERO SECTION RECARGADO (SIN BOTÓN, MÁS INFO) --- */}
+        <section className="relative min-h-[95vh] flex flex-col justify-center overflow-hidden">
+          <OrganicNetworkBackground />
+          
+          <div className="container mx-auto px-6 lg:px-12 relative z-10 pt-32 pb-20">
+            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-24">
+              
+              {/* IMAGEN HERO */}
+              <motion.div 
+                initial={{ opacity: 0, x: -50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                className="w-full lg:w-1/2 order-2 lg:order-1 relative"
+              >
+                 <Image 
+                    src="/servicios/serviciocon.png" 
+                    alt="Servicios Humanis" 
+                    width={700} 
+                    height={700} 
+                    priority 
+                    className="w-full h-auto object-contain z-20 relative drop-shadow-[0_0_35px_rgba(34,211,238,0.4)]" 
+                 />
+              </motion.div>
 
-          <section className="py-24 bg-white">
-            <div className="container mx-auto px-6 max-w-7xl">
-              <div className="text-center mb-16">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-4 border border-indigo-200">Servicios Principales</span>
-                <h2 className="text-4xl font-bold mb-4">Elige tu Modelo</h2>
-                <p className="text-xl text-slate-600 max-w-2xl mx-auto">
-                  Tres formas de trabajar juntos según el volumen y urgencia de tus vacantes.
-                </p>
-              </div>
-
-              <div className="grid lg:grid-cols-3 gap-8">
-                {mainServices.map((service, idx) => (
-                  <div 
-                    key={idx} 
-                    className={`relative p-8 bg-white/60 backdrop-blur-xl rounded-2xl border-2 shadow-xl hover:shadow-2xl hover:-translate-y-2 transition-all duration-500 opacity-0 animate-fadeInUp ${idx === 0 ? 'lg:scale-105 border-indigo-200' : 'border-slate-100'}`}
-                    style={{ animationDelay: `${idx * 0.15}s` }}
-                  >
-                    {service.highlight && (
-                      <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white text-xs font-bold px-4 py-1 rounded-full">
-                        {service.highlight}
-                      </div>
-                    )}
-                    <div className="w-16 h-16 mb-6 rounded-2xl bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center text-indigo-600">
-                      {service.icon}
-                    </div>
-                    <h3 className="text-2xl font-bold mb-4">{service.title}</h3>
-                    <p className="text-slate-600 mb-6">{service.desc}</p>
-                    <ul className="space-y-3 mb-8">
-                      {service.features.map((feature, i) => (
-                        <li key={i} className="flex items-start gap-3 text-sm text-slate-700">
-                          <CheckCircle size={18} className="text-green-500 flex-shrink-0 mt-0.5" />
-                          {feature}
-                        </li>
-                      ))}
-                    </ul>
-                    <Link href="/contacto" className={`inline-flex items-center justify-center gap-2 w-full font-semibold py-3 px-6 rounded-xl transition-all ${idx === 0 ? 'bg-gradient-to-r from-indigo-600 to-violet-600 text-white shadow-lg hover:shadow-xl' : 'bg-white text-slate-900 border-2 border-slate-200 hover:border-indigo-600 hover:text-indigo-600'}`}>
-                      Solicitar Info
-                      <ArrowRight size={18} />
-                    </Link>
-                  </div>
-                ))}
-              </div>
-            </div>
-          </section>
-
-          <section className="py-24 bg-slate-50">
-            <div className="container mx-auto px-6 max-w-7xl">
-              <div className="grid lg:grid-cols-2 gap-16 items-center">
-                <div>
-                  <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-6 border border-indigo-200">Valor Agregado</span>
-                  <h2 className="text-4xl font-bold mb-6">Servicios Complementarios</h2>
-                  <p className="text-xl text-slate-600 mb-8 leading-relaxed">
-                    Potencia tu proceso de selección con evaluaciones adicionales. 
-                    Disponibles como complemento a cualquiera de nuestros servicios principales.
-                  </p>
-                  <Link href="/contacto" className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
-                    Personalizar Paquete
-                  </Link>
+              {/* TEXTO HERO + GRID DE INFORMACIÓN (REEMPLAZO DEL BOTÓN) */}
+              <motion.div 
+                initial={{ opacity: 0, x: 50 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 1 }}
+                className="w-full lg:w-1/2 order-1 lg:order-2 text-center lg:text-left"
+              >
+                <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-800 text-[11px] font-bold uppercase tracking-widest mb-8 shadow-sm">
+                    Servicios Humanis
                 </div>
                 
-                <div className="grid grid-cols-2 gap-6">
-                  {complementaryServices.map((service, idx) => (
-                    <div 
-                      key={idx} 
-                      className="p-6 bg-white rounded-2xl border border-slate-100 shadow-lg hover:shadow-xl hover:-translate-y-1 transition-all duration-300 opacity-0 animate-fadeInUp"
-                      style={{ animationDelay: `${idx * 0.1}s` }}
-                    >
-                      <div className="w-12 h-12 mb-4 rounded-xl bg-gradient-to-br from-indigo-100 to-violet-100 flex items-center justify-center text-indigo-600">{service.icon}</div>
-                      <h4 className="font-bold mb-2">{service.title}</h4>
-                      <p className="text-sm text-slate-600">{service.desc}</p>
+                <h1 className="text-5xl md:text-7xl font-black mb-6 leading-[0.95] tracking-tighter text-slate-900">
+                  Infraestructura <br/> <RotatingText />
+                </h1>
+                
+                <p className="text-lg md:text-xl text-slate-600 mb-6 leading-relaxed font-light max-w-lg mx-auto lg:mx-0">
+                  Desplegamos una arquitectura de talento diseñada para empresas que exigen precisión. No somos solo headhunters; somos ingenieros de capital humano.
+                </p>
+
+                <p className="text-base text-slate-500 mb-10 leading-relaxed max-w-lg mx-auto lg:mx-0 font-medium border-l-4 border-cyan-500 pl-4">
+                  Combinamos inteligencia de mercado en tiempo real, cumplimiento normativo estricto (REPSE/ISO) y tecnología de evaluación predictiva para reducir tu rotación hasta en un 40% desde el primer año.
+                </p>
+                
+                {/* GRID DE INFORMACIÓN (EN LUGAR DEL BOTÓN) */}
+                <div className="grid grid-cols-2 gap-4 text-left">
+                    <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl flex items-start gap-3 hover:bg-slate-100 transition-colors">
+                        <Globe2 className="text-cyan-600 shrink-0" size={24} />
+                        <div>
+                            <h4 className="font-bold text-slate-900 text-sm">Cobertura Global</h4>
+                            <p className="text-xs text-slate-500 mt-1">Reclutamiento en todo LATAM y Norteamérica.</p>
+                        </div>
                     </div>
-                  ))}
+                    <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl flex items-start gap-3 hover:bg-slate-100 transition-colors">
+                        <Zap className="text-cyan-600 shrink-0" size={24} />
+                        <div>
+                            <h4 className="font-bold text-slate-900 text-sm">Velocidad Táctica</h4>
+                            <p className="text-xs text-slate-500 mt-1">SLAs de presentación de 5 a 10 días hábiles.</p>
+                        </div>
+                    </div>
+                    <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl flex items-start gap-3 hover:bg-slate-100 transition-colors">
+                        <ShieldCheck className="text-cyan-600 shrink-0" size={24} />
+                        <div>
+                            <h4 className="font-bold text-slate-900 text-sm">Blindaje Total</h4>
+                            <p className="text-xs text-slate-500 mt-1">Cumplimiento legal y fiscal garantizado 100%.</p>
+                        </div>
+                    </div>
+                    <div className="bg-slate-50 border border-slate-100 p-4 rounded-2xl flex items-start gap-3 hover:bg-slate-100 transition-colors">
+                        <BarChart3 className="text-cyan-600 shrink-0" size={24} />
+                        <div>
+                            <h4 className="font-bold text-slate-900 text-sm">Data Driven</h4>
+                            <p className="text-xs text-slate-500 mt-1">Reportes de mercado y salarios en tiempo real.</p>
+                        </div>
+                    </div>
                 </div>
-              </div>
+
+              </motion.div>
+
             </div>
-          </section>
+          </div>
+        </section>
 
-          <section className="py-24 bg-white">
-            <div className="container mx-auto px-6 max-w-7xl">
-              <div className="text-center mb-16">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold uppercase tracking-widest mb-4 border border-indigo-200">Transparencia</span>
-                <h2 className="text-4xl font-bold mb-4">Qué Incluye Cada Servicio</h2>
-              </div>
+        {/* --- SERVICIOS PRINCIPALES --- */}
+        <section className="relative bg-white pb-20">
+            {mainServices.map((service, index) => {
+                const isEven = index % 2 === 0;
+                return (
+                    <div key={service.id} className="py-24 relative">
+                        <div className="container mx-auto px-6 max-w-7xl relative z-10">
+                            <div className={`flex flex-col ${isEven ? 'lg:flex-row' : 'lg:flex-row-reverse'} gap-12 lg:gap-24 items-center`}>
+                                
+                                {/* IMAGEN DEL SERVICIO */}
+                                <div className="w-full lg:w-1/2 flex justify-center">
+                                    <div className="relative w-full max-w-[500px]">
+                                        <div className="absolute inset-0 bg-slate-100/50 rounded-full blur-[60px] scale-90" />
+                                        <Image 
+                                            src={service.image} 
+                                            alt={service.title} 
+                                            width={600} 
+                                            height={600}
+                                            className="relative z-10 object-contain w-full h-auto max-h-[300px] md:max-h-[450px] drop-shadow-2xl hover:scale-105 transition-transform duration-700"
+                                        />
+                                    </div>
+                                </div>
 
-              <div className="overflow-x-auto">
-                <table className="w-full min-w-[800px] bg-white rounded-2xl overflow-hidden shadow-lg">
-                  <thead>
-                    <tr className="border-b-2 border-slate-200 bg-slate-50">
-                      <th className="text-left py-4 px-6 font-semibold text-slate-900">Característica</th>
-                      <th className="text-center py-4 px-6 font-semibold bg-indigo-50 text-indigo-900">Reclutamiento</th>
-                      <th className="text-center py-4 px-6 font-semibold text-slate-900">Talento Joven</th>
-                      <th className="text-center py-4 px-6 font-semibold text-slate-900">RPO Ligero</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {[
-                      { feature: "Diagnóstico de perfil", rec: true, tj: true, rpo: true },
-                      { feature: "Búsqueda activa", rec: true, tj: true, rpo: true },
-                      { feature: "Filtro y evaluación", rec: true, tj: true, rpo: true },
-                      { feature: "Shortlist de candidatos", rec: "3-5", tj: "3-5", rpo: "Ilimitado" },
-                      { feature: "Garantía de reemplazo", rec: "90 días", tj: "60 días", rpo: "90 días" },
-                      { feature: "Equipo dedicado", rec: false, tj: false, rpo: true },
-                      { feature: "Dashboard de seguimiento", rec: false, tj: false, rpo: true },
-                      { feature: "Reportes mensuales", rec: false, tj: false, rpo: true },
-                    ].map((row, idx) => (
-                      <tr key={idx} className="border-b border-slate-100 hover:bg-slate-50 transition-colors">
-                        <td className="py-4 px-6 text-slate-700 font-medium">{row.feature}</td>
-                        <td className="py-4 px-6 text-center bg-indigo-50/50">
-                          {typeof row.rec === 'boolean' ? (
-                            row.rec ? <CheckCircle size={20} className="text-green-500 mx-auto" /> : <span className="text-slate-300">—</span>
-                          ) : (
-                            <span className="font-medium text-indigo-600">{row.rec}</span>
-                          )}
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          {typeof row.tj === 'boolean' ? (
-                            row.tj ? <CheckCircle size={20} className="text-green-500 mx-auto" /> : <span className="text-slate-300">—</span>
-                          ) : (
-                            <span className="font-medium text-indigo-600">{row.tj}</span>
-                          )}
-                        </td>
-                        <td className="py-4 px-6 text-center">
-                          {typeof row.rpo === 'boolean' ? (
-                            row.rpo ? <CheckCircle size={20} className="text-green-500 mx-auto" /> : <span className="text-slate-300">—</span>
-                          ) : (
-                            <span className="font-medium text-indigo-600">{row.rpo}</span>
-                          )}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </section>
+                                {/* INFO DEL SERVICIO */}
+                                <div className="w-full lg:w-1/2">
+                                    <div className="flex flex-col items-start">
+                                        <span className="text-8xl font-black text-transparent bg-clip-text bg-gradient-to-b from-slate-200 to-white opacity-80 leading-none -mb-6 ml-[-0.2em] select-none">
+                                            {service.step}
+                                        </span>
+                                        
+                                        <h3 className="text-xs font-bold uppercase tracking-[0.3em] text-slate-400 mb-2 pl-1">{service.subtitle}</h3>
+                                        <h2 className="text-4xl md:text-5xl font-black text-slate-900 mb-6 tracking-tighter leading-none">{service.title}</h2>
+                                        
+                                        <div className="w-20 h-1.5 bg-gradient-to-r from-slate-800 to-slate-600 rounded-full mb-8" />
+                                        
+                                        <p className="text-slate-600 text-lg leading-relaxed mb-10 font-medium">
+                                            {service.longDesc}
+                                        </p>
 
-          <section className="py-24 bg-gradient-to-br from-slate-900 to-slate-800 text-white">
-            <div className="container mx-auto px-6 max-w-7xl">
-              <div className="text-center mb-16">
-                <span className="inline-block px-4 py-1.5 rounded-full bg-white/10 text-white text-xs font-bold uppercase tracking-widest mb-4 border border-white/20">Compromiso</span>
-                <h2 className="text-4xl font-bold mb-4">Nuestras Garantías</h2>
-              </div>
+                                        {/* GRID DE FEATURES */}
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-3 gap-x-6 w-full mb-10">
+                                            {service.features.map((feat, i) => (
+                                                <div key={i} className="flex items-center gap-3">
+                                                    <CheckCircle2 size={18} className="text-slate-900 shrink-0" strokeWidth={2.5} />
+                                                    <span className="text-sm font-bold text-slate-700">{feat}</span>
+                                                </div>
+                                            ))}
+                                        </div>
 
-              <div className="grid md:grid-cols-3 gap-8">
-                {guarantees.map((item, idx) => (
-                  <div 
-                    key={idx} 
-                    className="p-8 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-sm hover:bg-white/10 transition-all duration-300 opacity-0 animate-fadeInUp"
-                    style={{ animationDelay: `${idx * 0.15}s` }}
-                  >
-                    <div className="w-14 h-14 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 mb-6">
-                      {item.icon}
+                                        <div className="bg-slate-50 border border-slate-200 rounded-2xl p-6 flex flex-col gap-2 w-full sm:w-auto min-w-[200px]">
+                                            <span className="text-[10px] font-black uppercase text-slate-400 tracking-wider">{service.kpi}</span>
+                                            <span className="text-5xl font-black text-slate-900 tracking-tighter">{service.kpiValue}</span>
+                                            <div className="w-full h-1 bg-slate-200 rounded-full mt-1">
+                                                <div className="h-full bg-slate-900 w-[95%] rounded-full" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
-                    <h3 className="text-xl font-bold mb-3">{item.title}</h3>
-                    <p className="text-slate-300">{item.desc}</p>
-                  </div>
-                ))}
-              </div>
+                );
+            })}
+        </section>
+
+        {/* --- SERVICIOS COMPLEMENTARIOS --- */}
+        <section className="relative py-32 bg-slate-50">
+            <div className="container mx-auto px-6 max-w-7xl relative z-10">
+                <div className="text-center mb-20">
+                    <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter mb-6">Complementos</h2>
+                    <p className="text-slate-500 text-xl font-light max-w-2xl mx-auto">Herramientas de precisión para decisiones informadas.</p>
+                </div>
+
+                <div className="grid md:grid-cols-2 gap-8">
+                    {complementaryServices.map((service, idx) => (
+                        <div key={idx} className="bg-white border border-slate-200 p-10 rounded-[2rem] hover:shadow-xl transition-shadow duration-300 group flex flex-col justify-between">
+                            <div>
+                                <div className="flex items-center gap-3 mb-4">
+                                    <Minus className="text-slate-300" />
+                                    <h3 className="text-2xl font-black text-slate-900 group-hover:text-cyan-700 transition-colors">{service.title}</h3>
+                                </div>
+                                <p className="text-slate-600 leading-relaxed font-medium text-lg">{service.desc}</p>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
-          </section>
+        </section>
 
-          <section className="py-24 bg-white">
-            <div className="container mx-auto px-6 max-w-4xl text-center">
-              <h2 className="text-4xl font-bold mb-6">
-                ¿No sabes cuál elegir?
-              </h2>
-              <p className="text-xl text-slate-600 mb-10 max-w-2xl mx-auto">
-                Agenda una llamada y te ayudamos a identificar el modelo ideal para tu empresa.
-              </p>
-              <Link href="/contacto" className="inline-flex items-center gap-2 bg-gradient-to-r from-indigo-600 to-violet-600 text-white font-semibold py-3 px-8 rounded-xl shadow-lg hover:shadow-xl transition-all">
-                <Calendar size={20} />
-                Agendar Consulta Gratuita
-              </Link>
+        {/* --- GARANTÍAS --- */}
+        <section className="relative py-32 bg-white">
+            <div className="container mx-auto px-6 max-w-7xl relative z-10">
+                <div className="text-center mb-20">
+                    <h2 className="text-4xl md:text-6xl font-black text-slate-900 tracking-tighter mb-6">Garantías</h2>
+                    <p className="text-slate-500 text-xl font-light max-w-2xl mx-auto">Tu inversión está protegida por contrato.</p>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-8">
+                    {guarantees.map((item, idx) => (
+                        <div key={idx} className="bg-slate-50 border border-slate-100 p-8 rounded-[2rem] text-center hover:bg-white hover:shadow-lg transition-all duration-300">
+                            <div className="w-12 h-1 bg-slate-900 mx-auto mb-6 rounded-full" />
+                            <h3 className="text-xl font-black text-slate-900 mb-4">{item.title}</h3>
+                            <p className="text-slate-600 text-sm leading-relaxed font-medium">{item.desc}</p>
+                        </div>
+                    ))}
+                </div>
             </div>
-          </section>
-        </main>
+        </section>
 
-        <Footer />
-      </div>
+        {/* --- CTA FINAL --- */}
+        <div className="py-40 bg-white text-center relative overflow-hidden z-10">
+            <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]" />
+            <div className="relative z-10">
+                <h2 className="text-6xl md:text-7xl font-black mb-12 text-slate-900 tracking-tighter">¿Hablamos de negocios?</h2>
+                <ModernButton onClick={() => setShowContact(true)}>Agendar Reunión</ModernButton>
+            </div>
+        </div>
 
-      <style jsx>{`
-        @keyframes fadeInDown {
-          from { opacity: 0; transform: translateY(-30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeInDown {
-          animation: fadeInDown 0.8s ease-out forwards;
-        }
-        @keyframes fadeInUp {
-          from { opacity: 0; transform: translateY(30px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        .animate-fadeInUp {
-          animation: fadeInUp 0.8s ease-out forwards;
-        }
-      `}</style>
-    </>
+      </main>
+      <Footer />
+    </div>
   );
 }
