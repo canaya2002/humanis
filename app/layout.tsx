@@ -103,7 +103,7 @@ export default function RootLayout({
               ],
               "contactPoint": {
                 "@type": "ContactPoint",
-                "telephone": "+52-55-0000-0000", // RECUERDA: Cambiar por tu teléfono real
+                "telephone": "+52-55-4416-7974", 
                 "contactType": "customer service",
                 "areaServed": "MX",
                 "availableLanguage": "Spanish"
