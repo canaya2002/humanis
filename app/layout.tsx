@@ -33,6 +33,15 @@ export const metadata: Metadata = {
   authors: [{ name: "Humanis México" }],
   creator: "Humanis México",
   publisher: "Humanis México",
+  
+  // --- CORRECCIÓN: DEFINICIÓN EXPLÍCITA DE ICONOS ---
+  // Esto asegura que Google y navegadores encuentren tus logos sin ambigüedad
+  icons: {
+    icon: '/icon.png', 
+    shortcut: '/icon.png',
+    apple: '/apple-icon.png',
+  },
+
   robots: {
     index: true,
     follow: true,
