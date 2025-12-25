@@ -43,13 +43,13 @@ export default function ContactoPage() {
     ]
   };
 
-  // LocalBusiness Schema con NAP completo
+  // CORRECCIÓN: Unificamos el @id con layout.tsx y cambiamos a EmploymentAgency
   const localBusinessSchema = {
     "@context": "https://schema.org",
-    "@type": "ProfessionalService",
+    "@type": "EmploymentAgency", // Mejor consistencia con layout.tsx que ProfessionalService
     "name": "Humanis",
     "image": "https://www.humanis.com.mx/humanislogo.png",
-    "@id": "https://www.humanis.com.mx",
+    "@id": "https://www.humanis.com.mx/#organization", // <--- AQUÍ ESTÁ LA CLAVE
     "url": "https://www.humanis.com.mx",
     "telephone": "+525544167974",
     "email": "contacto@humanis.mx",

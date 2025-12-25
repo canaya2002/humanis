@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
   Search, MapPin, DollarSign, Clock, Building2, 
-  Filter, X, Briefcase, Sparkles, ArrowRight, CheckCircle2 
+  Filter, X, Briefcase, CheckCircle2, ArrowRight 
 } from 'lucide-react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -119,47 +119,47 @@ const vacancies = [
     type: "Presencial",
     schedule: "Tiempo completo",
     area: "Ventas",
-    posted: "Hace 2 dÃ­as",
-    description: "Buscamos ejecutivo de ventas con experiencia en retail para tienda de lujo. Excelentes comisiones y ambiente de alto desempeÃ±o.",
-    requirements: ["2+ aÃ±os en ventas", "InglÃ©s intermedio", "Disponibilidad de horario"]
+    posted: "Hace 2 días",
+    description: "Buscamos ejecutivo de ventas con experiencia en retail para tienda de lujo. Excelentes comisiones y ambiente de alto desempeño.",
+    requirements: ["2+ años en ventas", "Inglés intermedio", "Disponibilidad de horario"]
   },
   { 
     id: 2,
     title: "Desarrollador Full Stack", 
     company: "Startup Fintech", 
-    location: "Remoto (MÃ©xico)", 
+    location: "Remoto (México)", 
     salary: "$45,000 - $60,000",
     type: "Remoto",
     schedule: "Tiempo completo",
     area: "TI",
-    posted: "Hace 1 dÃ­a",
-    description: "Ãšnete a nuestro equipo de desarrollo. Buscamos expertos en arquitectura escalable y microservicios.",
-    requirements: ["3+ aÃ±os de experiencia", "React y Node.js", "InglÃ©s avanzado"]
+    posted: "Hace 1 día",
+    description: "Únete a nuestro equipo de desarrollo. Buscamos expertos en arquitectura escalable y microservicios.",
+    requirements: ["3+ años de experiencia", "React y Node.js", "Inglés avanzado"]
   },
   { 
     id: 3,
-    title: "Coordinador de LogÃ­stica", 
-    company: "Empresa de LogÃ­stica", 
+    title: "Coordinador de Logística", 
+    company: "Empresa de Logística", 
     location: "Guadalajara, Jalisco", 
     salary: "$22,000 - $28,000",
     type: "Presencial",
     schedule: "Tiempo completo",
-    area: "LogÃ­stica",
-    posted: "Hace 3 dÃ­as",
-    description: "Coordinar operaciones de almacÃ©n y distribuciÃ³n en zona metropolitana.",
-    requirements: ["Experiencia en logÃ­stica", "Manejo de personal", "Licencia de manejo"]
+    area: "Logística",
+    posted: "Hace 3 días",
+    description: "Coordinar operaciones de almacén y distribución en zona metropolitana.",
+    requirements: ["Experiencia en logística", "Manejo de personal", "Licencia de manejo"]
   },
   { 
     id: 4,
     title: "Analista de Marketing Digital", 
     company: "Agencia de Marketing", 
-    location: "HÃ­brido - CDMX", 
+    location: "Híbrido - CDMX", 
     salary: "$20,000 - $28,000",
-    type: "HÃ­brido",
+    type: "Híbrido",
     schedule: "Tiempo completo",
     area: "Marketing",
-    posted: "Hace 1 dÃ­a",
-    description: "GestiÃ³n de campaÃ±as digitales, anÃ¡lisis de mÃ©tricas y reportes.",
+    posted: "Hace 1 día",
+    description: "Gestión de campañas digitales, análisis de métricas y reportes.",
     requirements: ["Google Ads certificado", "Meta Ads", "Excel avanzado"]
   },
   { 
@@ -171,37 +171,38 @@ const vacancies = [
     type: "Presencial",
     schedule: "Tiempo completo",
     area: "Finanzas",
-    posted: "Hace 5 dÃ­as",
+    posted: "Hace 5 días",
     description: "Responsable de la contabilidad general y cumplimiento fiscal.",
-    requirements: ["TÃ­tulo en ContadurÃ­a", "SAT y nÃ³minas", "5+ aÃ±os experiencia"]
+    requirements: ["Título en Contaduría", "SAT y nóminas", "5+ años experiencia"]
   },
   { 
     id: 6,
     title: "Customer Success Manager", 
     company: "SaaS B2B", 
-    location: "Remoto (MÃ©xico)", 
+    location: "Remoto (México)", 
     salary: "$35,000 - $45,000",
     type: "Remoto",
     schedule: "Tiempo completo",
     area: "Servicio al Cliente",
-    posted: "Hace 2 dÃ­as",
-    description: "Gestionar cartera de clientes enterprise y asegurar su Ã©xito.",
-    requirements: ["InglÃ©s avanzado", "Experiencia en CS", "Habilidades analÃ­ticas"]
+    posted: "Hace 2 días",
+    description: "Gestionar cartera de clientes enterprise y asegurar su éxito.",
+    requirements: ["Inglés avanzado", "Experiencia en CS", "Habilidades analíticas"]
   }
 ];
 
-const locations = ["Todas", "CDMX", "Guadalajara", "Monterrey", "QuerÃ©taro", "Remoto"];
-const areas = ["Todas", "Ventas", "TI", "LogÃ­stica", "Marketing", "Finanzas", "Operaciones"];
-const types = ["Todos", "Presencial", "Remoto", "HÃ­brido"];
+const locations = ["Todas", "CDMX", "Guadalajara", "Monterrey", "Querétaro", "Remoto"];
+const areas = ["Todas", "Ventas", "TI", "Logística", "Marketing", "Finanzas", "Operaciones"];
+const types = ["Todos", "Presencial", "Remoto", "Híbrido"];
 
-export default function VacantesPage() {
+export default function VacantesClient() {
   const [showHeader, setShowHeader] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedLocation, setSelectedLocation] = useState("Todas");
   const [selectedArea, setSelectedArea] = useState("Todas");
   const [selectedType, setSelectedType] = useState("Todos");
+  // showFilters se mantiene por si se usa en el futuro
   const [showFilters, setShowFilters] = useState(false);
-  // Iniciar con la primera vacante seleccionada en desktop para que no se vea vacÃ­o
+  // Iniciar con la primera vacante seleccionada en desktop para que no se vea vacío
   const [selectedVacancy, setSelectedVacancy] = useState<typeof vacancies[0] | null>(vacancies[0]);
   const lastScrollY = useRef(0);
 
@@ -222,63 +223,10 @@ export default function VacantesPage() {
     return matchesSearch && matchesLocation && matchesArea && matchesType;
   });
 
-  // --- SEO MASTERCLASS: JOB POSTING SCHEMA ---
-  // Generamos un script de datos estructurados para cada vacante
-  const jobSchemaScript = vacancies.map(job => {
-    // ExtracciÃ³n de salario simple (limpieza de "$", comas y tomar el primer nÃºmero)
-    const rawSalary = job.salary.replace(/[^0-9-]/g, '');
-    const salaryLow = rawSalary.split('-')[0] || "0";
-    const salaryHigh = rawSalary.split('-')[1] || salaryLow;
-
-    return {
-      "@context": "https://schema.org",
-      "@type": "JobPosting",
-      "title": job.title,
-      "description": `<p>${job.description}</p><p><strong>Requisitos:</strong> ${job.requirements.join(', ')}</p>`,
-      "identifier": {
-        "@type": "PropertyValue",
-        "name": "Humanis",
-        "value": `VAC-${job.id}`
-      },
-      "datePosted": new Date().toISOString().split('T')[0], // En producciÃ³n, usa la fecha real de la DB
-      "validThrough": "2025-12-31",
-      "employmentType": job.schedule.includes("Tiempo completo") ? "FULL_TIME" : "PART_TIME",
-      "hiringOrganization": {
-        "@type": "Organization",
-        "name": job.company,
-        "sameAs": "https://www.humanis.com.mx"
-      },
-      "jobLocation": {
-        "@type": "Place",
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": job.location,
-          "addressCountry": "MX"
-        }
-      },
-      "baseSalary": {
-        "@type": "MonetaryAmount",
-        "currency": "MXN",
-        "value": {
-          "@type": "QuantitativeValue",
-          "minValue": parseInt(salaryLow, 10),
-          "maxValue": parseInt(salaryHigh, 10),
-          "unitText": "MONTH"
-        }
-      }
-    };
-  });
-
   return (
     <>
       <GlobalStyles />
       
-      {/* INYECCIÃ“N DE SCHEMA: GOOGLE FOR JOBS */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jobSchemaScript) }}
-      />
-
       <div className="min-h-screen bg-white text-slate-900 font-sans selection:bg-cyan-100 selection:text-cyan-900">
         <Header showHeader={showHeader} />
 
@@ -287,7 +235,7 @@ export default function VacantesPage() {
           
           <div className="container mx-auto px-4 md:px-6 max-w-7xl relative z-10 pb-20">
             
-            {/* --- HEADER: TÃTULO Y BUSCADOR --- */}
+            {/* --- HEADER: TÍTULO Y BUSCADOR --- */}
             <div className="mb-12">
                 <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
                     <div>
@@ -305,7 +253,7 @@ export default function VacantesPage() {
                     </div>
                 </div>
 
-                {/* BARRA DE BÃšSQUEDA FLOTANTE */}
+                {/* BARRA DE BÚSQUEDA FLOTANTE */}
                 <div className="bg-white border border-slate-200 shadow-xl rounded-2xl p-2 flex flex-col md:flex-row gap-2 max-w-4xl">
                     <div className="relative flex-1">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={20} />
@@ -318,7 +266,7 @@ export default function VacantesPage() {
                         />
                     </div>
                     <div className="flex gap-2 overflow-x-auto pb-2 md:pb-0 no-scrollbar">
-                        {/* SELECTS PERSONALIZADOS (Estilo BotÃ³n) */}
+                        {/* SELECTS PERSONALIZADOS (Estilo Botón) */}
                         <div className="relative group">
                             <select 
                                 value={selectedLocation}
@@ -422,7 +370,7 @@ export default function VacantesPage() {
                                 {/* Cuerpo del Detalle */}
                                 <div className="grid grid-cols-2 gap-8 mb-10">
                                     <div>
-                                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">DescripciÃ³n</h4>
+                                        <h4 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-4">Descripción</h4>
                                         <p className="text-slate-700 leading-relaxed font-medium">
                                             {selectedVacancy.description}
                                         </p>
@@ -440,7 +388,7 @@ export default function VacantesPage() {
                                     </div>
                                 </div>
 
-                                {/* Footer con AcciÃ³n */}
+                                {/* Footer con Acción */}
                                 <div className="flex items-center justify-between pt-6 border-t border-slate-100">
                                     <div className="flex gap-4 text-sm font-bold text-slate-500">
                                         <span className="flex items-center gap-2"><MapPin size={16}/> {selectedVacancy.location}</span>
@@ -463,7 +411,7 @@ export default function VacantesPage() {
             </div>
           </div>
 
-          {/* MODAL MÃ“VIL (SOLO APARECE EN PANTALLAS PEQUEÃ‘AS) */}
+          {/* MODAL MÓVIL (SOLO APARECE EN PANTALLAS PEQUEÑAS) */}
           <AnimatePresence>
             {selectedVacancy && (
                 <motion.div 
@@ -495,7 +443,7 @@ export default function VacantesPage() {
 
                         <div className="space-y-6 mb-8">
                             <div>
-                                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">DescripciÃ³n</h4>
+                                <h4 className="text-xs font-black uppercase tracking-widest text-slate-400 mb-2">Descripción</h4>
                                 <p className="text-slate-700 text-sm leading-relaxed font-medium">{selectedVacancy.description}</p>
                             </div>
                             <div>

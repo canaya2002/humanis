@@ -50,12 +50,13 @@ export default function NosotrosPage() {
     ]
   };
 
-  // AboutPage Schema (E-E-A-T)
+  // AboutPage Schema (E-E-A-T) - CORREGIDO
   const aboutSchema = {
     "@context": "https://schema.org",
     "@type": "AboutPage",
     "mainEntity": {
       "@type": "Organization",
+      "@id": "https://www.humanis.com.mx/#organization", // <--- VINCULACIÓN MAESTRA AGREGADA
       "name": "Humanis",
       "legalName": "Humanis S.A. de C.V.",
       "description": "Agencia de colocación de personal con registro STPS vigente. Intermediamos entre empresas y talento con total transparencia y cumplimiento normativo.",

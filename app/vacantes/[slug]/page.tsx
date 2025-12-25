@@ -22,7 +22,6 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
   }
 
-  // Verificar si expiró para ajustar el título (opcional pero recomendado para UX en buscadores)
   const isExpired = new Date(vacancy.validThrough) < new Date();
   const titlePrefix = isExpired ? '[Cerrada] ' : '';
 
@@ -46,24 +45,18 @@ export default async function VacantePage({ params }: { params: { slug: string }
   const { slug } = await params;
   const vacancy = getVacancyBySlug(slug);
 
-  // Solo devolvemos 404 si la vacante NO existe en la base de datos.
-  // Si existe pero expiró, NO hacemos notFound() para mantener el SEO, simplemente mostramos el aviso.
   if (!vacancy) {
     notFound();
   }
 
-  // 1. Lógica de Expiración (Server Side)
-  // Comparamos la fecha de validez con la fecha actual
   const isExpired = new Date(vacancy.validThrough) < new Date();
 
-  // 2. Lógica robusta para parsing de salario (evita errores con formatos como "$18k" o "A convenir")
   const rawSalary = vacancy.salary.replace(/[^0-9-]/g, ''); 
   const parts = rawSalary.split('-');
   const minSalary = parts[0] ? parseInt(parts[0], 10) : 0;
-  // Si no hay rango (ej: solo "20000"), el máximo es igual al mínimo
   const maxSalary = parts[1] ? parseInt(parts[1], 10) : minSalary;
 
-  // 3. Construcción del Schema.org JobPosting
+  // Construcción del Schema.org JobPosting - OPTIMIZADO
   const jobPostingSchema = {
     "@context": "https://schema.org",
     "@type": "JobPosting",
@@ -75,13 +68,14 @@ export default async function VacantePage({ params }: { params: { slug: string }
       "value": `humanis-${vacancy.id}`
     },
     "datePosted": vacancy.datePosted,
-    "validThrough": vacancy.validThrough, // Google leerá esto; si expiró, la quita de Google Jobs automáticamente
+    "validThrough": vacancy.validThrough,
     "employmentType": vacancy.employmentType || "FULL_TIME",
     "hiringOrganization": {
       "@type": "Organization",
       "name": "Humanis",
       "sameAs": "https://www.humanis.com.mx",
-      "logo": "https://www.humanis.com.mx/humanislogo.png"
+      "logo": "https://www.humanis.com.mx/humanislogo.png",
+      "@id": "https://www.humanis.com.mx/#organization" // <--- VINCULACIÓN MAESTRA AGREGADA
     },
     "jobLocation": {
       "@type": "Place",
@@ -112,7 +106,6 @@ export default async function VacantePage({ params }: { params: { slug: string }
 
   return (
     <>
-      {/* Inyectar Schema JobPosting en el HEAD (Invisible al usuario, visible para Google) */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -120,7 +113,6 @@ export default async function VacantePage({ params }: { params: { slug: string }
         }}
       />
       
-      {/* Renderizamos el Cliente y le pasamos el dato de si expiró */}
       <VacanteDetailClient vacancy={vacancy} isExpired={isExpired} />
     </>
   );
