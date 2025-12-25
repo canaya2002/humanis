@@ -2,7 +2,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { motion, useAnimation, useInView } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
@@ -10,9 +10,9 @@ import {
   Briefcase, ShieldCheck, 
   FileText, CheckCircle, UserCheck, 
   TrendingUp, Search,
-  Users, Zap, 
-  Code, Terminal, Database, Server, Cloud, Globe, ArrowRight, Activity,
-  Calculator, Scale, Stethoscope, HardHat, PenTool, Smartphone, Cpu
+  Users, Activity,
+  Calculator, Scale, Stethoscope, HardHat, PenTool, Smartphone, Cpu,
+  Server, Cloud, Terminal, Globe, Zap, ArrowRight, Code, Database 
 } from 'lucide-react';
 
 // Importa tus componentes externos
@@ -92,10 +92,17 @@ const RotatingText = () => {
 
 const InfiniteCarousel = () => {
   const logos = Array.from({ length: 8 }, (_, i) => `/socios/Partners_${i + 1}.png`);
-  // SEO: Nombres descriptivos para los logos de socios (simulados para el ejemplo)
-  const partnerAlts = [
-    "Empresa líder en Tecnología", "Corporativo Financiero", "Industria Automotriz", "Sector Retail",
-    "Logística y Transporte", "Servicios de Salud", "Consultoría Global", "Manufactura Avanzada"
+  
+  // SEO: Nombres Reales de las Empresas para el ALT
+  const partnerNames = [
+    "Unilever", 
+    "P&G", 
+    "Pepsico", 
+    "FEMSA", 
+    "Nestle", 
+    "Walmart", 
+    "Randstad", 
+    "Oxxo"  
   ];
 
   return (
@@ -112,13 +119,12 @@ const InfiniteCarousel = () => {
         <div className="flex w-full overflow-hidden group">
             <div className="flex animate-infinite-scroll group-hover:[animation-play-state:paused] items-center [animation-duration:120s]">
                 {[...logos, ...logos, ...logos].map((logo, idx) => {
-                    // Calculamos el índice real para el texto alternativo
                     const realIdx = idx % logos.length;
                     return (
                         <div key={idx} className="flex-shrink-0 w-72 mx-8 flex items-center justify-center transition-all duration-500 hover:scale-105">
                             <Image 
                                 src={logo} 
-                                alt={`Cliente Humanis: ${partnerAlts[realIdx] || 'Socio Estratégico'}`} 
+                                alt={`Logo de ${partnerNames[realIdx] || 'Socio Estratégico'} - Cliente de Humanis`}
                                 width={220} 
                                 height={112} 
                                 className="max-w-[220px] max-h-28 object-contain opacity-100 drop-shadow-md" 
@@ -134,15 +140,12 @@ const InfiniteCarousel = () => {
   );
 };
 
-// --- METODOLOGÍA 360 ARREGLADA (Rotación Perfecta + Iconos Negros + Sin Caja) ---
+// --- METODOLOGÍA 360 ---
 const ForCompaniesSection = ({ navigateTo }: { navigateTo: (page: string) => void }) => {
   const containerRef = useRef(null);
-  const isInView = useInView(containerRef, { once: true, margin: "-100px" });
   
-  // Diseño botón central 3D "Liquid"
   const LIQUID_3D_BUTTON = "bg-gradient-to-br from-slate-50 to-slate-100 backdrop-blur-xl border-[3px] border-white shadow-[0_15px_35px_rgba(0,0,0,0.15),inset_2px_2px_5px_rgba(255,255,255,1),inset_-2px_-2px_5px_rgba(0,0,0,0.05)] rounded-3xl";
 
-  // ICONOS FULL BLACK/SLATE
   const iconsList = [
     { Icon: Search, hex: 'text-slate-900' }, 
     { Icon: UserCheck, hex: 'text-slate-900' }, 
@@ -156,7 +159,6 @@ const ForCompaniesSection = ({ navigateTo }: { navigateTo: (page: string) => voi
   return (
     <section className="py-32 bg-white relative overflow-hidden z-30" id="empresas" ref={containerRef}>
       
-      {/* FONDO BLANCO PURO */}
       <div className="absolute inset-0 z-0 bg-white pointer-events-none" />
 
       <div className="container mx-auto px-6 max-w-7xl relative z-20">
@@ -181,24 +183,20 @@ const ForCompaniesSection = ({ navigateTo }: { navigateTo: (page: string) => voi
 
           <div className="flex flex-col gap-10 order-1 lg:order-2">
             
-            {/* CONTENEDOR FLOTANTE (Sin borde, sin fondo, solo el anillo) */}
             <div className="relative h-[450px] md:h-[600px] w-full flex items-center justify-center">
                
-               {/* Anillos de Fondo */}
                <div className="absolute w-[300px] h-[300px] md:w-[450px] md:h-[450px] rounded-full border border-slate-100" />
                <div className="absolute w-[220px] h-[220px] md:w-[350px] md:h-[350px] rounded-full border border-dashed border-slate-200" />
                
-               {/* CENTRO: Eficacia TOTAL (FLOTANDO + ESTILO 3D) */}
                <div className={`absolute z-40 p-6 w-36 h-36 md:w-48 md:h-48 flex flex-col justify-center items-center ${LIQUID_3D_BUTTON} hover:scale-105 transition-transform duration-300`}>
                    <Activity className="text-slate-900 mb-2" size={32} />
                    <div className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-slate-500 mb-1 relative">Eficacia</div>
                    <div className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight relative">TOTAL</div>
                </div>
 
-               {/* ICONOS GIRATORIOS (Rotación Sincronizada) */}
                <motion.div
                  animate={{ rotate: 360 }}
-                 transition={{ repeat: Infinity, duration: 40, ease: "linear" }} // Duración constante
+                 transition={{ repeat: Infinity, duration: 40, ease: "linear" }} 
                  className="absolute inset-0 flex items-center justify-center pointer-events-none scale-75 md:scale-100"
                >
                  {iconsList.map(({ Icon, hex }, idx) => {
@@ -211,7 +209,6 @@ const ForCompaniesSection = ({ navigateTo }: { navigateTo: (page: string) => voi
                              style={{ transform: `translate(${x}px, ${y}px)` }} 
                              className="absolute flex items-center justify-center z-30 pointer-events-auto"
                          >
-                             {/* ROTACIÓN INVERSA EXACTA: Mismos valores que el padre pero negativos */}
                              <motion.div 
                                  animate={{ rotate: -360 }} 
                                  transition={{ repeat: Infinity, duration: 40, ease: "linear" }} 
@@ -234,6 +231,7 @@ const ForCompaniesSection = ({ navigateTo }: { navigateTo: (page: string) => voi
 
 // --- FONDO DE COLUMNAS DE CARRERAS ---
 const CareerIconsBackground = () => {
+    // Aquí es donde ocurría el error: Code y Database ya están importados
     const leftIcons = [Code, Cpu, Database, Server, Cloud, Terminal, HardHat, Zap, Globe, Smartphone];
     const rightIcons = [Briefcase, UserCheck, FileText, Calculator, Scale, ShieldCheck, Stethoscope, Users, Search, PenTool];
 
@@ -323,7 +321,8 @@ const ServicesScrollSection = () => {
                         <div className="absolute inset-0 bg-slate-200/50 blur-[80px] rounded-full scale-75 animate-pulse z-0" />
                         <Image 
                             src={item.img} 
-                            alt={`Servicio Humanis: ${item.title} - ${item.desc}`} // SEO: ALT descriptivo
+                            // SEO: Alt descriptivo
+                            alt={`Servicio Humanis: ${item.title} - ${item.desc}`}
                             width={600} 
                             height={600} 
                             className="relative z-10 object-contain w-auto h-full max-h-[250px] md:max-h-[350px] lg:max-h-[500px] drop-shadow-2xl hover:scale-105 transition-transform duration-700" 
@@ -366,8 +365,7 @@ export default function HumanisApp() {
   useEffect(() => { const timer = setTimeout(() => setIsLoaded(true), 10); return () => clearTimeout(timer); }, []);
   const navigateTo = (page: string) => { if (page === 'contacto') setShowContact(true); else if (page === 'empresas') router.push('/para-empresas'); else if (page === 'candidatos') router.push('/talento'); else router.push(`/${page}`); };
 
-  // --- SEO MASTERCLASS: SERVICE SCHEMA ---
-  // Definimos tus servicios principales para Google en formato JSON-LD
+  // SEO: Schema para la Homepage (ItemList de servicios)
   const serviceSchema = {
     "@context": "https://schema.org",
     "@type": "ItemList",

@@ -1,9 +1,9 @@
 import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import VacanteDetailClient from './VacanteDetailClient';
-import { getVacancyBySlug, getAllVacancySlugs, Vacancy } from '../../vacanciesData';
+import { getVacancyBySlug, getAllVacancySlugs } from '../../vacanciesData';
 
-// Generar rutas estáticas en build time
+// Generar rutas estáticas en build time para mejor rendimiento
 export async function generateStaticParams() {
   const slugs = getAllVacancySlugs();
   return slugs.map((slug) => ({
@@ -13,7 +13,8 @@ export async function generateStaticParams() {
 
 // Metadata dinámica para SEO
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  const vacancy = getVacancyBySlug(params.slug);
+  const { slug } = await params;
+  const vacancy = getVacancyBySlug(slug);
 
   if (!vacancy) {
     return {
@@ -21,30 +22,48 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
   }
 
+  // Verificar si expiró para ajustar el título (opcional pero recomendado para UX en buscadores)
+  const isExpired = new Date(vacancy.validThrough) < new Date();
+  const titlePrefix = isExpired ? '[Cerrada] ' : '';
+
   return {
-    title: `${vacancy.title} - ${vacancy.company} | Humanis`,
+    title: `${titlePrefix}${vacancy.title} - ${vacancy.company} | Humanis`,
     description: `${vacancy.description} Ubicación: ${vacancy.location}. Salario: ${vacancy.salary}. Aplica ahora con Humanis.`,
     alternates: {
-      canonical: `https://www.humanis.com.mx/vacantes/${params.slug}`,
+      canonical: `https://www.humanis.com.mx/vacantes/${slug}`,
     },
     openGraph: {
-      title: `${vacancy.title} - ${vacancy.company}`,
+      title: `${titlePrefix}${vacancy.title} - ${vacancy.company}`,
       description: vacancy.description,
-      url: `https://www.humanis.com.mx/vacantes/${params.slug}`,
+      url: `https://www.humanis.com.mx/vacantes/${slug}`,
       type: 'website',
       locale: 'es_MX',
     },
   };
 }
 
-export default function VacantePage({ params }: { params: { slug: string } }) {
-  const vacancy = getVacancyBySlug(params.slug);
+export default async function VacantePage({ params }: { params: { slug: string } }) {
+  const { slug } = await params;
+  const vacancy = getVacancyBySlug(slug);
 
+  // Solo devolvemos 404 si la vacante NO existe en la base de datos.
+  // Si existe pero expiró, NO hacemos notFound() para mantener el SEO, simplemente mostramos el aviso.
   if (!vacancy) {
     notFound();
   }
 
-  // Schema.org JobPosting - ESTO ES LO CRÍTICO PARA GOOGLE JOBS
+  // 1. Lógica de Expiración (Server Side)
+  // Comparamos la fecha de validez con la fecha actual
+  const isExpired = new Date(vacancy.validThrough) < new Date();
+
+  // 2. Lógica robusta para parsing de salario (evita errores con formatos como "$18k" o "A convenir")
+  const rawSalary = vacancy.salary.replace(/[^0-9-]/g, ''); 
+  const parts = rawSalary.split('-');
+  const minSalary = parts[0] ? parseInt(parts[0], 10) : 0;
+  // Si no hay rango (ej: solo "20000"), el máximo es igual al mínimo
+  const maxSalary = parts[1] ? parseInt(parts[1], 10) : minSalary;
+
+  // 3. Construcción del Schema.org JobPosting
   const jobPostingSchema = {
     "@context": "https://schema.org",
     "@type": "JobPosting",
@@ -56,7 +75,7 @@ export default function VacantePage({ params }: { params: { slug: string } }) {
       "value": `humanis-${vacancy.id}`
     },
     "datePosted": vacancy.datePosted,
-    "validThrough": vacancy.validThrough,
+    "validThrough": vacancy.validThrough, // Google leerá esto; si expiró, la quita de Google Jobs automáticamente
     "employmentType": vacancy.employmentType || "FULL_TIME",
     "hiringOrganization": {
       "@type": "Organization",
@@ -78,8 +97,8 @@ export default function VacantePage({ params }: { params: { slug: string } }) {
       "currency": "MXN",
       "value": {
         "@type": "QuantitativeValue",
-        "minValue": parseFloat(vacancy.salary.match(/\d{1,3}(?:,\d{3})*/)?.[0]?.replace(',', '') || '0'),
-        "maxValue": parseFloat(vacancy.salary.match(/\d{1,3}(?:,\d{3})*/g)?.[1]?.replace(',', '') || '0'),
+        "minValue": minSalary,
+        "maxValue": maxSalary,
         "unitText": "MONTH"
       }
     },
@@ -88,12 +107,12 @@ export default function VacantePage({ params }: { params: { slug: string } }) {
       "@type": "Country",
       "name": "MX"
     },
-    "url": `https://www.humanis.com.mx/vacantes/${params.slug}`
+    "url": `https://www.humanis.com.mx/vacantes/${slug}`
   };
 
   return (
     <>
-      {/* Inyectar Schema JobPosting en el HEAD */}
+      {/* Inyectar Schema JobPosting en el HEAD (Invisible al usuario, visible para Google) */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -101,8 +120,8 @@ export default function VacantePage({ params }: { params: { slug: string } }) {
         }}
       />
       
-      {/* Componente cliente para la UI */}
-      <VacanteDetailClient vacancy={vacancy} />
+      {/* Renderizamos el Cliente y le pasamos el dato de si expiró */}
+      <VacanteDetailClient vacancy={vacancy} isExpired={isExpired} />
     </>
   );
 }

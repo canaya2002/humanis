@@ -60,21 +60,28 @@ export default function Header({ showHeader, setShowContact }: HeaderProps) {
         <div className="container mx-auto px-6">
           <div className="flex items-start justify-between relative">
             
-            {/* 1. LOGO - Se redimensiona, pero el fondo sigue transparente */}
+            {/* 1. LOGO - OPTIMIZADO PARA CLS */}
+            {/* Se usa transform: scale en lugar de cambiar height para evitar Layout Shifts */}
             <Link href="/" className="relative z-50 flex-shrink-0 group block mt-0 pt-0">
-               <Image 
-                 src="/humanislogo.png" 
-                 alt="Humanis - Agencia de Colocación de Personal" 
-                 width={160}
-                 height={160}
-                 className={`
-                   w-auto object-contain object-left-top drop-shadow-2xl transition-all duration-500
-                   ${scrolled 
-                     ? 'h-16 md:h-20 -mt-1' 
-                     : 'h-24 md:h-32 lg:h-40 -mt-2 lg:-mt-4'} 
-                 `}
-                 priority
-               />
+               <div 
+                 className="relative origin-top-left transition-transform duration-500 ease-in-out"
+                 style={{
+                   // Escala suavemente del 100% al 60%
+                   transform: scrolled ? 'scale(0.6)' : 'scale(1)',
+                   // Compensa el margen superior al escalar para que se mantenga alineado visualmente
+                   marginTop: scrolled ? '0px' : '-8px'
+                 }}
+               >
+                 <Image 
+                   src="/humanislogo.png" 
+                   alt="Humanis - Agencia de Colocación de Personal" 
+                   width={160}
+                   height={160}
+                   // Altura fija base (h-32 / h-40), el tamaño visual se controla con scale()
+                   className="h-24 md:h-32 lg:h-40 w-auto object-contain object-left-top drop-shadow-2xl"
+                   priority
+                 />
+               </div>
             </Link>
 
             {/* 2. MENÚ CENTRAL */}

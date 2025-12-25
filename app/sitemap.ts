@@ -1,105 +1,102 @@
 import { MetadataRoute } from 'next';
+import { vacancies } from './vacanciesData'; // Importamos tus datos de vacantes
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = 'https://www.humanis.com.mx';
   
-  // Fechas fijas para diferentes tipos de contenido
-  // Actualiza estas fechas cuando modifiques el contenido real
-  const contentDates = {
-    homepage: new Date('2025-12-24'),
-    paraEmpresas: new Date('2025-12-24'),
-    talento: new Date('2025-12-24'),
-    servicios: new Date('2025-12-24'),
-    vacantes: new Date('2025-12-24'), 
-    casosExito: new Date('2025-12-24'),
-    proceso: new Date('2025-12-24'),
-    nosotros: new Date('2025-12-24'),
-    faqEmpresas: new Date('2025-12-24'),
-    faqTalento: new Date('2025-12-24'),
-    contacto: new Date('2025-12-24'),
-    privacidad: new Date('2025-12-24'),
-    legal: new Date('2025-12-24'),
-  };
+  // Fecha actual para las páginas estáticas (se actualiza al hacer build)
+  const currentDate = new Date();
 
-  return [
+  // 1. Definición de Rutas Estáticas
+  const staticRoutes: MetadataRoute.Sitemap = [
     {
       url: baseUrl,
-      lastModified: contentDates.homepage,
+      lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 1,
     },
     {
       url: `${baseUrl}/para-empresas`,
-      lastModified: contentDates.paraEmpresas,
+      lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.9,
     },
     {
       url: `${baseUrl}/talento`,
-      lastModified: contentDates.talento,
+      lastModified: currentDate,
       changeFrequency: 'weekly',
       priority: 0.9,
     },
     {
       url: `${baseUrl}/servicios`,
-      lastModified: contentDates.servicios,
+      lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.8,
     },
     {
       url: `${baseUrl}/vacantes`,
-      lastModified: contentDates.vacantes,
-      changeFrequency: 'daily',
+      lastModified: currentDate,
+      changeFrequency: 'daily', // Importante: esta página cambia diario
       priority: 0.9,
     },
     {
       url: `${baseUrl}/casos-de-exito`,
-      lastModified: contentDates.casosExito,
+      lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
       url: `${baseUrl}/proceso`,
-      lastModified: contentDates.proceso,
+      lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
     {
       url: `${baseUrl}/nosotros`,
-      lastModified: contentDates.nosotros,
+      lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
     {
       url: `${baseUrl}/faq-empresas`,
-      lastModified: contentDates.faqEmpresas,
+      lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
       url: `${baseUrl}/faq-talento`,
-      lastModified: contentDates.faqTalento,
+      lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.5,
     },
     {
       url: `${baseUrl}/contacto`,
-      lastModified: contentDates.contacto,
+      lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.8,
     },
-    // Páginas legales (Esenciales para la confianza de Google E-E-A-T)
+    // Páginas Legales
     {
       url: `${baseUrl}/privacidad`,
-      lastModified: contentDates.privacidad,
+      lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
     {
       url: `${baseUrl}/legal`,
-      lastModified: contentDates.legal,
+      lastModified: currentDate,
       changeFrequency: 'yearly',
       priority: 0.3,
     },
   ];
+
+  const vacancyRoutes: MetadataRoute.Sitemap = vacancies.map((vacancy) => ({
+    url: `${baseUrl}/vacantes/${vacancy.slug}`,
+    lastModified: new Date(vacancy.datePosted), // Usa la fecha real de publicación
+    changeFrequency: 'daily',
+    priority: 0.9, // Alta prioridad para ofertas de empleo
+  }));
+
+  // 3. Unificar ambos arreglos
+  return [...staticRoutes, ...vacancyRoutes];
 }
