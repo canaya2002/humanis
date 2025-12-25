@@ -2,18 +2,12 @@
 
 import React from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { 
   Facebook, Instagram, Linkedin, 
   ArrowUp, MapPin, Mail, Phone 
 } from 'lucide-react';
-// Importamos un ícono SVG personalizado para TikTok ya que Lucide a veces no lo incluye por defecto o puedes usar el de Lucide si está disponible en tu versión. 
-// Si no tienes el icono de Tiktok en tu versión de Lucide, aquí uso un SVG simple inline o el de la librería si existe.
-// Para asegurar compatibilidad, usaré un SVG inline para TikTok si es necesario, pero aquí asumo que puedes usar un componente o texto.
-// Nota: Lucide React v0.4+ suele tener 'Twitter' o 'X', pero TikTok no siempre. 
-// Usaré un icono genérico de video o texto si no está, pero asumo que tienes la librería actualizada.
-// Si prefieres usar FontAwesome u otra, avísame. Aquí usaré el texto "TikTok" o un placeholder si falla el import, 
-// pero para mantener el estilo consistente, aquí está el array con tus links reales.
 
 // 1. TUS REDES SOCIALES REALES
 const socialLinks = [
@@ -35,9 +29,7 @@ const socialLinks = [
   { 
     name: 'TikTok', 
     href: 'https://www.tiktok.com/@humanis_mx', 
-    // Si tu versión de Lucide no tiene TikTok, puedes importar otro ícono o crear uno custom.
-    // Aquí uso un SVG inline dentro del map para asegurar que se vea bien el logo de TikTok.
-    icon: null // Lo manejaremos en el render
+    icon: null // SVG inline para TikTok
   },
 ];
 
@@ -59,7 +51,6 @@ export default function Footer() {
   };
 
   return (
-    // Fondo bg-white puro, sin decoraciones extrañas
     <footer className="relative bg-white border-t border-slate-100 overflow-hidden font-sans pt-24 pb-12">
       
       <div className="container mx-auto px-6 relative z-10 flex flex-col items-center">
@@ -75,11 +66,13 @@ export default function Footer() {
             <div className="absolute -inset-10 bg-gradient-to-tr from-cyan-100/50 to-blue-100/50 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none" />
             
             <Link href="/">
-              <img 
+              <Image 
                 src="/humanislogo.png" 
-                alt="Humanis Logo" 
-                // TAMAÑO AUMENTADO
+                alt="Agencia de Colocación Humanis - Logo" 
+                width={160}
+                height={160}
                 className="h-32 md:h-40 w-auto object-contain relative z-10 drop-shadow-sm transition-transform duration-500 hover:scale-[1.02]" 
+                priority
               />
             </Link>
         </motion.div>
@@ -93,7 +86,6 @@ export default function Footer() {
           className="flex gap-6 mb-16"
         >
             {socialLinks.map((social) => {
-                // Renderizado condicional para el icono de TikTok si no viene de Lucide
                 const isTikTok = social.name === 'TikTok';
                 const Icon = social.icon;
 
@@ -101,15 +93,14 @@ export default function Footer() {
                     <motion.a
                         key={social.name}
                         href={social.href}
-                        target="_blank" // Abrir en nueva pestaña
-                        rel="noopener noreferrer" // Seguridad y SEO
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        aria-label={`Visitar nuestro perfil de ${social.name}`}
                         whileHover={{ y: -5, scale: 1.1 }}
                         whileTap={{ scale: 0.9 }}
                         className="w-12 h-12 rounded-full bg-white border border-slate-200 text-slate-400 flex items-center justify-center hover:border-cyan-400 hover:text-cyan-600 hover:shadow-[0_10px_25px_-5px_rgba(6,182,212,0.3)] transition-all duration-300"
-                        aria-label={`Visitar Humanis en ${social.name}`} // Mejora de accesibilidad/SEO
                     >
                         {isTikTok ? (
-                            // Icono SVG Manual de TikTok para asegurar que se vea perfecto
                             <svg 
                                 xmlns="http://www.w3.org/2000/svg" 
                                 width="20" 
@@ -156,12 +147,20 @@ export default function Footer() {
 
         {/* 4. INFORMACIÓN DE CONTACTO RÁPIDA */}
         <div className="flex flex-wrap justify-center gap-8 mb-10 text-slate-400 text-sm font-light">
-            <a href="tel:+525544167974" className="flex items-center gap-2 hover:text-cyan-600 transition-colors">
+            <a 
+              href="tel:+525544167974" 
+              className="flex items-center gap-2 hover:text-cyan-600 transition-colors"
+              aria-label="Llamar a Humanis"
+            >
                 <Phone size={14} />
                 <span>+52 55 4416 7974</span>
             </a>
             <span className="hidden sm:block text-slate-200">|</span>
-            <a href="mailto:contacto@humanis.com.mx" className="flex items-center gap-2 hover:text-cyan-600 transition-colors">
+            <a 
+              href="mailto:contacto@humanis.com.mx" 
+              className="flex items-center gap-2 hover:text-cyan-600 transition-colors"
+              aria-label="Enviar correo a Humanis"
+            >
                 <Mail size={14} />
                 <span>contacto@humanis.com.mx</span>
             </a>
@@ -201,6 +200,7 @@ export default function Footer() {
       {/* BOTÓN "BACK TO TOP" */}
       <motion.button
         onClick={scrollToTop}
+        aria-label="Volver arriba"
         initial={{ opacity: 0, scale: 0.5 }}
         whileInView={{ opacity: 1, scale: 1 }}
         whileHover={{ scale: 1.1, y: -3 }}

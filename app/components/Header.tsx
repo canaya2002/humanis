@@ -1,6 +1,7 @@
 'use client';
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X, ChevronDown, ArrowUpRight } from 'lucide-react';
 
 interface HeaderProps {
@@ -37,14 +38,12 @@ export default function Header({ showHeader, setShowContact }: HeaderProps) {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Mantenemos esta variable solo para redimensionar el LOGO, no el fondo
       setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // CONSTANTES DE ALINEACIÓN
   const ALIGNMENT_CLASSES = scrolled ? 'mt-4' : 'mt-8';
   const ELEMENT_PADDING = 'py-3';
 
@@ -63,26 +62,28 @@ export default function Header({ showHeader, setShowContact }: HeaderProps) {
             
             {/* 1. LOGO - Se redimensiona, pero el fondo sigue transparente */}
             <Link href="/" className="relative z-50 flex-shrink-0 group block mt-0 pt-0">
-               <img 
+               <Image 
                  src="/humanislogo.png" 
-                 alt="Humanis Logo" 
+                 alt="Humanis - Agencia de Colocación de Personal" 
+                 width={160}
+                 height={160}
                  className={`
                    w-auto object-contain object-left-top drop-shadow-2xl transition-all duration-500
                    ${scrolled 
                      ? 'h-16 md:h-20 -mt-1' 
                      : 'h-24 md:h-32 lg:h-40 -mt-2 lg:-mt-4'} 
                  `}
+                 priority
                />
             </Link>
 
-            {/* 2. MENÚ CENTRAL - Este mantiene su "cápsula" visual para que se lea */}
+            {/* 2. MENÚ CENTRAL */}
             <nav 
               className={`
                 hidden lg:flex items-center gap-2 px-4 rounded-full transition-all duration-500 absolute left-1/2 -translate-x-1/2
                 ${ALIGNMENT_CLASSES} ${ELEMENT_PADDING}
               `}
               style={{
-                // Fondo de la cápsula del menú: Sutil blanco transparente
                 background: scrolled ? 'rgba(255, 255, 255, 0.4)' : 'rgba(255, 255, 255, 0.2)', 
                 backdropFilter: 'blur(30px)',
                 WebkitBackdropFilter: 'blur(30px)',
@@ -146,6 +147,7 @@ export default function Header({ showHeader, setShowContact }: HeaderProps) {
             <div className={`flex items-center gap-4 transition-all duration-500 ${ALIGNMENT_CLASSES}`}>
               <button 
                   onClick={() => setShowContact && setShowContact(true)}
+                  aria-label="Agendar llamada con Humanis"
                   className={`
                     hidden lg:flex items-center gap-3 px-8 rounded-full text-white text-sm font-black transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl active:scale-95 group
                     ${ELEMENT_PADDING}
@@ -163,6 +165,7 @@ export default function Header({ showHeader, setShowContact }: HeaderProps) {
               <button 
                   className="lg:hidden flex items-center justify-center w-12 h-12 rounded-full text-slate-900 transition-all active:scale-90 shadow-lg bg-white/80 backdrop-blur-md border border-white"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
+                  aria-label={isMenuOpen ? "Cerrar menú" : "Abrir menú"}
               >
                 {isMenuOpen ? <X size={26} className="stroke-[3]" /> : <Menu size={26} className="stroke-[3]" />}
               </button>
@@ -214,6 +217,7 @@ export default function Header({ showHeader, setShowContact }: HeaderProps) {
                             if(setShowContact) setShowContact(true);
                             setIsMenuOpen(false);
                         }}
+                        aria-label="Agendar llamada con Humanis"
                         className="w-full py-5 rounded-2xl bg-slate-900 text-white font-black text-xl shadow-xl active:scale-95 transition-all flex justify-center gap-2"
                     >
                         Agendar Llamada

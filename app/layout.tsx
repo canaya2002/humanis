@@ -30,18 +30,6 @@ export const metadata: Metadata = {
     template: "%s | Humanis México"
   },
   description: "Agencia de colocación de personal en CDMX con cobertura nacional. Reclutamiento, filtros y validación de candidatos para cualquier posición. Servicio gratuito para talento, tarifa al empleador.",
-  keywords: [
-    "agencia de colocación de personal",
-    "agencia de contratación México",
-    "reclutamiento operativo",
-    "contratación masiva de personal",
-    "agencia de empleo corporativo",
-    "colocación de personal CDMX",
-    "reclutamiento y selección para empresas",
-    "contratación de personal operativo",
-    "agencia de colocación Lomas de Chapultepec",
-    "agencia de colocación Miguel Hidalgo"
-  ],
   authors: [{ name: "Humanis México" }],
   creator: "Humanis México",
   publisher: "Humanis México",
@@ -106,9 +94,10 @@ export default function RootLayout({
               "name": "Humanis",
               "url": "https://www.humanis.com.mx",
               "logo": "https://www.humanis.com.mx/humanislogo.png",
+              "image": "https://www.humanis.com.mx/humanislogo.png",
               "description": "Agencia de colocación de personal en México. Reclutamiento, filtros y validación de candidatos para cualquier posición operativa, administrativa y mandos medios. Servicio gratuito para el talento, tarifa al empleador.",
               "telephone": "+52-55-44-16-7974",
-              "email": "contacto@humanis.mx",
+              "email": "soporte@humanis.mx",
               "address": {
                 "@type": "PostalAddress",
                 "streetAddress": "C. Montes Urales 424-V",
@@ -127,7 +116,7 @@ export default function RootLayout({
                 "name": "México"
               },
               "sameAs": [
-                "https://www.facebook.com/Humanis/61576232000413/",
+                "https://www.facebook.com/people/Humanis/61576232000413/",
                 "https://www.instagram.com/humanis.oficial",
                 "https://www.linkedin.com/company/humanismx/",
                 "https://www.tiktok.com/@humanis_mx"
