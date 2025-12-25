@@ -1,201 +1,98 @@
-'use client';
-import React, { useState, useEffect, useRef } from 'react';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { 
-  FileSearch, UserCheck, Briefcase, Trophy, 
-  Clock, Shield, Target, CheckCircle2, ArrowRight
-} from 'lucide-react';
-import Header from '../components/Header';
-import Footer from '../components/Footer';
-import GlobalStyles from '../components/GlobalStyles';
-import ContactIntro from '../components/ContactIntro';
+import { Metadata } from 'next';
+import ProcesoClient from './ProcesoClient';
 
-const steps = [
-  { 
-    id: 1, 
-    title: "Levantamiento de Perfil", 
-    desc: "No solo pedimos la 'Job Description'. Analizamos tu cultura, el reto del puesto y los 'no negociables'.",
-    icon: <FileSearch size={32} />,
-    duration: "Día 1",
-    color: "bg-blue-500"
+export const metadata: Metadata = {
+  title: 'Proceso de Colocación de Personal | Metodología Humanis',
+  description: 'Conoce nuestro proceso trazable de colocación: diagnóstico, reclutamiento, validación y presentación de candidatos. Metodología ágil con garantía de reemplazo.',
+  keywords: [
+    'proceso de reclutamiento',
+    'metodología colocación personal',
+    'cómo funciona agencia empleo',
+    'proceso de selección México',
+    'validación de candidatos'
+  ],
+  alternates: {
+    canonical: 'https://www.humanis.com.mx/proceso'
   },
-  { 
-    id: 2, 
-    title: "Headhunting Activo", 
-    desc: "Activamos nuestra red. No esperamos a que lleguen CVs; salimos a buscar a los candidatos pasivos (que ya tienen empleo).",
-    icon: <Target size={32} />,
-    duration: "Día 2-4",
-    color: "bg-indigo-500"
+  openGraph: {
+    title: 'Proceso de Colocación Trazable | Humanis',
+    description: 'Metodología probada en 4 etapas: diagnóstico, reclutamiento, validación y presentación.',
+    url: 'https://www.humanis.com.mx/proceso',
+    siteName: 'Humanis México',
+    locale: 'es_MX',
+    type: 'website'
   },
-  { 
-    id: 3, 
-    title: "Entrevistas Profundas", 
-    desc: "Filtramos por competencias y fit cultural. Solo te llegan candidatos viables que ya pasaron nuestro filtro de hierro.",
-    icon: <UserCheck size={32} />,
-    duration: "Día 5-7",
-    color: "bg-violet-500"
-  },
-  { 
-    id: 4, 
-    title: "Presentación de Terna", 
-    desc: "Te entregamos una terna de finalistas (Shortlist) con expediente completo y referencias validadas.",
-    icon: <Briefcase size={32} />,
-    duration: "Día 8-10",
-    color: "bg-purple-500"
-  },
-  { 
-    id: 5, 
-    title: "Cierre y Onboarding", 
-    desc: "Te apoyamos en la oferta económica y seguimiento al ingreso. Inicia tu periodo de garantía.",
-    icon: <Trophy size={32} />,
-    duration: "Día 15+",
-    color: "bg-fuchsia-500"
+  twitter: {
+    card: 'summary',
+    title: 'Nuestro Proceso | Humanis',
+    description: 'Metodología de colocación con proceso trazable.'
   }
-];
+};
 
 export default function ProcesoPage() {
-  const [showHeader, setShowHeader] = useState(true);
-  const [showContact, setShowContact] = useState(false);
-  const lastScrollY = useRef(0);
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Inicio",
+        "item": "https://www.humanis.com.mx"
+      },
+      {
+        "@type": "ListItem",
+        "position": 2,
+        "name": "Proceso",
+        "item": "https://www.humanis.com.mx/proceso"
+      }
+    ]
+  };
 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.scrollY > lastScrollY.current && window.scrollY > 80) { setShowHeader(false); } else { setShowHeader(true); }
-      lastScrollY.current = window.scrollY;
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // --- SEO MASTERCLASS: HOW-TO SCHEMA ---
   const howToSchema = {
     "@context": "https://schema.org",
     "@type": "HowTo",
-    "name": "Proceso de Reclutamiento Humanis",
-    "description": "Metodología de 5 pasos para contratar al mejor talento en México de forma segura y rápida.",
-    "totalTime": "P15D", // 15 Días aprox
-    "step": steps.map(step => ({
-      "@type": "HowToStep",
-      "name": step.title,
-      "text": step.desc,
-      "position": step.id,
-      "url": "https://www.humanis.com.mx/proceso"
-    }))
+    "name": "Proceso de Colocación de Personal Humanis",
+    "description": "Metodología de 4 pasos para colocar talento con proceso trazable y garantía de reemplazo.",
+    "step": [
+      {
+        "@type": "HowToStep",
+        "name": "Diagnóstico y Perfilamiento",
+        "text": "Análisis profundo de la vacante, cultura organizacional y requisitos no negociables.",
+        "position": 1
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Reclutamiento Activo",
+        "text": "Búsqueda dirigida de candidatos con experiencia relevante y filtros de competencia.",
+        "position": 2
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Validación",
+        "text": "Entrevistas por competencias, validación de referencias y presentación de terna final.",
+        "position": 3
+      },
+      {
+        "@type": "HowToStep",
+        "name": "Presentación y Seguimiento",
+        "text": "Coordinación de entrevistas, acompañamiento en negociación y garantía de reemplazo.",
+        "position": 4
+      }
+    ]
   };
 
   return (
     <>
-      <GlobalStyles />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }} />
-
-      <div className="min-h-screen bg-slate-50 text-slate-900 font-sans selection:bg-indigo-100 selection:text-indigo-900">
-        <Header showHeader={showHeader} setShowContact={setShowContact} />
-        <ContactIntro isOpen={showContact} onClose={() => setShowContact(false)} />
-
-        <main className="pt-0">
-            
-            {/* HERO SIMPLE */}
-            <section className="pt-32 pb-20 bg-white border-b border-slate-200">
-                <div className="container mx-auto px-6 max-w-4xl text-center">
-                    <span className="inline-block px-4 py-1.5 rounded-full bg-slate-100 text-slate-600 text-[10px] font-bold uppercase tracking-widest mb-6 border border-slate-200">
-                        Metodología Probada
-                    </span>
-                    <h1 className="text-5xl md:text-6xl font-black text-slate-900 mb-6 tracking-tight">
-                        La Ciencia del <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-600 to-purple-600">Reclutamiento</span>
-                    </h1>
-                    <p className="text-xl text-slate-600 leading-relaxed font-light">
-                        Hemos perfeccionado un proceso de 5 etapas que elimina la incertidumbre y garantiza resultados. Sin atajos.
-                    </p>
-                </div>
-            </section>
-
-            {/* TIMELINE VERTICAL */}
-            <section className="py-24 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-[0.03]" />
-                <div className="container mx-auto px-6 max-w-5xl relative z-10">
-                    
-                    {/* LÍNEA CONECTORA (SOLO DESKTOP) */}
-                    <div className="hidden md:block absolute left-1/2 top-0 bottom-0 w-1 bg-slate-200 -translate-x-1/2 rounded-full" />
-
-                    <div className="space-y-12 md:space-y-24">
-                        {steps.map((step, idx) => {
-                            const isEven = idx % 2 === 0;
-                            return (
-                                <motion.div 
-                                    key={step.id}
-                                    initial={{ opacity: 0, y: 50 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true, margin: "-100px" }}
-                                    transition={{ duration: 0.6, delay: idx * 0.1 }}
-                                    className={`flex flex-col md:flex-row items-center gap-8 md:gap-0 ${isEven ? 'md:flex-row-reverse' : ''}`}
-                                >
-                                    {/* CONTENIDO */}
-                                    <div className={`w-full md:w-1/2 ${isEven ? 'md:pl-16 text-center md:text-left' : 'md:pr-16 text-center md:text-right'}`}>
-                                        <div className={`inline-block px-3 py-1 rounded-lg text-xs font-bold text-white mb-3 shadow-md ${step.color}`}>
-                                            {step.duration}
-                                        </div>
-                                        <h3 className="text-3xl font-black text-slate-900 mb-4">{step.title}</h3>
-                                        <p className="text-lg text-slate-600 font-medium leading-relaxed">{step.desc}</p>
-                                    </div>
-
-                                    {/* PUNTO CENTRAL (ICONO) */}
-                                    <div className="relative z-10 shrink-0">
-                                        <div className={`w-20 h-20 rounded-2xl flex items-center justify-center text-white shadow-xl rotate-3 hover:rotate-0 transition-transform duration-300 ${step.color}`}>
-                                            {step.icon}
-                                        </div>
-                                    </div>
-
-                                    {/* ESPACIO VACÍO PARA BALANCEAR */}
-                                    <div className="w-full md:w-1/2 hidden md:block" />
-                                </motion.div>
-                            );
-                        })}
-                    </div>
-
-                </div>
-            </section>
-
-            {/* GARANTÍA */}
-            <section className="py-24 bg-white border-y border-slate-200">
-                <div className="container mx-auto px-6 max-w-4xl">
-                    <div className="bg-slate-900 rounded-[2.5rem] p-12 md:p-16 text-center text-white shadow-2xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 p-12 opacity-10 group-hover:scale-110 transition-transform duration-700">
-                            <Shield size={200} />
-                        </div>
-                        <div className="relative z-10">
-                            <h2 className="text-4xl font-black mb-6">Garantía de Reemplazo</h2>
-                            <p className="text-xl text-slate-300 mb-10 leading-relaxed">
-                                Si el candidato abandona el puesto en los primeros 90 días, realizamos el proceso nuevamente <strong>sin costo adicional</strong>.
-                            </p>
-                            <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-                                <div className="flex items-center gap-3 bg-white/10 px-6 py-3 rounded-full border border-white/20">
-                                    <CheckCircle2 className="text-green-400" /> 90 Días de Cobertura
-                                </div>
-                                <div className="flex items-center gap-3 bg-white/10 px-6 py-3 rounded-full border border-white/20">
-                                    <CheckCircle2 className="text-green-400" /> Sin Letras Chiquitas
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            {/* CTA */}
-            <div className="py-32 bg-slate-50 text-center">
-                 <div className="container mx-auto px-6">
-                    <h2 className="text-5xl font-black mb-8 text-slate-900">¿Tienes una vacante difícil?</h2>
-                    <p className="text-xl text-slate-500 mb-10">Ponnos a prueba. Resultados en 48 horas.</p>
-                    <button onClick={() => setShowContact(true)} className="inline-flex items-center gap-3 bg-indigo-600 text-white font-bold py-4 px-10 rounded-full hover:bg-indigo-500 transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1">
-                        <Clock size={20} />
-                        Iniciar Reto 48h
-                    </button>
-                 </div>
-            </div>
-
-        </main>
-        <Footer />
-      </div>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(howToSchema) }}
+      />
+      <ProcesoClient />
     </>
   );
 }
