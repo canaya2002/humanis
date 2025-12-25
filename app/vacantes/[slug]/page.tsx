@@ -51,12 +51,20 @@ export default async function VacantePage({ params }: { params: { slug: string }
 
   const isExpired = new Date(vacancy.validThrough) < new Date();
 
+  // --- LÓGICA ROBUSTA DE PARSEO DE SALARIO ---
+  // Elimina todo lo que no sea número o guión
   const rawSalary = vacancy.salary.replace(/[^0-9-]/g, ''); 
   const parts = rawSalary.split('-');
+  
+  // Intenta parsear; si falla o está vacío, será 0 o NaN
   const minSalary = parts[0] ? parseInt(parts[0], 10) : 0;
+  // Si no hay rango (ej. "$20,000"), el max es igual al min
   const maxSalary = parts[1] ? parseInt(parts[1], 10) : minSalary;
 
-  // Construcción del Schema.org JobPosting - OPTIMIZADO
+  // Validación crítica: Solo incluimos salario en el schema si detectamos un valor positivo
+  const hasSalary = !isNaN(minSalary) && minSalary > 0;
+
+  // Construcción del Schema.org JobPosting - OPTIMIZADO Y ROBUSTO
   const jobPostingSchema = {
     "@context": "https://schema.org",
     "@type": "JobPosting",
@@ -75,7 +83,7 @@ export default async function VacantePage({ params }: { params: { slug: string }
       "name": "Humanis",
       "sameAs": "https://www.humanis.com.mx",
       "logo": "https://www.humanis.com.mx/humanislogo.png",
-      "@id": "https://www.humanis.com.mx/#organization" // <--- VINCULACIÓN MAESTRA AGREGADA
+      "@id": "https://www.humanis.com.mx/#organization" // Vinculación semántica
     },
     "jobLocation": {
       "@type": "Place",
@@ -86,16 +94,19 @@ export default async function VacantePage({ params }: { params: { slug: string }
         "addressCountry": "MX"
       }
     },
-    "baseSalary": {
-      "@type": "MonetaryAmount",
-      "currency": "MXN",
-      "value": {
-        "@type": "QuantitativeValue",
-        "minValue": minSalary,
-        "maxValue": maxSalary,
-        "unitText": "MONTH"
+    // Inserción condicional del objeto baseSalary
+    ...(hasSalary && {
+      "baseSalary": {
+        "@type": "MonetaryAmount",
+        "currency": "MXN",
+        "value": {
+          "@type": "QuantitativeValue",
+          "minValue": minSalary,
+          "maxValue": maxSalary,
+          "unitText": "MONTH"
+        }
       }
-    },
+    }),
     "jobLocationType": vacancy.type === 'Remoto' ? 'TELECOMMUTE' : undefined,
     "applicantLocationRequirements": {
       "@type": "Country",

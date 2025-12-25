@@ -44,8 +44,9 @@ export const metadata: Metadata = {
       'max-snippet': -1,
     },
   },
+
   alternates: {
-    canonical: 'https://www.humanis.com.mx',
+    canonical: './',
   },
   openGraph: {
     title: "Humanis | Agencia de Contratación y Colocación de Personal en México",

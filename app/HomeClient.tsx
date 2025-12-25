@@ -390,7 +390,13 @@ export default function HomeClient({ solutionsData }: HomeClientProps) {
                            </div>
                            <div className={`w-full text-center lg:text-left transition-all duration-1000 order-2 lg:order-2 ${isLoaded ? 'opacity-100 translate-x-0' : 'opacity-0 translate-x-10'}`}>
                                 <div className="inline-flex items-center gap-3 px-5 py-2.5 rounded-full bg-slate-50 border border-slate-200 text-slate-800 text-[11px] font-bold uppercase tracking-widest mb-8 mx-auto lg:mx-0 shadow-sm"><Activity size={14} />Capital Humano 4.0</div>
-                                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 mb-4 leading-[0.95] tracking-tighter">Talento <br/><RotatingText /></h1>
+                                
+                                {/* --- CORRECCIÓN SEO PARA H1 --- */}
+                                <h1 className="text-5xl md:text-7xl lg:text-8xl font-black text-slate-900 mb-4 leading-[0.95] tracking-tighter">
+                                    <span className="sr-only">Talento Ejecutivo y Operativo en México</span>
+                                    Talento <br/><RotatingText />
+                                </h1>
+                                
                                 <p className="text-slate-600 text-lg md:text-xl lg:text-2xl max-w-xl mx-auto lg:mx-0 mb-12 font-light leading-relaxed">Ingeniería de personal y blindaje jurídico. <strong className="text-slate-900 font-bold">Excelencia operativa.</strong></p>
                                 <div className="flex flex-wrap gap-5 justify-center lg:justify-start">
                                     <ModernButton onClick={() => navigateTo('empresas')}>Soy Empresa</ModernButton>

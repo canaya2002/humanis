@@ -12,7 +12,7 @@ export default function LocationMap() {
     script.async = true;
     document.body.appendChild(script);
 
-    // 2. ConfiguraciÃ³n (Montes Urales)
+    // 2. Configuración (Montes Urales)
     const CONFIGURATION = {
       "locations": [
         {
@@ -53,8 +53,16 @@ export default function LocationMap() {
   }, []);
 
   return (
-    <div className="w-full h-full rounded-[2rem] overflow-hidden shadow-2xl border border-slate-200 bg-slate-100">
+    <div className="w-full h-full rounded-[2rem] overflow-hidden shadow-2xl border border-slate-200 bg-slate-100 relative">
       
+      {/* --- CORRECCIÓN SEO: DIRECCIÓN EN TEXTO PLANO --- */}
+      {/* Invisible visualmente pero legible para crawlers y screen readers */}
+      <div className="sr-only">
+        <h3>Oficinas Centrales Humanis</h3>
+        <p>C. Montes Urales 424, Lomas - Virreyes, Miguel Hidalgo, 11000 Ciudad de México, CDMX</p>
+        <p>Teléfono: +52 55 44 16 7974</p>
+      </div>
+
       {/* USAMOS @ts-ignore PARA QUE TYPESCRIPT NO BLOQUEE EL BUILD 
          AL NO RECONOCER LOS ELEMENTOS WEB DE GOOGLE 
       */}
