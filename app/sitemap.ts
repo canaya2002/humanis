@@ -9,54 +9,59 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   // 1. Definición de Rutas Estáticas
   const staticRoutes: MetadataRoute.Sitemap = [
+    // HOME: Máxima prioridad
     {
       url: baseUrl,
       lastModified: currentDate,
       changeFrequency: 'weekly',
-      priority: 1,
+      priority: 1.0,
     },
+    // LISTADO DE VACANTES: Alta prioridad, cambia diario
+    {
+      url: `${baseUrl}/vacantes`,
+      lastModified: currentDate,
+      changeFrequency: 'daily', 
+      priority: 0.8,
+    },
+    // LANDINGS PRINCIPALES: Prioridad media-alta
     {
       url: `${baseUrl}/para-empresas`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/talento`,
-      lastModified: currentDate,
-      changeFrequency: 'weekly',
-      priority: 0.9,
+      priority: 0.7,
     },
     {
       url: `${baseUrl}/servicios`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
-      priority: 0.8,
+      priority: 0.7,
     },
     {
-      url: `${baseUrl}/vacantes`,
-      lastModified: currentDate,
-      changeFrequency: 'daily', // Importante: esta página cambia diario
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/casos-de-exito`,
+      url: `${baseUrl}/talento`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
-    {
-      url: `${baseUrl}/proceso`,
-      lastModified: currentDate,
-      changeFrequency: 'monthly',
-      priority: 0.7,
-    },
+    // PÁGINAS INFORMATIVAS: Prioridad media
     {
       url: `${baseUrl}/nosotros`,
       lastModified: currentDate,
       changeFrequency: 'monthly',
       priority: 0.6,
     },
+    {
+      url: `${baseUrl}/casos-de-exito`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    {
+      url: `${baseUrl}/proceso`,
+      lastModified: currentDate,
+      changeFrequency: 'monthly',
+      priority: 0.6,
+    },
+    // SOPORTE Y CONTACTO: Prioridad media-baja
     {
       url: `${baseUrl}/faq-empresas`,
       lastModified: currentDate,
@@ -73,9 +78,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/contacto`,
       lastModified: currentDate,
       changeFrequency: 'yearly',
-      priority: 0.8,
+      priority: 0.5,
     },
-    // Páginas Legales
+    // LEGALES: Baja prioridad (no gastar crawl budget aquí)
     {
       url: `${baseUrl}/privacidad`,
       lastModified: currentDate,
@@ -90,11 +95,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
   ];
 
+  // 2. Rutas Dinámicas de Vacantes (Detalle)
   const vacancyRoutes: MetadataRoute.Sitemap = vacancies.map((vacancy) => ({
     url: `${baseUrl}/vacantes/${vacancy.slug}`,
-    lastModified: new Date(vacancy.datePosted), // Usa la fecha real de publicación
-    changeFrequency: 'daily',
-    priority: 0.9, // Alta prioridad para ofertas de empleo
+    // Usamos la fecha real de publicación de la vacante
+    lastModified: new Date(vacancy.datePosted), 
+    changeFrequency: 'daily', // El estado de una vacante puede cambiar rápido
+    priority: 0.9, // Muy alta prioridad para indexar ofertas individuales
   }));
 
   // 3. Unificar ambos arreglos

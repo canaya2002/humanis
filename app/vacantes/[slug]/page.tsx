@@ -12,7 +12,7 @@ export async function generateStaticParams() {
 }
 
 // Metadata dinámica para SEO
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
   const vacancy = getVacancyBySlug(slug);
 
@@ -29,19 +29,21 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     title: `${titlePrefix}${vacancy.title} - ${vacancy.company} | Humanis`,
     description: `${vacancy.description} Ubicación: ${vacancy.location}. Salario: ${vacancy.salary}. Aplica ahora con Humanis.`,
     alternates: {
-      canonical: `https://www.humanis.com.mx/vacantes/${slug}`,
+      // Canonical relativo para usar metadataBase del layout
+      canonical: `/vacantes/${slug}`,
     },
     openGraph: {
       title: `${titlePrefix}${vacancy.title} - ${vacancy.company}`,
       description: vacancy.description,
-      url: `https://www.humanis.com.mx/vacantes/${slug}`,
+      // URL para OG (aquí sí se prefiere absoluta o relativa resuelta por Next.js)
+      url: `/vacantes/${slug}`,
       type: 'website',
       locale: 'es_MX',
     },
   };
 }
 
-export default async function VacantePage({ params }: { params: { slug: string } }) {
+export default async function VacantePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
   const vacancy = getVacancyBySlug(slug);
 
@@ -51,20 +53,22 @@ export default async function VacantePage({ params }: { params: { slug: string }
 
   const isExpired = new Date(vacancy.validThrough) < new Date();
 
-  // --- LÓGICA ROBUSTA DE PARSEO DE SALARIO ---
-  // Elimina todo lo que no sea número o guión
-  const rawSalary = vacancy.salary.replace(/[^0-9-]/g, ''); 
-  const parts = rawSalary.split('-');
+  // --- LÓGICA DE PARSEO DE SALARIO ROBUSTA ---
+  // 1. Normalizar separadores y convertir a minúsculas
+  let cleanSalary = vacancy.salary.toLowerCase().replace(' a ', '-').replace(' to ', '-');
+  // 2. Eliminar todo excepto números y guiones
+  cleanSalary = cleanSalary.replace(/[^0-9-]/g, ''); 
   
-  // Intenta parsear; si falla o está vacío, será 0 o NaN
+  const parts = cleanSalary.split('-');
+  
+  // Parsear valores
   const minSalary = parts[0] ? parseInt(parts[0], 10) : 0;
-  // Si no hay rango (ej. "$20,000"), el max es igual al min
   const maxSalary = parts[1] ? parseInt(parts[1], 10) : minSalary;
 
-  // Validación crítica: Solo incluimos salario en el schema si detectamos un valor positivo
+  // Validación: Solo incluir salario en schema si hay valores lógicos
   const hasSalary = !isNaN(minSalary) && minSalary > 0;
 
-  // Construcción del Schema.org JobPosting - OPTIMIZADO Y ROBUSTO
+  // Construcción del Schema.org JobPosting
   const jobPostingSchema = {
     "@context": "https://schema.org",
     "@type": "JobPosting",
@@ -78,13 +82,13 @@ export default async function VacantePage({ params }: { params: { slug: string }
     "datePosted": vacancy.datePosted,
     "validThrough": vacancy.validThrough,
     "employmentType": vacancy.employmentType || "FULL_TIME",
+    
+    // CORRECCIÓN A: Referencia por ID para evitar duplicidad y fortalecer entidad
     "hiringOrganization": {
       "@type": "Organization",
-      "name": "Humanis",
-      "sameAs": "https://www.humanis.com.mx",
-      "logo": "https://www.humanis.com.mx/humanislogo.png",
-      "@id": "https://www.humanis.com.mx/#organization" // Vinculación semántica
+      "@id": "https://www.humanis.com.mx/#organization" 
     },
+    
     "jobLocation": {
       "@type": "Place",
       "address": {
@@ -94,7 +98,8 @@ export default async function VacantePage({ params }: { params: { slug: string }
         "addressCountry": "MX"
       }
     },
-    // Inserción condicional del objeto baseSalary
+    
+    // Inserción condicional de salario
     ...(hasSalary && {
       "baseSalary": {
         "@type": "MonetaryAmount",
@@ -107,11 +112,16 @@ export default async function VacantePage({ params }: { params: { slug: string }
         }
       }
     }),
+    
     "jobLocationType": vacancy.type === 'Remoto' ? 'TELECOMMUTE' : undefined,
     "applicantLocationRequirements": {
       "@type": "Country",
       "name": "MX"
     },
+    
+    // CORRECCIÓN B: Indicar aplicación directa
+    "directApply": true,
+    
     "url": `https://www.humanis.com.mx/vacantes/${slug}`
   };
 

@@ -14,12 +14,14 @@ export const metadata: Metadata = {
     'vacantes activas'
   ],
   alternates: {
-    canonical: 'https://www.humanis.com.mx/vacantes'
+    // CORRECCIÓN B: Uso de ruta relativa. 
+    // Next.js resolverá esto usando metadataBase definido en app/layout.tsx
+    canonical: '/vacantes'
   },
   openGraph: {
     title: 'Vacantes de Empleo en México | Humanis',
     description: 'Encuentra tu próximo empleo. Vacantes verificadas en empresas líderes. Proceso de postulación sin costo.',
-    url: 'https://www.humanis.com.mx/vacantes',
+    url: '/vacantes',
     siteName: 'Humanis México',
     locale: 'es_MX',
     type: 'website'
@@ -51,7 +53,7 @@ export default function VacantesPage() {
     ]
   };
 
-  // CollectionPage schema (sin JobPosting individual porque no hay páginas /vacantes/[id])
+  // CollectionPage schema
   const collectionSchema = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
@@ -74,9 +76,6 @@ export default function VacantesPage() {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }}
       />
-      {/* NOTA TÉCNICA: Sin URLs individuales por vacante (/vacantes/[id]), 
-          no es posible implementar JobPosting schema individual. 
-          La aparición en Google Jobs NO está garantizada sin páginas específicas por posición. */}
       <VacantesClient />
     </>
   );
